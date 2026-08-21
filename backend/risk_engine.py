@@ -157,7 +157,22 @@ def calculate_risk(signals):
         malicious = vt.get("malicious", 0)
         suspicious = vt.get("suspicious", 0)
 
-        if malicious > 0:
+        # Strong external confirmation
+        if malicious >= 10:
+            score += 40
+            evidence.append({
+                "signal": f"VirusTotal strongly flagged URL as malicious ({malicious} engines)",
+                "points": 40
+            })
+
+        elif malicious >= 3:
+            score += 30
+            evidence.append({
+                "signal": f"VirusTotal flagged URL as malicious ({malicious} engines)",
+                "points": 30
+            })
+
+        elif malicious > 0:
             score += 20
             evidence.append({
                 "signal": f"VirusTotal flagged URL as malicious ({malicious} engines)",
@@ -165,11 +180,36 @@ def calculate_risk(signals):
             })
 
         elif suspicious > 0:
-            score += 10
+            score += 15
             evidence.append({
                 "signal": f"VirusTotal flagged URL as suspicious ({suspicious} engines)",
-                "points": 10
+                "points": 15
             })
+
+    # -------------------------
+    # CROSS-SIGNAL CORROBORATION
+    # -------------------------
+    # Multiple independent systems
+    # agreeing should increase confidence/risk.
+
+    has_malicious_url = any(
+        vt.get("malicious", 0) > 0
+        for vt in vt_results
+    )
+
+    if has_malicious_url and ai.get("scam_intent") is True:
+        score += 10
+        evidence.append({
+            "signal": "AI and VirusTotal independently confirmed scam risk",
+            "points": 10
+        })
+
+    if has_malicious_url and ai.get("impersonation") is True:
+        score += 5
+        evidence.append({
+            "signal": "Malicious URL combined with suspected impersonation",
+            "points": 5
+        })
 
     # -------------------------
     # CAP SCORE
@@ -234,7 +274,7 @@ def calculate_risk(signals):
     elif signals["threat_signals"]:
         threat_type = "Threat / Account Scam"
 
-    elif any(vt.get("malicious", 0) > 0 for vt in vt_results):
+    elif has_malicious_url:
         threat_type = "Malicious Link"
 
     elif signals["urls"]:
