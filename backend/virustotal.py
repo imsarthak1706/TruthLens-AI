@@ -23,11 +23,28 @@ def scan_url(url: str):
         url.encode()
     ).decode().rstrip("=")
 
-    response = requests.get(
-        f"https://www.virustotal.com/api/v3/urls/{url_id}",
-        headers=headers,
-        timeout=20
-    )
+    try:
+        response = requests.get(
+            f"https://www.virustotal.com/api/v3/urls/{url_id}",
+            headers=headers,
+            timeout=20
+        )
+    except requests.exceptions.Timeout:
+        return {
+            "status": "error",
+            "malicious": 0,
+            "suspicious": 0,
+            "harmless": 0,
+            "undetected": 0
+        }
+    except requests.exceptions.RequestException:
+        return {
+            "status": "error",
+            "malicious": 0,
+            "suspicious": 0,
+            "harmless": 0,
+            "undetected": 0
+        }
 
     if response.status_code == 404:
         return {
@@ -38,15 +55,41 @@ def scan_url(url: str):
             "undetected": 0
         }
 
-    response.raise_for_status()
+    try:
+        response.raise_for_status()
+        data = response.json()
+    except (requests.exceptions.RequestException, ValueError):
+        return {
+            "status": "error",
+            "malicious": 0,
+            "suspicious": 0,
+            "harmless": 0,
+            "undetected": 0
+        }
 
-    data = response.json()
+    if not isinstance(data, dict):
+        return {
+            "status": "error",
+            "malicious": 0,
+            "suspicious": 0,
+            "harmless": 0,
+            "undetected": 0
+        }
 
     stats = (
         data.get("data", {})
         .get("attributes", {})
         .get("last_analysis_stats", {})
     )
+
+    if not isinstance(stats, dict):
+        return {
+            "status": "error",
+            "malicious": 0,
+            "suspicious": 0,
+            "harmless": 0,
+            "undetected": 0
+        }
 
     return {
         "status": "found",

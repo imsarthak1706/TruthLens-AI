@@ -217,6 +217,21 @@ def calculate_risk(signals):
 
     score = min(score, 100)
 
+    has_vt_alert = any(
+        vt.get("malicious", 0) > 0 or vt.get("suspicious", 0) > 0
+        for vt in vt_results
+    )
+
+    ai_benign_high_confidence = (
+        ai.get("threat_type") == "benign"
+        and ai.get("scam_intent") is False
+        and ai.get("confidence") == "high"
+        and not has_vt_alert
+    )
+
+    if ai_benign_high_confidence:
+        score = min(score, 20)
+
     # -------------------------
     # SEVERITY
     # -------------------------
@@ -253,47 +268,65 @@ def calculate_risk(signals):
     # THREAT TYPE
     # -------------------------
 
-    if signals["otp_signals"] and signals["brand_signals"]:
-        threat_type = "Bank / Account Impersonation"
+    ai = signals.get("ai", {})
+    ai_threat_type = ai.get("threat_type")
 
-    elif signals["otp_signals"]:
-        threat_type = "OTP / Verification Scam"
+    threat_type_map = {
+        "malicious_link": "Malicious Link",
+        "credential_phishing": "Credential Phishing",
+        "payment_scam": "Payment Scam",
+        "identity_scam": "Identity / KYC Scam",
+        "impersonation": "Possible Impersonation Scam",
+        "social_engineering": "Social Engineering",
+        "malware": "Malware",
+        "benign": "No Strong Threat Detected",
+    }
 
-    elif signals["upi_ids"] and signals["payment_signals"]:
-        threat_type = "Payment Scam"
-
-    elif signals["credential_signals"] and signals["brand_signals"]:
-        threat_type = "Credential Phishing"
-
-    elif signals["personal_info_signals"] and signals["brand_signals"]:
-        threat_type = "Identity / KYC Scam"
-
-    elif signals["urgency_signals"] and signals["payment_signals"]:
-        threat_type = "Financial Social Engineering"
-
-    elif signals["threat_signals"]:
-        threat_type = "Threat / Account Scam"
-
-    elif has_malicious_url:
-        threat_type = "Malicious Link"
-
-    elif signals["urls"]:
-        threat_type = "Suspicious Link"
-
-    elif ai.get("impersonation") is True:
-        threat_type = "Possible Impersonation Scam"
-
-    elif ai.get("financial_manipulation") is True:
-        threat_type = "Financial Social Engineering"
-
-    elif ai.get("social_engineering") is True:
-        threat_type = "Social Engineering"
-
-    elif ai.get("scam_intent") is True:
-        threat_type = "Potential Scam"
+    if ai_threat_type in threat_type_map and ai_threat_type != "unknown":
+        threat_type = threat_type_map[ai_threat_type]
 
     else:
-        threat_type = "No Strong Threat Detected"
+        if signals["otp_signals"] and signals["brand_signals"]:
+            threat_type = "Bank / Account Impersonation"
+
+        elif signals["otp_signals"]:
+            threat_type = "OTP / Verification Scam"
+
+        elif signals["upi_ids"] and signals["payment_signals"]:
+            threat_type = "Payment Scam"
+
+        elif signals["credential_signals"] and signals["brand_signals"]:
+            threat_type = "Credential Phishing"
+
+        elif signals["personal_info_signals"] and signals["brand_signals"]:
+            threat_type = "Identity / KYC Scam"
+
+        elif signals["urgency_signals"] and signals["payment_signals"]:
+            threat_type = "Financial Social Engineering"
+
+        elif signals["threat_signals"]:
+            threat_type = "Threat / Account Scam"
+
+        elif has_malicious_url:
+            threat_type = "Malicious Link"
+
+        elif signals["urls"]:
+            threat_type = "Suspicious Link"
+
+        elif ai.get("impersonation") is True:
+            threat_type = "Possible Impersonation Scam"
+
+        elif ai.get("financial_manipulation") is True:
+            threat_type = "Financial Social Engineering"
+
+        elif ai.get("social_engineering") is True:
+            threat_type = "Social Engineering"
+
+        elif ai.get("scam_intent") is True:
+            threat_type = "Potential Scam"
+
+        else:
+            threat_type = "No Strong Threat Detected"
 
     # -------------------------
     # RECOMMENDATION

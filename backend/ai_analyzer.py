@@ -41,7 +41,8 @@ Use exactly these fields:
     "financial_manipulation": false,
     "urgency": "low",
     "confidence": "high",
-    "explanation": "Short explanation."
+    "explanation": "Short explanation.",
+    "threat_type": "benign"
 }}
 
 Rules:
@@ -53,36 +54,67 @@ Rules:
 - confidence: low, medium, or high
 - explanation: maximum 20 words
 
+- threat_type must be exactly one of:
+  malicious_link, credential_phishing, payment_scam, identity_scam,
+  impersonation, social_engineering, malware, benign, unknown
+
+- Do not classify based on keywords alone.
+- Judge the complete context of the message.
+- Words such as verify, payment, account, login, urgent, or link can appear in legitimate messages.
+- threat_type must represent the primary threat.
+- Use benign when there is no meaningful scam behavior.
+- Use unknown when there is insufficient information to classify.
+
 Return the JSON immediately.
 """
 
-    response = client.chat.completions.create(
-        model="Qwen/Qwen3-8B",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        max_tokens=500,
+    try:
+        for max_tokens in (1500, 3000):
+            response = client.chat.completions.create(
+                model="Qwen/Qwen3-8B",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+                max_tokens=max_tokens,
 
-        # Disable Qwen3 thinking/reasoning mode
-        extra_body={
-            "chat_template_kwargs": {
-                "enable_thinking": False
-            }
+                # Disable Qwen3 thinking/reasoning mode
+                extra_body={
+                    "chat_template_kwargs": {
+                        "enable_thinking": False
+                    }
+                }
+            )
+
+            message = response.choices[0].message
+            if message.content or getattr(response.choices[0], "finish_reason", None) != "length":
+                break
+    except Exception:
+        return {
+            "scam_intent": False,
+            "social_engineering": False,
+            "impersonation": False,
+            "financial_manipulation": False,
+            "urgency": "low",
+            "confidence": "low",
+            "explanation": "AI analysis unavailable."
         }
-    )
-
-    message = response.choices[0].message
 
     # We only want the actual answer.
     content = message.content
 
     if not content:
-        raise RuntimeError(
-            "Hugging Face returned no JSON content."
-        )
+        return {
+            "scam_intent": False,
+            "social_engineering": False,
+            "impersonation": False,
+            "financial_manipulation": False,
+            "urgency": "low",
+            "confidence": "low",
+            "explanation": "AI analysis unavailable."
+        }
 
     content = content.strip()
 
@@ -108,21 +140,62 @@ Return the JSON immediately.
     )
 
     if not match:
-        raise RuntimeError(
-            "AI response did not contain valid JSON.\n\n"
-            f"Raw response:\n{content}"
-        )
+        return {
+            "scam_intent": False,
+            "social_engineering": False,
+            "impersonation": False,
+            "financial_manipulation": False,
+            "urgency": "low",
+            "confidence": "low",
+            "explanation": "AI analysis unavailable."
+        }
 
     json_text = match.group(0)
 
     try:
         result = json.loads(json_text)
+    except json.JSONDecodeError:
+        return {
+            "scam_intent": False,
+            "social_engineering": False,
+            "impersonation": False,
+            "financial_manipulation": False,
+            "urgency": "low",
+            "confidence": "low",
+            "explanation": "AI analysis unavailable."
+        }
 
-    except json.JSONDecodeError as error:
+    if not isinstance(result, dict):
+        return {
+            "scam_intent": False,
+            "social_engineering": False,
+            "impersonation": False,
+            "financial_manipulation": False,
+            "urgency": "low",
+            "confidence": "low",
+            "explanation": "AI analysis unavailable."
+        }
 
-        raise RuntimeError(
-            f"Could not parse AI JSON: {error}\n\n"
-            f"Raw response:\n{content}"
-        )
+    for key, default_value in {
+        "scam_intent": False,
+        "social_engineering": False,
+        "impersonation": False,
+        "financial_manipulation": False,
+        "urgency": "low",
+        "confidence": "low",
+        "explanation": "AI analysis unavailable.",
+        "threat_type": "unknown"
+    }.items():
+        if key not in result or result[key] is None:
+            result[key] = default_value
+
+    if result.get("urgency") not in ["low", "medium", "high"]:
+        result["urgency"] = "low"
+
+    if result.get("confidence") not in ["low", "medium", "high"]:
+        result["confidence"] = "low"
+
+    if not isinstance(result.get("explanation"), str) or not result["explanation"]:
+        result["explanation"] = "AI analysis unavailable."
 
     return result

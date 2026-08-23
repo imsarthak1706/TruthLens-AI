@@ -33,7 +33,18 @@ def process_text(text: str):
     signals = detect_signals(text)
 
     # 2. Hugging Face AI analysis
-    ai_result = analyze_text(text)
+    try:
+        ai_result = analyze_text(text)
+    except Exception:
+        ai_result = {
+            "scam_intent": False,
+            "social_engineering": False,
+            "impersonation": False,
+            "financial_manipulation": False,
+            "urgency": "low",
+            "confidence": "low",
+            "explanation": "AI analysis unavailable"
+        }
 
     # 3. VirusTotal URL analysis
     vt_results = []
@@ -74,6 +85,12 @@ def process_text(text: str):
         "ai_analysis": ai_result,
         "virustotal": vt_results,
         "recommendation": result["recommendation"],
+        "extracted_entities": {
+            "urls": signals["urls"],
+            "upi_ids": signals["upi_ids"],
+            "phone_numbers": signals["phone_numbers"],
+            "emails": signals["emails"]
+        },
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
@@ -94,40 +111,59 @@ def scan(request: ScanRequest):
 
 @app.post("/api/scan/image")
 async def scan_image(
-    file: UploadFile = File(...),
+    file: UploadFile | None = File(None),
     platform: str = Form("web")
 ):
 
     # Check that a file was actually uploaded
-    if not file.filename:
+    if file is None or not file.filename:
         return {
             "error": "No image file provided"
         }
 
-    # Save uploaded image temporarily
+    if file.content_type and not file.content_type.startswith("image/"):
+        return {
+            "error": "Unsupported image type"
+        }
+
+    contents = await file.read()
+
+    if not contents:
+        return {
+            "error": "Empty image file"
+        }
+
     suffix = os.path.splitext(file.filename)[1] or ".png"
 
+    # Save uploaded image temporarily before entering the cleanup scope.
     with tempfile.NamedTemporaryFile(
         delete=False,
         suffix=suffix
     ) as temp_file:
-
-        contents = await file.read()
         temp_file.write(contents)
         temp_path = temp_file.name
 
     try:
-
-        # 1. OCR
-        extracted_text = extract_text_from_image(temp_path)
+        try:
+            # 1. OCR and image preprocessing
+            extracted_text = extract_text_from_image(temp_path)
+        except Exception:
+            return {
+                "error": "Could not process image"
+            }
 
         if not extracted_text.strip():
             return {
                 "error": "Could not extract text from image"
             }
 
-        # 2. Run complete text pipeline
-        result = process_text(extracted_text)
+        try:
+            # 2. Run complete text pipeline
+            result = process_text(extracted_text)
+        except Exception:
+            return {
+                "error": "Could not process image"
+            }
 
         # 3. Add image/OCR information
         result["input_type"] = "image"
@@ -137,7 +173,6 @@ async def scan_image(
         return result
 
     finally:
-
         # Delete temporary image
         if os.path.exists(temp_path):
             os.remove(temp_path)
