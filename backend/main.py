@@ -503,6 +503,7 @@ async def scan_video(
 
         frames = []
         frame_ocr_parts = []
+        frame_editing_indicators = []
         for frame_record in frame_records:
             frame_path = frame_record["path"]
             frame_bytes = Path(frame_path).read_bytes()
@@ -523,10 +524,24 @@ async def scan_video(
             if ocr_error:
                 frame["ocr_error"] = ocr_error
             frames.append(frame)
-            if ocr_text:
-                frame_ocr_parts.append(ocr_text)
+            if ocr_text.strip():
+                frame_ocr_parts.append(ocr_text.strip())
+
+            possible_editing_indicators = (
+                image_forensics.get("ela", {}).get("possible_editing_indicators")
+                if isinstance(image_forensics, dict)
+                and isinstance(image_forensics.get("ela"), dict)
+                else None
+            )
+            if isinstance(possible_editing_indicators, bool):
+                frame_editing_indicators.append(possible_editing_indicators)
 
         frame_ocr_text = "\n".join(frame_ocr_parts)
+        frame_possible_editing_indicators = (
+            any(frame_editing_indicators)
+            if frame_editing_indicators
+            else None
+        )
         audio_forensics = None
         if video_metadata["has_audio"]:
             audio_path = str(Path(temp_directory) / "audio.wav")
@@ -594,15 +609,41 @@ async def scan_video(
             "video_metadata": video_metadata,
             "frames": frames,
             "frame_ocr_text": frame_ocr_text,
+            "video_forensics": {
+                "frame_possible_editing_indicators": frame_possible_editing_indicators,
+            },
             "audio_forensics": audio_forensics,
+            "analysis_source": "none",
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 
-        if transcription.get("status") != "success":
+        transcript = transcription.get("text")
+        has_transcript = isinstance(transcript, str) and bool(transcript.strip())
+        has_frame_ocr = bool(frame_ocr_text)
+
+        if has_transcript and has_frame_ocr:
+            analysis_input = (
+                f"SPOKEN TRANSCRIPT:\n{transcript.strip()}\n\n"
+                f"ON-SCREEN TEXT:\n{frame_ocr_text}"
+            )
+            analysis_source = "speech_and_frame_ocr"
+        elif has_transcript:
+            analysis_input = transcript.strip()
+            analysis_source = "speech"
+        elif has_frame_ocr:
+            analysis_input = frame_ocr_text
+            analysis_source = "frame_ocr"
+        else:
+            analysis_input = None
+            analysis_source = "none"
+
+        base_response["analysis_source"] = analysis_source
+
+        if analysis_input is None:
             return base_response
 
         try:
-            result = process_text(transcription["text"])
+            result = process_text(analysis_input)
         except Exception as error:
             return {
                 **base_response,
@@ -620,6 +661,10 @@ async def scan_video(
             "video_metadata": video_metadata,
             "frames": frames,
             "frame_ocr_text": frame_ocr_text,
+            "video_forensics": {
+                "frame_possible_editing_indicators": frame_possible_editing_indicators,
+            },
             "audio_forensics": audio_forensics,
+            "analysis_source": analysis_source,
         })
         return result
