@@ -282,7 +282,10 @@ def calculate_risk(signals):
         "benign": "No Strong Threat Detected",
     }
 
-    if ai_threat_type in threat_type_map and ai_threat_type != "unknown":
+    if has_malicious_url:
+        threat_type = "Malicious Link"
+
+    elif ai_threat_type in threat_type_map and ai_threat_type != "unknown":
         threat_type = threat_type_map[ai_threat_type]
 
     else:

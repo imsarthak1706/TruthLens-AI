@@ -1,14 +1,26 @@
 from fastapi import FastAPI, UploadFile, File, Form
 from pydantic import BaseModel
 from datetime import datetime, timezone
+from uuid import uuid4
 import tempfile
 import os
+import subprocess
+from pathlib import Path
 
 from detector import detect_signals
 from risk_engine import calculate_risk
 from ai_analyzer import analyze_text
 from virustotal import scan_url
-from image_analyzer import extract_text_from_image
+from image_analyzer import analyze_image_forensics, extract_text_from_image
+from audio_analyzer import analyze_audio_forensics
+from audio_transcriber import transcribe_audio
+from video_analyzer import (
+    VideoProcessingError,
+    extract_audio,
+    extract_frames,
+    probe_video,
+    select_frame_timestamps,
+)
 
 
 app = FastAPI(title="TruthLensAI Detection Engine")
@@ -17,6 +29,13 @@ app = FastAPI(title="TruthLensAI Detection Engine")
 class ScanRequest(BaseModel):
     input: str
     platform: str
+
+
+MAX_VIDEO_BYTES = 50 * 1024 * 1024
+MAX_VIDEO_DURATION_SECONDS = 120
+MAX_VIDEO_WIDTH = 1920
+MAX_VIDEO_HEIGHT = 1080
+SUPPORTED_VIDEO_EXTENSIONS = {".mp4", ".mov", ".webm", ".mkv"}
 
 
 @app.get("/")
@@ -76,7 +95,7 @@ def process_text(text: str):
     result = calculate_risk(combined_signals)
 
     return {
-        "scan_id": "test_001",
+        "scan_id": str(uuid4()),
         "risk_score": result["risk_score"],
         "severity": result["severity"],
         "confidence": result["confidence"],
@@ -153,8 +172,45 @@ async def scan_image(
             }
 
         if not extracted_text.strip():
+            # A valid image can contain no readable text; forensics remain useful.
+            try:
+                image_forensics = analyze_image_forensics(contents)
+            except Exception as error:
+                image_forensics = {
+                    "exif": {
+                        "available": False,
+                        "fields": {},
+                        "error": str(error),
+                    },
+                    "ela": {
+                        "supported": False,
+                        "possible_editing_indicators": None,
+                        "reason": str(error),
+                    },
+                }
+
             return {
-                "error": "Could not extract text from image"
+                "scan_id": str(uuid4()),
+                "risk_score": None,
+                "severity": None,
+                "confidence": None,
+                "threat_type": None,
+                "evidence": [],
+                "ai_analysis": None,
+                "virustotal": [],
+                "recommendation": "No readable text detected; image forensics are informational only.",
+                "extracted_entities": {
+                    "urls": [],
+                    "upi_ids": [],
+                    "phone_numbers": [],
+                    "emails": []
+                },
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "input_type": "image",
+                "platform": platform,
+                "extracted_text": "",
+                "ocr_status": "No readable text detected",
+                "image_forensics": image_forensics,
             }
 
         try:
@@ -169,6 +225,22 @@ async def scan_image(
         result["input_type"] = "image"
         result["platform"] = platform
         result["extracted_text"] = extracted_text
+        # Image forensics is informational and does not affect risk scoring.
+        try:
+            result["image_forensics"] = analyze_image_forensics(contents)
+        except Exception as error:
+            result["image_forensics"] = {
+                "exif": {
+                    "available": False,
+                    "fields": {},
+                    "error": str(error),
+                },
+                "ela": {
+                    "supported": False,
+                    "possible_editing_indicators": None,
+                    "reason": str(error),
+                },
+            }
 
         return result
 
@@ -176,3 +248,423 @@ async def scan_image(
         # Delete temporary image
         if os.path.exists(temp_path):
             os.remove(temp_path)
+
+
+# -----------------------------------------
+# AUDIO FORENSICS
+# -----------------------------------------
+
+@app.post("/api/scan/audio")
+async def scan_audio(
+    file: UploadFile | None = File(None),
+    platform: str = Form("web")
+):
+
+    if file is None or not file.filename:
+        return {
+            "error": {
+                "code": "audio_file_missing",
+                "message": "No audio file provided",
+            }
+        }
+
+    content_type = file.content_type or ""
+    if content_type and not (
+        content_type.startswith("audio/")
+        or content_type == "application/octet-stream"
+    ):
+        return {
+            "error": {
+                "code": "unsupported_audio_type",
+                "message": "Unsupported audio content type",
+            }
+        }
+
+    contents = await file.read()
+    if not contents:
+        return {
+            "error": {
+                "code": "audio_file_empty",
+                "message": "Empty audio file",
+            }
+        }
+
+    suffix = os.path.splitext(file.filename)[1] or ".audio"
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp_file:
+        temp_file.write(contents)
+        temp_path = temp_file.name
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as normalized_file:
+        normalized_path = normalized_file.name
+
+    try:
+        try:
+            subprocess.run(
+                [
+                    "ffmpeg",
+                    "-y",
+                    "-i",
+                    temp_path,
+                    "-ac",
+                    "1",
+                    "-ar",
+                    "16000",
+                    "-f",
+                    "wav",
+                    normalized_path,
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+        except (OSError, subprocess.CalledProcessError) as error:
+            message = getattr(error, "stderr", None) or str(error)
+            try:
+                audio_forensics = analyze_audio_forensics(temp_path)
+            except Exception as analyzer_error:
+                audio_forensics = {
+                    "error": {
+                        "code": "audio_forensics_failed",
+                        "message": str(analyzer_error),
+                    }
+                }
+            return {
+                "error": {
+                    "code": "audio_conversion_failed",
+                    "message": message.strip(),
+                },
+                "audio_forensics": audio_forensics,
+            }
+
+        try:
+            transcription = transcribe_audio(normalized_path)
+        except Exception as error:
+            transcription = {
+                "status": "error",
+                "text": None,
+                "code": "transcription_failed",
+                "message": str(error),
+            }
+
+        try:
+            audio_forensics = analyze_audio_forensics(normalized_path)
+        except Exception as error:
+            audio_forensics = {
+                "error": {
+                    "code": "audio_forensics_failed",
+                    "message": str(error),
+                }
+            }
+
+        base_response = {
+            "scan_id": str(uuid4()),
+            "input_type": "audio",
+            "platform": platform,
+            "transcript": transcription.get("text"),
+            "transcription": transcription,
+            "risk_score": None,
+            "severity": None,
+            "confidence": None,
+            "threat_type": None,
+            "evidence": [],
+            "ai_analysis": None,
+            "virustotal": [],
+            "recommendation": "No usable speech transcript was available; audio forensics are informational only.",
+            "extracted_entities": {
+                "urls": [],
+                "upi_ids": [],
+                "phone_numbers": [],
+                "emails": [],
+            },
+            "audio_forensics": audio_forensics,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
+        if transcription.get("status") != "success":
+            return base_response
+
+        try:
+            result = process_text(transcription["text"])
+        except Exception as error:
+            return {
+                **base_response,
+                "error": {
+                    "code": "audio_text_analysis_failed",
+                    "message": str(error),
+                },
+            }
+
+        result["input_type"] = "audio"
+        result["platform"] = platform
+        result["transcript"] = transcription["text"]
+        result["transcription"] = transcription
+        result["audio_forensics"] = audio_forensics
+        return result
+    finally:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+        if os.path.exists(normalized_path):
+            os.remove(normalized_path)
+
+
+# -----------------------------------------
+# VIDEO SCANNING
+# -----------------------------------------
+
+@app.post("/api/scan/video")
+async def scan_video(
+    file: UploadFile | None = File(None),
+    platform: str = Form("web")
+):
+
+    if file is None or not file.filename:
+        return {
+            "error": {
+                "code": "video_file_missing",
+                "message": "No video file provided",
+            }
+        }
+
+    suffix = Path(file.filename).suffix.lower()
+    content_type = file.content_type or ""
+    if suffix not in SUPPORTED_VIDEO_EXTENSIONS or (
+        content_type
+        and not (
+            content_type.startswith("video/")
+            or content_type == "application/octet-stream"
+        )
+    ):
+        return {
+            "error": {
+                "code": "unsupported_video_type",
+                "message": "Supported video formats are MP4, MOV, WebM, and MKV",
+            }
+        }
+
+    contents = await file.read(MAX_VIDEO_BYTES + 1)
+    if not contents:
+        return {
+            "error": {
+                "code": "video_file_empty",
+                "message": "Empty video file",
+            }
+        }
+    if len(contents) > MAX_VIDEO_BYTES:
+        return {
+            "error": {
+                "code": "video_file_too_large",
+                "message": "Video file exceeds the 50 MB limit",
+            }
+        }
+
+    with tempfile.TemporaryDirectory(prefix="truthlens-video-") as temp_directory:
+        video_path = str(Path(temp_directory) / f"input{suffix}")
+        Path(video_path).write_bytes(contents)
+
+        try:
+            video_metadata = probe_video(video_path)
+        except VideoProcessingError as error:
+            return {"error": {"code": error.code, "message": error.message}}
+
+        duration_seconds = video_metadata["duration_seconds"]
+        width = video_metadata.get("width")
+        height = video_metadata.get("height")
+        if duration_seconds > MAX_VIDEO_DURATION_SECONDS:
+            return {
+                "error": {
+                    "code": "video_duration_too_long",
+                    "message": "Video duration exceeds the 60 second limit",
+                }
+            }
+        if not isinstance(width, int) or not isinstance(height, int):
+            return {
+                "error": {
+                    "code": "invalid_video_dimensions",
+                    "message": "Video dimensions are unavailable",
+                }
+            }
+        if width > MAX_VIDEO_WIDTH or height > MAX_VIDEO_HEIGHT:
+            return {
+                "error": {
+                    "code": "video_dimensions_too_large",
+                    "message": "Video dimensions must not exceed 1920x1080",
+                }
+            }
+
+        try:
+            frame_records = extract_frames(
+                video_path,
+                select_frame_timestamps(duration_seconds),
+                temp_directory,
+            )
+        except VideoProcessingError as error:
+            return {"error": {"code": error.code, "message": error.message}}
+
+        frames = []
+        frame_ocr_parts = []
+        frame_editing_indicators = []
+        for frame_record in frame_records:
+            frame_path = frame_record["path"]
+            frame_bytes = Path(frame_path).read_bytes()
+            try:
+                ocr_text = extract_text_from_image(frame_path)
+            except Exception as error:
+                ocr_text = ""
+                ocr_error = str(error)
+            else:
+                ocr_error = None
+
+            image_forensics = analyze_image_forensics(frame_bytes)
+            frame = {
+                "timestamp_seconds": frame_record["timestamp_seconds"],
+                "ocr_text": ocr_text,
+                "image_forensics": image_forensics,
+            }
+            if ocr_error:
+                frame["ocr_error"] = ocr_error
+            frames.append(frame)
+            if ocr_text.strip():
+                frame_ocr_parts.append(ocr_text.strip())
+
+            possible_editing_indicators = (
+                image_forensics.get("ela", {}).get("possible_editing_indicators")
+                if isinstance(image_forensics, dict)
+                and isinstance(image_forensics.get("ela"), dict)
+                else None
+            )
+            if isinstance(possible_editing_indicators, bool):
+                frame_editing_indicators.append(possible_editing_indicators)
+
+        frame_ocr_text = "\n".join(frame_ocr_parts)
+        frame_possible_editing_indicators = (
+            any(frame_editing_indicators)
+            if frame_editing_indicators
+            else None
+        )
+        audio_forensics = None
+        if video_metadata["has_audio"]:
+            audio_path = str(Path(temp_directory) / "audio.wav")
+            try:
+                extract_audio(video_path, audio_path)
+            except VideoProcessingError as error:
+                transcription = {
+                    "status": "error",
+                    "text": None,
+                    "code": error.code,
+                    "message": error.message,
+                }
+                audio_forensics = {
+                    "error": {
+                        "code": "audio_forensics_unavailable",
+                        "message": error.message,
+                    }
+                }
+            else:
+                try:
+                    transcription = transcribe_audio(audio_path)
+                except Exception as error:
+                    transcription = {
+                        "status": "error",
+                        "text": None,
+                        "code": "transcription_failed",
+                        "message": str(error),
+                    }
+                try:
+                    audio_forensics = analyze_audio_forensics(audio_path)
+                except Exception as error:
+                    audio_forensics = {
+                        "error": {
+                            "code": "audio_forensics_failed",
+                            "message": str(error),
+                        }
+                    }
+        else:
+            transcription = {
+                "status": "no_audio",
+                "text": None,
+                "reason": "No audio stream found",
+            }
+
+        base_response = {
+            "scan_id": str(uuid4()),
+            "input_type": "video",
+            "platform": platform,
+            "transcript": transcription.get("text"),
+            "transcription": transcription,
+            "risk_score": None,
+            "severity": None,
+            "confidence": None,
+            "threat_type": None,
+            "evidence": [],
+            "ai_analysis": None,
+            "virustotal": [],
+            "recommendation": "No usable speech transcript was available; visual and audio forensics are informational only.",
+            "extracted_entities": {
+                "urls": [],
+                "upi_ids": [],
+                "phone_numbers": [],
+                "emails": [],
+            },
+            "video_metadata": video_metadata,
+            "frames": frames,
+            "frame_ocr_text": frame_ocr_text,
+            "video_forensics": {
+                "frame_possible_editing_indicators": frame_possible_editing_indicators,
+            },
+            "audio_forensics": audio_forensics,
+            "analysis_source": "none",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
+        transcript = transcription.get("text")
+        has_transcript = isinstance(transcript, str) and bool(transcript.strip())
+        has_frame_ocr = bool(frame_ocr_text)
+
+        if has_transcript and has_frame_ocr:
+            analysis_input = (
+                f"SPOKEN TRANSCRIPT:\n{transcript.strip()}\n\n"
+                f"ON-SCREEN TEXT:\n{frame_ocr_text}"
+            )
+            analysis_source = "speech_and_frame_ocr"
+        elif has_transcript:
+            analysis_input = transcript.strip()
+            analysis_source = "speech"
+        elif has_frame_ocr:
+            analysis_input = frame_ocr_text
+            analysis_source = "frame_ocr"
+        else:
+            analysis_input = None
+            analysis_source = "none"
+
+        base_response["analysis_source"] = analysis_source
+
+        if analysis_input is None:
+            return base_response
+
+        try:
+            result = process_text(analysis_input)
+        except Exception as error:
+            return {
+                **base_response,
+                "error": {
+                    "code": "video_text_analysis_failed",
+                    "message": str(error),
+                },
+            }
+
+        result.update({
+            "input_type": "video",
+            "platform": platform,
+            "transcript": transcription["text"],
+            "transcription": transcription,
+            "video_metadata": video_metadata,
+            "frames": frames,
+            "frame_ocr_text": frame_ocr_text,
+            "video_forensics": {
+                "frame_possible_editing_indicators": frame_possible_editing_indicators,
+            },
+            "audio_forensics": audio_forensics,
+            "analysis_source": analysis_source,
+        })
+        return result
