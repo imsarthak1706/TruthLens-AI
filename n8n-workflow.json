@@ -9,14 +9,14 @@
           ]
         }
       },
-      "id": "028c850e-8345-4600-b14a-66d159820257",
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.3,
       "position": [
-        -2096,
-        336
-      ]
+        -1872,
+        368
+      ],
+      "id": "d4e52a22-474c-4fb5-a167-f0a1af6cdde4"
     },
     {
       "parameters": {
@@ -25,17 +25,17 @@
         "orderBy": "id.desc",
         "filterType": "none"
       },
-      "id": "2de1ecb1-fc2a-4785-b0bb-11c2b27fb622",
       "name": "Get many rows",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        -1872,
-        336
+        -1648,
+        368
       ],
+      "id": "9f9b1b8c-f195-4b65-8308-349cc6a9c3d8",
       "credentials": {
         "supabaseApi": {
-          "id": "d2lD9Yxursie0cww",
+          "id": "sjrJaO6ku8joiwtU",
           "name": "Supabase account"
         }
       }
@@ -65,27 +65,27 @@
         },
         "options": {}
       },
-      "id": "5d236b1f-c9ba-46af-b8c1-813795e33add",
       "name": "If",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -1648,
-        336
-      ]
+        -1424,
+        368
+      ],
+      "id": "b2658246-8793-4da3-81f2-ac6639779de3"
     },
     {
       "parameters": {
         "jsCode": "const output = [];\n\nfor (const item of $input.all()) {\n  const data = item.json;\n\n  let urls = data.urls || [];\n  let domains = data.domains || [];\n\n  // Prefer the actual Telegram message text. The stored message may be the raw\n  // serialized Telegram JSON, so parse it and use its .text field when present.\n  let text = data.message;\n  if (typeof text === \"string\") {\n    try {\n      const parsed = JSON.parse(text);\n      if (parsed && typeof parsed === \"object\" && typeof parsed.text === \"string\") {\n        text = parsed.text;\n      }\n    } catch {\n      // Not JSON: message is already plain text, keep as-is.\n    }\n  }\n\n  // If URLs are not already extracted, get them from the clean message text.\n  if (!urls.length && text) {\n    urls = String(text).match(/https?:\\/\\/[^\\s\"\\\\]+/g) || [];\n  }\n\n  if (typeof urls === \"string\") {\n    try {\n      urls = JSON.parse(urls);\n    } catch {\n      urls = [];\n    }\n  }\n\n  if (typeof domains === \"string\") {\n    try {\n      domains = JSON.parse(domains);\n    } catch {\n      domains = [];\n    }\n  }\n\n  for (const url of urls) {\n    output.push({\n      json: {\n        scan_id: data.id,\n        indicator_type: \"URL\",\n        value: url,\n        vt_id: Buffer.from(url)\n          .toString(\"base64\")\n          .replace(/=/g, \"\")\n          .replace(/\\+/g, \"-\")\n          .replace(/\\//g, \"_\")\n      }\n    });\n  }\n\n  for (const domain of domains) {\n    output.push({\n      json: {\n        scan_id: data.id,\n        indicator_type: \"DOMAIN\",\n        value: domain\n      }\n    });\n  }\n}\n\nreturn output;"
       },
-      "id": "bd110198-90c7-4238-b1a0-fca6de502cd2",
       "name": "Code in JavaScript",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1424,
-        480
-      ]
+        -1200,
+        512
+      ],
+      "id": "f13b67af-e3f8-4d6d-b0aa-53d08e34a8f8"
     },
     {
       "parameters": {
@@ -112,14 +112,14 @@
         },
         "options": {}
       },
-      "id": "89fa13d3-c1b9-4473-abe0-12100417558a",
       "name": "If1",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -1200,
-        96
-      ]
+        -976,
+        0
+      ],
+      "id": "69929b43-24a6-4d00-87f8-2018f2ebc061"
     },
     {
       "parameters": {
@@ -146,14 +146,14 @@
         },
         "options": {}
       },
-      "id": "83427161-c2b4-4d2f-8bab-bf75511612d9",
       "name": "HTTP Request1",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.5,
       "position": [
-        -976,
-        96
-      ]
+        -752,
+        0
+      ],
+      "id": "b6f920ae-2a22-47f2-88bc-6a1130405991"
     },
     {
       "parameters": {
@@ -181,14 +181,14 @@
         "jsonBody": "{\n  \"input\": \"URGENT! Your SBI account will be blocked today. Send money immediately to verify your account.\",\n  \"platform\": \"telegram\"\n}",
         "options": {}
       },
-      "id": "6fd3eca9-cf0d-4001-9061-36d3b25bdab2",
       "name": "HTTP Request",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.5,
       "position": [
-        -752,
-        96
-      ]
+        -528,
+        0
+      ],
+      "id": "174b137a-8963-46d7-a009-c5719d0279b7"
     },
     {
       "parameters": {
@@ -224,40 +224,40 @@
         },
         "options": {}
       },
-      "id": "661eaf55-25c9-4b9b-8fbf-2808810a4e60",
       "name": "If2",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -528,
-        96
-      ]
+        -304,
+        0
+      ],
+      "id": "de87511e-f570-42dd-b6c2-f0c6ea800f9b"
     },
     {
       "parameters": {
         "jsCode": "const vt = $input.first().json;\n\nconst original = $('If1').first().json;\n\nreturn [{\n  json: {\n    scan_id: original.scan_id,\n    indicator_type: original.indicator_type,\n    value: original.value,\n    vt_data: vt\n  }\n}];"
       },
-      "id": "29952f65-7f0b-4fb4-bd05-a24f547cbf2b",
       "name": "Code in JavaScript1",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -304,
-        192
-      ]
+        -80,
+        96
+      ],
+      "id": "ac62bedd-2162-4739-828c-3333933a70a0"
     },
     {
       "parameters": {
         "jsCode": "const items = $input.all();\n\nreturn items.map(item => {\n  const d = item.json;\n\n  const vt = d.vt_data?.data;\n  const status = vt?.attributes?.status;\n\n  // VirusTotal has not finished scanning yet\n  if (status !== \"completed\") {\n    return {\n      json: {\n        ...d,\n        vt_status: status || \"unknown\",\n        malicious: 0,\n        suspicious: 0,\n        harmless: 0,\n        undetected: 0,\n        risk_score: null,\n        verdict: \"ANALYZING\"\n      }\n    };\n  }\n\n  const stats = vt.attributes.stats || {};\n\n  const malicious = Number(stats.malicious || 0);\n  const suspicious = Number(stats.suspicious || 0);\n  const harmless = Number(stats.harmless || 0);\n  const undetected = Number(stats.undetected || 0);\n\n  const risk_score = Math.min(\n    100,\n    malicious * 30 + suspicious * 15\n  );\n\n  let verdict;\n\n  if (risk_score >= 70) {\n    verdict = \"SCAM\";\n  } else if (risk_score >= 40) {\n    verdict = \"SUSPICIOUS\";\n  } else {\n    verdict = \"SAFE\";\n  }\n\n  return {\n    json: {\n      ...d,\n      malicious,\n      suspicious,\n      harmless,\n      undetected,\n      risk_score,\n      verdict,\n      vt_status: \"completed\"\n    }\n  };\n});"
       },
-      "id": "5ae34fb4-08cb-47f1-aa7c-9eec4acff25c",
       "name": "Risk Engine",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -80,
-        192
-      ]
+        144,
+        96
+      ],
+      "id": "09cefdc0-ab10-45be-be6c-d230dec440f6"
     },
     {
       "parameters": {
@@ -294,17 +294,17 @@
           ]
         }
       },
-      "id": "050ba573-8403-42f8-91a0-7151d96fbed2",
       "name": "Update a row",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        144,
-        192
+        368,
+        96
       ],
+      "id": "9c4a4437-4315-4263-9cc9-765445312389",
       "credentials": {
         "supabaseApi": {
-          "id": "d2lD9Yxursie0cww",
+          "id": "sjrJaO6ku8joiwtU",
           "name": "Supabase account"
         }
       }
@@ -313,14 +313,14 @@
       "parameters": {
         "jsCode": "const d = $('Update a row').first().json;\n\nconst r = $('Risk Engine').first().json;\n\nif (d.verdict === \"ANALYZING\") {\n  return [{\n    json: {\n      ...d,\n      response: `🔄 ANALYZING\n\n🔗 URL:\n${Array.isArray(d.urls) ? d.urls.join(\"\\n\") : d.value || \"Unknown\"}\n\n🛡️ VirusTotal is still processing this URL.\n\nPlease try again in a few seconds.\n\n⚠️ Do not open or interact with this link.`\n    }\n  }];\n}\n\nconst urls = Array.isArray(d.urls)\n  ? d.urls\n  : (r.value ? [r.value] : JSON.parse(d.urls || \"[]\"));\n\nconst response = `🚨 ${d.verdict}\n\n🔗 URL:\n${urls.join(\"\\n\")}\n\n⚠️ Risk Score: ${d.risk_score}/100\n\n🎯 Type: ${d.scam_type || \"Unknown\"}\n\n🛡️ VirusTotal:\n\n• Malicious: ${r.malicious}\n• Suspicious: ${r.suspicious}\n• Harmless: ${r.harmless}\n• Undetected: ${r.undetected}\n\n📝 Reason:\n${d.reasons || \"Analysis completed.\"}\n\n⚠️ Do not open or interact with this link.`;\n\nreturn [{\n  json: {\n    ...d,\n    response\n  }\n}];"
       },
-      "id": "482dc92d-3460-4a92-abdb-4fe9be2033aa",
       "name": "response builder",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        368,
-        192
-      ]
+        592,
+        96
+      ],
+      "id": "bb97d51e-f0d6-4e89-aa12-85336f8671b9"
     },
     {
       "parameters": {
@@ -369,33 +369,33 @@
         },
         "additionalFields": {}
       },
-      "id": "f1ed136e-2f39-4899-84ae-a97eb23a133c",
       "name": "Send a text message",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        592,
-        192
+        816,
+        96
       ],
-      "webhookId": "b3d4e1c4-9aa2-4b76-b031-e1ba9f9c682d",
+      "webhookId": "d70f8e11-6a3e-4d07-a49c-b77e78b2bc64",
+      "id": "a4f43998-51c2-4d4c-ba8a-830b797e777b",
       "credentials": {
         "telegramApi": {
-          "id": "YzqsziR6QE4TPvg3",
+          "id": "fE4fEfsTySkWHA78",
           "name": "Telegram account"
         }
       }
     },
     {
       "parameters": {},
-      "id": "08b058ca-bd22-495a-8789-6c25f2ecb347",
       "name": "Wait",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -304,
-        0
+        -80,
+        -96
       ],
-      "webhookId": "01f71883-b1e9-4463-bfae-78f6bfd4fca6"
+      "webhookId": "a392083d-6f9a-4667-8e78-5a12981394f3",
+      "id": "dffd1bb0-ecb1-459d-94fd-4d75aacf348e"
     },
     {
       "parameters": {
@@ -411,14 +411,14 @@
         },
         "options": {}
       },
-      "id": "e1a37516-3063-4bda-9d7c-f2903e0cd526",
       "name": "HTTP Request2",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.5,
       "position": [
-        -80,
-        0
-      ]
+        144,
+        -96
+      ],
+      "id": "7ff8eb2d-4c0c-485f-b05d-1f87cd906579"
     },
     {
       "parameters": {
@@ -444,17 +444,17 @@
           ]
         }
       },
-      "id": "74d83603-6c39-41ae-91e1-ff4b3ba26257",
       "name": "Create a row",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        -1200,
-        576
+        -976,
+        608
       ],
+      "id": "39dd49e8-7d53-4442-8943-4925c5ee65a3",
       "credentials": {
         "supabaseApi": {
-          "id": "d2lD9Yxursie0cww",
+          "id": "sjrJaO6ku8joiwtU",
           "name": "Supabase account"
         }
       }
@@ -465,15 +465,15 @@
         "path": "scan",
         "options": {}
       },
-      "id": "9803e9b6-2263-4cf1-9e3a-4cb1d8ad5a92",
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -1872,
-        528
+        -1648,
+        560
       ],
-      "webhookId": "30a37b9f-e81f-4cbe-8128-1733273d85cd"
+      "webhookId": "30a37b9f-e81f-4cbe-8128-1733273d85cd",
+      "id": "0c1cb658-d8ba-4c8f-bb1b-bfb13b7c47f9"
     },
     {
       "parameters": {
@@ -507,17 +507,17 @@
           ]
         }
       },
-      "id": "9d031c39-e944-4efe-b141-260c509d5406",
       "name": "Create a row1",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        -1648,
-        576
+        -1424,
+        608
       ],
+      "id": "e6265c4e-dcf4-47ac-a0fc-be5bb089975b",
       "credentials": {
         "supabaseApi": {
-          "id": "d2lD9Yxursie0cww",
+          "id": "sjrJaO6ku8joiwtU",
           "name": "Supabase account"
         }
       }
@@ -530,18 +530,18 @@
         ],
         "additionalFields": {}
       },
-      "id": "aa000000-0000-4000-8000-000000000001",
       "name": "Telegram Trigger",
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.5,
       "position": [
         -528,
-        720
+        752
       ],
-      "webhookId": "620e0628-3729-4b10-8d87-b59627f57605",
+      "webhookId": "8e5a29ba-62e8-41a8-a670-151b0bfc29eb",
+      "id": "1a11aef5-9497-4bf8-99fc-7c4d9ba7f4b2",
       "credentials": {
         "telegramApi": {
-          "id": "YzqsziR6QE4TPvg3",
+          "id": "fE4fEfsTySkWHA78",
           "name": "Telegram account"
         }
       }
@@ -571,14 +571,14 @@
         },
         "options": {}
       },
-      "id": "7ee347ad-cddc-4327-aa42-739353fde853",
       "name": "Is Callback?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
         -304,
-        720
-      ]
+        752
+      ],
+      "id": "84db17c5-ba34-4e39-abf0-e192427fd547"
     },
     {
       "parameters": {
@@ -595,10 +595,10 @@
                 "conditions": [
                   {
                     "leftValue": "={{ $json.callback_query.data }}",
-                    "rightValue": "report_incident",
+                    "rightValue": "report_incident:",
                     "operator": {
                       "type": "string",
-                      "operation": "equals"
+                      "operation": "startsWith"
                     }
                   }
                 ],
@@ -636,14 +636,14 @@
           "fallbackOutput": "none"
         }
       },
-      "id": "ca59f9c0-29b0-4696-8d7e-6c30cc3d5098",
       "name": "Route Callback",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
         -80,
-        480
-      ]
+        384
+      ],
+      "id": "8042b9a2-cbf1-41b5-8f7a-5029ae0d908c"
     },
     {
       "parameters": {
@@ -651,18 +651,18 @@
         "queryId": "={{ $('Telegram Trigger').item.json.callback_query.id }}",
         "additionalFields": {}
       },
-      "id": "a39ba504-d1d5-4cc9-9c7e-ebf743bd7bfb",
       "name": "Acknowledge Report Callback",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
         144,
-        432
+        368
       ],
-      "webhookId": "235b1891-7565-4dc1-aff3-fd486a0eb857",
+      "webhookId": "f539138b-9ca7-406f-b5ee-2bfcef732b75",
+      "id": "39fcfafb-faf2-4729-9d14-6bad571dd126",
       "credentials": {
         "telegramApi": {
-          "id": "YzqsziR6QE4TPvg3",
+          "id": "fE4fEfsTySkWHA78",
           "name": "Telegram account"
         }
       }
@@ -677,53 +677,53 @@
         "filters": {
           "conditions": [
             {
-              "keyName": "chat_id",
+              "keyName": "scan_id",
               "condition": "eq",
-              "keyValue": "={{ $('Telegram Trigger').item.json.callback_query.message.chat.id }}"
+              "keyValue": "={{ $('Telegram Trigger').item.json.callback_query.data.split(':')[1] }}"
             }
           ]
         }
       },
-      "id": "cc4284f5-c7f6-41a3-8949-47c15132255c",
       "name": "Load Incident Evidence",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
         368,
-        432
+        368
       ],
+      "id": "cf7039c8-2d7b-4ab1-ac93-9d6459aa7927",
       "credentials": {
         "supabaseApi": {
-          "id": "d2lD9Yxursie0cww",
+          "id": "sjrJaO6ku8joiwtU",
           "name": "Supabase account"
         }
       }
     },
     {
       "parameters": {
-        "jsCode": "const row = $input.first() ? $input.first().json : {};\n\nlet ev = {};\ntry {\n  ev = typeof row.evidence_json === \"string\" ? JSON.parse(row.evidence_json) : (row.evidence_json || {});\n} catch (e) {\n  ev = {};\n}\n\nconst val = (v) => (v === undefined || v === null || v === \"\") ? null : v;\nconst arr = (a) => Array.isArray(a) ? a : [];\n\nconst ai = (ev.ai_analysis && typeof ev.ai_analysis === \"object\") ? ev.ai_analysis : {};\nconst vt = ev.virustotal != null ? ev.virustotal : null;\nconst ent = (ev.extracted_entities && typeof ev.extracted_entities === \"object\") ? ev.extracted_entities : {};\n\nconst incident_id = ev.scan_id != null ? ev.scan_id : (row.scan_id != null ? row.scan_id : null);\n\n// Structured report object — kept in the workflow for later PDF/email phases.\nconst report = {\n  title: \"TRUTHLENSAI INCIDENT REPORT\",\n  incident_id: incident_id,\n  scan_id: val(ev.scan_id),\n  timestamp: val(ev.timestamp),\n  platform: val(ev.platform),\n  input_type: val(ev.input_type),\n  risk_score: ev.risk_score != null ? ev.risk_score : null,\n  severity: val(ev.severity),\n  confidence: val(ev.confidence),\n  threat_type: val(ev.threat_type),\n  original_content: {\n    original_text: val(ev.original_text),\n    extracted_text: val(ev.extracted_text)\n  },\n  extracted_entities: {\n    urls: arr(ent.urls),\n    upi_ids: arr(ent.upi_ids),\n    phone_numbers: arr(ent.phone_numbers),\n    emails: arr(ent.emails)\n  },\n  detected_signals: arr(ev.evidence),\n  ai_analysis: {\n    scam_intent: ai.scam_intent !== undefined ? ai.scam_intent : null,\n    social_engineering: ai.social_engineering !== undefined ? ai.social_engineering : null,\n    impersonation: ai.impersonation !== undefined ? ai.impersonation : null,\n    financial_manipulation: ai.financial_manipulation !== undefined ? ai.financial_manipulation : null,\n    urgency: ai.urgency !== undefined ? ai.urgency : null,\n    confidence: ai.confidence !== undefined ? ai.confidence : null,\n    explanation: ai.explanation !== undefined ? ai.explanation : null,\n    threat_type: ai.threat_type !== undefined ? ai.threat_type : null\n  },\n  virustotal: vt,\n  recommendation: val(ev.recommendation)\n};\n\n// Human-readable text version, faithful to real values only.\nconst lines = [];\nconst show = (label, v) => { lines.push(label + \": \" + (v === null || v === undefined || v === \"\" ? \"(not available)\" : v)); };\n\nlines.push(\"🚨 TRUTHLENSAI INCIDENT REPORT\");\nlines.push(\"\");\nshow(\"Incident ID\", report.incident_id);\nshow(\"Scan ID\", report.scan_id);\nshow(\"Timestamp\", report.timestamp);\nshow(\"Platform\", report.platform);\nshow(\"Input Type\", report.input_type);\nshow(\"Risk Score\", report.risk_score);\nshow(\"Severity\", report.severity);\nshow(\"Confidence\", report.confidence);\nshow(\"Threat Type\", report.threat_type);\nlines.push(\"\");\nlines.push(\"── ORIGINAL CONTENT ──\");\nif (report.original_content.original_text != null) lines.push(\"Original Text:\\n\" + report.original_content.original_text);\nif (report.original_content.extracted_text != null) lines.push(\"Extracted Text (OCR):\\n\" + report.original_content.extracted_text);\nif (report.original_content.original_text == null && report.original_content.extracted_text == null) lines.push(\"(not available)\");\nlines.push(\"\");\nlines.push(\"── EXTRACTED ENTITIES ──\");\nshow(\"URLs\", report.extracted_entities.urls.join(\", \"));\nshow(\"UPI IDs\", report.extracted_entities.upi_ids.join(\", \"));\nshow(\"Phone Numbers\", report.extracted_entities.phone_numbers.join(\", \"));\nshow(\"Emails\", report.extracted_entities.emails.join(\", \"));\nlines.push(\"\");\nlines.push(\"── DETECTED SIGNALS ──\");\nif (report.detected_signals.length) {\n  for (const s of report.detected_signals) {\n    const text = (s && typeof s === \"object\") ? (s.signal || JSON.stringify(s)) : s;\n    lines.push(\"• \" + text);\n  }\n} else {\n  lines.push(\"(none)\");\n}\nlines.push(\"\");\nlines.push(\"── AI ANALYSIS ──\");\nshow(\"Scam Intent\", report.ai_analysis.scam_intent);\nshow(\"Social Engineering\", report.ai_analysis.social_engineering);\nshow(\"Impersonation\", report.ai_analysis.impersonation);\nshow(\"Financial Manipulation\", report.ai_analysis.financial_manipulation);\nshow(\"Urgency\", report.ai_analysis.urgency);\nshow(\"Confidence\", report.ai_analysis.confidence);\nshow(\"Threat Type\", report.ai_analysis.threat_type);\nshow(\"Explanation\", report.ai_analysis.explanation);\nlines.push(\"\");\nlines.push(\"── VIRUSTOTAL ──\");\nif (report.virustotal != null) {\n  lines.push(typeof report.virustotal === \"object\" ? JSON.stringify(report.virustotal, null, 2) : String(report.virustotal));\n} else {\n  lines.push(\"(not available)\");\n}\nlines.push(\"\");\nlines.push(\"── RECOMMENDATION ──\");\nlines.push(report.recommendation != null ? report.recommendation : \"(not available)\");\n\nconst report_text = lines.join(\"\\n\");\n\nreturn [{ json: { incident_id: incident_id, incident_report: report, report_text: report_text } }];"
+        "jsCode": "const row = $input.first() ? $input.first().json : {};\n\nlet ev = {};\ntry {\n  ev = typeof row.evidence_json === \"string\" ? JSON.parse(row.evidence_json) : (row.evidence_json || {});\n} catch (e) {\n  ev = {};\n}\n\nconst val = (v) => (v === undefined || v === null || v === \"\") ? null : v;\nconst arr = (a) => Array.isArray(a) ? a : [];\n\nconst ai = (ev.ai_analysis && typeof ev.ai_analysis === \"object\") ? ev.ai_analysis : {};\nconst vt = ev.virustotal != null ? ev.virustotal : null;\nconst ent = (ev.extracted_entities && typeof ev.extracted_entities === \"object\") ? ev.extracted_entities : {};\n\nconst incident_id = row.id != null ? row.id : null;\n\n// Structured report object — kept in the workflow for later PDF/email phases.\nconst report = {\n  title: \"TRUTHLENSAI INCIDENT REPORT\",\n  incident_id: incident_id,\n  scan_id: val(row.scan_id),\n  timestamp: val(ev.timestamp),\n  platform: val(ev.platform),\n  input_type: val(ev.input_type),\n  risk_score: ev.risk_score != null ? ev.risk_score : null,\n  severity: val(ev.severity),\n  confidence: val(ev.confidence),\n  threat_type: val(ev.threat_type),\n  original_content: {\n    original_text: val(ev.original_text),\n    extracted_text: val(ev.extracted_text)\n  },\n  extracted_entities: {\n    urls: arr(ent.urls),\n    upi_ids: arr(ent.upi_ids),\n    phone_numbers: arr(ent.phone_numbers),\n    emails: arr(ent.emails)\n  },\n  detected_signals: arr(ev.evidence),\n  ai_analysis: {\n    scam_intent: ai.scam_intent !== undefined ? ai.scam_intent : null,\n    social_engineering: ai.social_engineering !== undefined ? ai.social_engineering : null,\n    impersonation: ai.impersonation !== undefined ? ai.impersonation : null,\n    financial_manipulation: ai.financial_manipulation !== undefined ? ai.financial_manipulation : null,\n    urgency: ai.urgency !== undefined ? ai.urgency : null,\n    confidence: ai.confidence !== undefined ? ai.confidence : null,\n    explanation: ai.explanation !== undefined ? ai.explanation : null,\n    threat_type: ai.threat_type !== undefined ? ai.threat_type : null\n  },\n  virustotal: vt,\n  recommendation: val(ev.recommendation)\n};\n\n// Audio-specific fields carried only for audio incidents (additive).\nif (ev.input_type === \"audio\") {\n  report.transcript = (ev.transcript !== undefined && ev.transcript !== null) ? ev.transcript : null;\n  report.transcription = (ev.transcription && typeof ev.transcription === \"object\") ? ev.transcription : null;\n  report.audio_forensics = (ev.audio_forensics && typeof ev.audio_forensics === \"object\") ? ev.audio_forensics : null;\n}\n\n// Video-specific fields carried only for video incidents (additive).\nif (ev.input_type === \"video\") {\n  report.transcript = (ev.transcript !== undefined && ev.transcript !== null) ? ev.transcript : null;\n  report.transcription = (ev.transcription && typeof ev.transcription === \"object\") ? ev.transcription : null;\n  report.video_metadata = (ev.video_metadata && typeof ev.video_metadata === \"object\") ? ev.video_metadata : null;\n  report.frames = (ev.frames !== undefined && ev.frames !== null) ? ev.frames : null;\n  report.frame_ocr_text = (ev.frame_ocr_text !== undefined && ev.frame_ocr_text !== null) ? ev.frame_ocr_text : null;\n  report.audio_forensics = (ev.audio_forensics && typeof ev.audio_forensics === \"object\") ? ev.audio_forensics : null;\n}\n\n// Human-readable text version, faithful to real values only.\nconst lines = [];\nconst show = (label, v) => { lines.push(label + \": \" + (v === null || v === undefined || v === \"\" ? \"(not available)\" : v)); };\n\nlines.push(\"🚨 TRUTHLENSAI INCIDENT REPORT\");\nlines.push(\"\");\nshow(\"Incident ID\", report.incident_id);\nshow(\"Scan ID\", report.scan_id);\nshow(\"Timestamp\", report.timestamp);\nshow(\"Platform\", report.platform);\nshow(\"Input Type\", report.input_type);\nshow(\"Risk Score\", report.risk_score);\nshow(\"Severity\", report.severity);\nshow(\"Confidence\", report.confidence);\nshow(\"Threat Type\", report.threat_type);\nlines.push(\"\");\nlines.push(\"── ORIGINAL CONTENT ──\");\nif (report.original_content.original_text != null) lines.push(\"Original Text:\\n\" + report.original_content.original_text);\nif (report.original_content.extracted_text != null) lines.push(\"Extracted Text (OCR):\\n\" + report.original_content.extracted_text);\nif (report.original_content.original_text == null && report.original_content.extracted_text == null) lines.push(\"(not available)\");\nlines.push(\"\");\nlines.push(\"── EXTRACTED ENTITIES ──\");\nshow(\"URLs\", report.extracted_entities.urls.join(\", \"));\nshow(\"UPI IDs\", report.extracted_entities.upi_ids.join(\", \"));\nshow(\"Phone Numbers\", report.extracted_entities.phone_numbers.join(\", \"));\nshow(\"Emails\", report.extracted_entities.emails.join(\", \"));\nlines.push(\"\");\nlines.push(\"── DETECTED SIGNALS ──\");\nif (report.detected_signals.length) {\n  for (const s of report.detected_signals) {\n    const text = (s && typeof s === \"object\") ? (s.signal || JSON.stringify(s)) : s;\n    lines.push(\"• \" + text);\n  }\n} else {\n  lines.push(\"(none)\");\n}\nlines.push(\"\");\nlines.push(\"── AI ANALYSIS ──\");\nshow(\"Scam Intent\", report.ai_analysis.scam_intent);\nshow(\"Social Engineering\", report.ai_analysis.social_engineering);\nshow(\"Impersonation\", report.ai_analysis.impersonation);\nshow(\"Financial Manipulation\", report.ai_analysis.financial_manipulation);\nshow(\"Urgency\", report.ai_analysis.urgency);\nshow(\"Confidence\", report.ai_analysis.confidence);\nshow(\"Threat Type\", report.ai_analysis.threat_type);\nshow(\"Explanation\", report.ai_analysis.explanation);\nlines.push(\"\");\nlines.push(\"── VIRUSTOTAL ──\");\nif (report.virustotal != null) {\n  lines.push(typeof report.virustotal === \"object\" ? JSON.stringify(report.virustotal, null, 2) : String(report.virustotal));\n} else {\n  lines.push(\"(not available)\");\n}\nlines.push(\"\");\nlines.push(\"── RECOMMENDATION ──\");\nlines.push(report.recommendation != null ? report.recommendation : \"(not available)\");\n\n// Audio-specific text sections (audio incidents only).\nif (report.input_type === \"audio\") {\n  lines.push(\"\");\n  lines.push(\"── TRANSCRIPT ──\");\n  const tr = (report.transcription && typeof report.transcription === \"object\") ? report.transcription : {};\n  if (tr.status) lines.push(\"Transcription status: \" + tr.status);\n  lines.push((report.transcript != null && report.transcript !== \"\") ? report.transcript : \"(not available)\");\n  lines.push(\"\");\n  lines.push(\"── AUDIO FORENSICS ──\");\n  const af = (report.audio_forensics && typeof report.audio_forensics === \"object\") ? report.audio_forensics : null;\n  if (!af) {\n    lines.push(\"(not available)\");\n  } else {\n    const p = (af.pitch && typeof af.pitch === \"object\") ? af.pitch : {};\n    const sp = (af.spectral && typeof af.spectral === \"object\") ? af.spectral : {};\n    show(\"Duration (s)\", af.duration_seconds);\n    show(\"Sample Rate (Hz)\", af.sample_rate);\n    show(\"RMS Energy\", af.rms_energy);\n    show(\"Pitch Mean (Hz)\", p.mean_hz);\n    show(\"Pitch Std (Hz)\", p.std_hz);\n    show(\"Spectral Centroid (Hz)\", sp.centroid_mean_hz);\n    show(\"Spectral Bandwidth (Hz)\", sp.bandwidth_mean_hz);\n    const manip = af.possible_manipulation_indicators;\n    lines.push(\"Possible manipulation indicators: \" + (manip === true ? \"Yes\" : (manip === false ? \"No\" : \"(not available)\")));\n  }\n}\n\n// Video-specific text sections (video incidents only).\nif (report.input_type === \"video\") {\n  const vm = (report.video_metadata && typeof report.video_metadata === \"object\") ? report.video_metadata : {};\n  const af = (report.audio_forensics && typeof report.audio_forensics === \"object\") ? report.audio_forensics : null;\n  const tr = (report.transcription && typeof report.transcription === \"object\") ? report.transcription : {};\n\n  lines.push(\"\");\n  lines.push(\"── VIDEO TRANSCRIPT ──\");\n  if (tr.status) lines.push(\"Transcription status: \" + tr.status);\n  lines.push((report.transcript != null && report.transcript !== \"\") ? report.transcript : \"(not available)\");\n\n  lines.push(\"\");\n  lines.push(\"── VIDEO METADATA ──\");\n  const duration = (vm.duration_seconds != null ? vm.duration_seconds : (vm.duration != null ? vm.duration : null));\n  let resolution = null;\n  if (vm.resolution != null && vm.resolution !== \"\") { resolution = String(vm.resolution); }\n  else if (vm.width != null && vm.height != null) { resolution = String(vm.width) + \"x\" + String(vm.height); }\n  const fps = (vm.fps != null ? vm.fps : (vm.frame_rate != null ? vm.frame_rate : null));\n  const codec = (vm.codec != null ? vm.codec : (vm.video_codec != null ? vm.video_codec : null));\n  const audioPresent = (vm.has_audio != null ? vm.has_audio : (vm.audio_present != null ? vm.audio_present : null));\n  show(\"Duration (s)\", duration);\n  show(\"Resolution\", resolution);\n  show(\"FPS\", fps);\n  show(\"Codec\", codec);\n  lines.push(\"Audio present: \" + (audioPresent === true ? \"Yes\" : (audioPresent === false ? \"No\" : \"(not available)\")));\n\n  lines.push(\"\");\n  lines.push(\"── FRAME ANALYSIS ──\");\n  let frameCount = null;\n  if (Array.isArray(report.frames)) { frameCount = report.frames.length; }\n  else if (report.frames && typeof report.frames === \"object\" && report.frames.count != null) { frameCount = report.frames.count; }\n  else if (typeof report.frames === \"number\") { frameCount = report.frames; }\n  show(\"Sampled frames\", frameCount);\n  let frameOcr = \"\";\n  if (Array.isArray(report.frame_ocr_text)) { frameOcr = report.frame_ocr_text.filter(t => t != null && String(t).trim() !== \"\").join(\"\\n\"); }\n  else if (typeof report.frame_ocr_text === \"string\") { frameOcr = report.frame_ocr_text; }\n  lines.push(\"OCR text found in frames:\");\n  lines.push((frameOcr && String(frameOcr).trim() !== \"\") ? frameOcr : \"No OCR text found in frames\");\n  const frameManip = (vm.possible_manipulation_indicators != null ? vm.possible_manipulation_indicators : null);\n  lines.push(\"Possible manipulation indicators: \" + (frameManip === true ? \"Yes\" : (frameManip === false ? \"No\" : \"(not available)\")));\n\n  lines.push(\"\");\n  lines.push(\"── AUDIO ANALYSIS ──\");\n  if (!af) {\n    lines.push(\"(not available)\");\n  } else {\n    const p = (af.pitch && typeof af.pitch === \"object\") ? af.pitch : {};\n    const sp = (af.spectral && typeof af.spectral === \"object\") ? af.spectral : {};\n    if (tr.language != null) show(\"Language\", tr.language);\n    show(\"Duration (s)\", af.duration_seconds);\n    show(\"Sample Rate (Hz)\", af.sample_rate);\n    show(\"RMS Energy\", af.rms_energy);\n    show(\"Pitch Mean (Hz)\", p.mean_hz);\n    show(\"Pitch Std (Hz)\", p.std_hz);\n    show(\"Spectral Centroid (Hz)\", sp.centroid_mean_hz);\n    show(\"Spectral Bandwidth (Hz)\", sp.bandwidth_mean_hz);\n    const manip = af.possible_manipulation_indicators;\n    lines.push(\"Possible manipulation indicators: \" + (manip === true ? \"Yes\" : (manip === false ? \"No\" : \"(not available)\")));\n  }\n}\n\nconst report_text = lines.join(\"\\n\");\n\nreturn [{ json: { incident_id: incident_id, incident_report: report, report_text: report_text } }];"
       },
-      "id": "d030467c-0cbf-4863-8449-5aecef476f28",
       "name": "Generate Incident Report",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         592,
-        480
-      ]
+        368
+      ],
+      "id": "18155ded-0814-4738-b014-c5a03a4345a5"
     },
     {
       "parameters": {
-        "jsCode": "const gen = $('Generate Incident Report').first().json;\nconst r = (gen && gen.incident_report) ? gen.incident_report : {};\n\nconst esc = (v) => (v === null || v === undefined) ? \"\" : String(v).replace(/&/g, \"&amp;\").replace(/</g, \"&lt;\").replace(/>/g, \"&gt;\");\n\nconst incident_id = r.incident_id != null ? r.incident_id : \"N/A\";\nconst threat_type = r.threat_type != null ? r.threat_type : \"Unknown\";\nconst subject = \"TruthLensAI Incident Report — \" + incident_id + \" — \" + threat_type;\n\nconst tdKey = \"padding:6px 12px;border:1px solid #ddd;background:#f7f7f7;font-weight:bold;width:38%;\";\nconst tdVal = \"padding:6px 12px;border:1px solid #ddd;\";\nconst rawRow = (label, value) => \"<tr><td style=\\\"\" + tdKey + \"\\\">\" + esc(label) + \"</td><td style=\\\"\" + tdVal + \"\\\">\" + (value === null || value === undefined || value === \"\" ? \"Not available\" : value) + \"</td></tr>\";\nconst row = (label, value) => rawRow(label, (value === null || value === undefined || value === \"\") ? \"Not available\" : esc(value));\nconst tableOpen = \"<table style=\\\"border-collapse:collapse;width:100%;font-size:14px;\\\">\";\nconst section = (title, body) => \"<h2 style=\\\"color:#b00020;border-bottom:2px solid #b00020;padding-bottom:4px;margin-top:28px;font-size:17px;\\\">\" + esc(title) + \"</h2>\" + body;\n\n// 1. Overview\nconst overview = [\n  tableOpen,\n  row(\"Incident ID\", r.incident_id),\n  row(\"Scan ID\", r.scan_id),\n  row(\"Timestamp\", r.timestamp),\n  row(\"Platform\", r.platform),\n  row(\"Input Type\", r.input_type),\n  row(\"Threat Type\", r.threat_type),\n  row(\"Risk Score\", r.risk_score != null ? r.risk_score + \"/100\" : null),\n  row(\"Severity\", r.severity),\n  row(\"Confidence\", r.confidence),\n  rawRow(\"Current Reporting Status\", \"Prepared (development mode — external reporting not connected)\"),\n  \"</table>\"\n].join(\"\");\n\n// 2. Summary (only from available values, no invented facts)\nlet summaryText = \"This incident was flagged by TruthLensAI\";\nif (r.platform) summaryText += \" on the \" + r.platform + \" platform\";\nif (r.threat_type) summaryText += \" as a potential \" + r.threat_type + \" threat\";\nsummaryText += \". \";\nsummaryText += (r.risk_score != null) ? (\"It received a risk score of \" + r.risk_score + \"/100\") : \"A risk score was not recorded\";\nif (r.severity) summaryText += \" with a severity rating of \" + r.severity;\nif (r.confidence) summaryText += \" and \" + r.confidence + \" confidence\";\nsummaryText += \".\";\n\n// 3. Original content\nconst oc = r.original_content || {};\nconst preStyle = \"white-space:pre-wrap;word-break:break-word;background:#f4f4f4;padding:10px;border:1px solid #ddd;font-size:13px;\";\nlet ocHtml;\nif (r.input_type === \"image\" && oc.extracted_text) {\n  ocHtml = \"<p><strong>Extracted OCR Text:</strong></p><pre style=\\\"\" + preStyle + \"\\\">\" + esc(oc.extracted_text) + \"</pre>\";\n} else if (oc.original_text) {\n  ocHtml = \"<p><strong>Original Message (as received):</strong></p><pre style=\\\"\" + preStyle + \"\\\">\" + esc(oc.original_text) + \"</pre>\";\n} else if (oc.extracted_text) {\n  ocHtml = \"<p><strong>Extracted OCR Text:</strong></p><pre style=\\\"\" + preStyle + \"\\\">\" + esc(oc.extracted_text) + \"</pre>\";\n} else {\n  ocHtml = \"<p>Original content not available for this incident.</p>\";\n}\n\n// 4. Detected indicators\nconst signals = Array.isArray(r.detected_signals) ? r.detected_signals : [];\nlet sigHtml;\nif (signals.length) {\n  sigHtml = \"<ul style=\\\"font-size:14px;\\\">\" + signals.map(s => {\n    const text = (s && typeof s === \"object\") ? (s.signal || JSON.stringify(s)) : s;\n    return \"<li>\" + esc(text) + \"</li>\";\n  }).join(\"\") + \"</ul>\";\n} else {\n  sigHtml = \"<p>No specific indicators were recorded for this incident.</p>\";\n}\n\n// 5. Extracted entities (skip empty sections)\nconst ent = r.extracted_entities || {};\nconst entRows = [];\nconst addEnt = (label, a) => { if (Array.isArray(a) && a.length) entRows.push(row(label, a.join(\", \"))); };\naddEnt(\"URLs\", ent.urls);\naddEnt(\"UPI IDs\", ent.upi_ids);\naddEnt(\"Phone Numbers\", ent.phone_numbers);\naddEnt(\"Email Addresses\", ent.emails);\nconst entHtml = entRows.length ? (tableOpen + entRows.join(\"\") + \"</table>\") : \"<p>No entities were extracted from this incident.</p>\";\n\n// 6. AI assessment\nconst ai = r.ai_analysis || {};\nconst aiBool = (v) => v === true ? \"Detected\" : (v === false ? \"Not detected\" : (v == null ? \"Not available\" : esc(v)));\nconst aiHtml = [\n  tableOpen,\n  rawRow(\"Scam Intent\", aiBool(ai.scam_intent)),\n  rawRow(\"Social Engineering\", aiBool(ai.social_engineering)),\n  rawRow(\"Impersonation\", aiBool(ai.impersonation)),\n  rawRow(\"Financial Manipulation\", aiBool(ai.financial_manipulation)),\n  rawRow(\"Urgency\", ai.urgency != null ? esc(ai.urgency) : \"Not available\"),\n  rawRow(\"Confidence\", ai.confidence != null ? esc(ai.confidence) : \"Not available\"),\n  rawRow(\"AI Threat Type\", ai.threat_type != null ? esc(ai.threat_type) : \"Not available\"),\n  rawRow(\"AI Explanation\", ai.explanation != null ? esc(ai.explanation) : \"Not available\"),\n  \"</table>\"\n].join(\"\");\n\n// 7. VirusTotal\nconst vt = r.virustotal;\nconst isEmptyObj = (o) => o && typeof o === \"object\" && !Array.isArray(o) && Object.keys(o).length === 0;\nlet vtHtml;\nif (vt === null || vt === undefined || isEmptyObj(vt)) {\n  vtHtml = \"<p>VirusTotal: No result available for this incident.</p>\";\n} else if (typeof vt === \"object\") {\n  const stats = (vt.stats && typeof vt.stats === \"object\") ? vt.stats : vt;\n  const vtUrl = vt.url != null ? vt.url : (vt.value != null ? vt.value : null);\n  const vtStatus = vt.status != null ? vt.status : (vt.vt_status != null ? vt.vt_status : null);\n  const g = (k) => (stats && stats[k] != null) ? stats[k] : null;\n  const rows2 = [];\n  if (vtUrl != null) rows2.push(row(\"URL\", vtUrl));\n  if (vtStatus != null) rows2.push(row(\"Status\", vtStatus));\n  if (g(\"malicious\") != null) rows2.push(row(\"Malicious Engines\", g(\"malicious\")));\n  if (g(\"suspicious\") != null) rows2.push(row(\"Suspicious Engines\", g(\"suspicious\")));\n  if (g(\"harmless\") != null) rows2.push(row(\"Harmless Engines\", g(\"harmless\")));\n  if (g(\"undetected\") != null) rows2.push(row(\"Undetected Engines\", g(\"undetected\")));\n  vtHtml = rows2.length ? (tableOpen + rows2.join(\"\") + \"</table>\") : \"<p>VirusTotal: No result available for this incident.</p>\";\n} else {\n  vtHtml = \"<p>\" + esc(String(vt)) + \"</p>\";\n}\n\n// 8. Recommendation\nconst recHtml = \"<p>\" + (r.recommendation != null ? esc(r.recommendation) : \"No specific recommendation was recorded for this incident.\") + \"</p>\";\n\n// 9. Evidence / reporting status\nconst statusHtml = tableOpen + rawRow(\"Evidence Pack\", \"Prepared\") + rawRow(\"Incident Report\", \"Generated\") + rawRow(\"External Reporting\", \"Not connected\") + \"</table>\";\n\nconst html = [\n  \"<div style=\\\"font-family:Arial,Helvetica,sans-serif;color:#222;max-width:800px;margin:0 auto;\\\">\",\n  \"<div style=\\\"background:#b00020;color:#fff;padding:16px 20px;border-radius:6px;\\\">\",\n  \"<h1 style=\\\"margin:0;font-size:22px;\\\">🚨 TruthLensAI Incident Report</h1>\",\n  \"<p style=\\\"margin:6px 0 0;font-size:13px;\\\">Incident ID: \" + esc(incident_id) + \" &nbsp;|&nbsp; Threat Type: \" + esc(threat_type) + \"</p>\",\n  \"</div>\",\n  \"<p style=\\\"font-size:12px;color:#888;\\\">Development / demo report. This workflow does not contact any external authority.</p>\",\n  section(\"1. Incident Overview\", overview),\n  section(\"2. Incident Summary\", \"<p style=\\\"font-size:14px;\\\">\" + esc(summaryText) + \"</p>\"),\n  section(\"3. Original Content\", ocHtml),\n  section(\"4. Detected Indicators\", sigHtml),\n  section(\"5. Extracted Entities\", entHtml),\n  section(\"6. AI Assessment\", aiHtml),\n  section(\"7. VirusTotal Findings\", vtHtml),\n  section(\"8. Recommended Action\", recHtml),\n  section(\"9. Evidence / Reporting Status\", statusHtml),\n  \"<p style=\\\"font-size:11px;color:#999;margin-top:30px;\\\">Generated by TruthLensAI • Development reporting workflow</p>\",\n  \"</div>\"\n].join(\"\");\n\nconst safeId = String(incident_id).replace(/[^a-zA-Z0-9_-]/g, \"_\");\nconst fileName = \"TruthLensAI_Incident_Report_\" + safeId + \".html\";\n\nreturn [{\n  json: { subject: subject, incident_id: incident_id, threat_type: threat_type, email_html: html },\n  binary: {\n    report: {\n      data: Buffer.from(html, \"utf8\").toString(\"base64\"),\n      fileName: fileName,\n      mimeType: \"text/html\"\n    }\n  }\n}];"
+        "jsCode": "const gen = $('Generate Incident Report').first().json;\nconst r = (gen && gen.incident_report) ? gen.incident_report : {};\n\nconst esc = (v) => (v === null || v === undefined) ? \"\" : String(v).replace(/&/g, \"&amp;\").replace(/</g, \"&lt;\").replace(/>/g, \"&gt;\");\n\nconst incident_id = r.incident_id != null ? r.incident_id : \"N/A\";\nconst threat_type = r.threat_type != null ? r.threat_type : \"Unknown\";\nconst subject = \"TruthLensAI Incident Report — \" + incident_id + \" — \" + threat_type;\n\nconst tdKey = \"padding:6px 12px;border:1px solid #ddd;background:#f7f7f7;font-weight:bold;width:38%;\";\nconst tdVal = \"padding:6px 12px;border:1px solid #ddd;\";\nconst rawRow = (label, value) => \"<tr><td style=\\\"\" + tdKey + \"\\\">\" + esc(label) + \"</td><td style=\\\"\" + tdVal + \"\\\">\" + (value === null || value === undefined || value === \"\" ? \"Not available\" : value) + \"</td></tr>\";\nconst row = (label, value) => rawRow(label, (value === null || value === undefined || value === \"\") ? \"Not available\" : esc(value));\nconst tableOpen = \"<table style=\\\"border-collapse:collapse;width:100%;font-size:14px;\\\">\";\nconst section = (title, body) => \"<h2 style=\\\"color:#b00020;border-bottom:2px solid #b00020;padding-bottom:4px;margin-top:28px;font-size:17px;\\\">\" + esc(title) + \"</h2>\" + body;\n\n// 1. Overview\nconst overview = [\n  tableOpen,\n  row(\"Incident ID\", r.incident_id),\n  row(\"Scan ID\", r.scan_id),\n  row(\"Timestamp\", r.timestamp),\n  row(\"Platform\", r.platform),\n  row(\"Input Type\", r.input_type),\n  row(\"Threat Type\", r.threat_type),\n  row(\"Risk Score\", r.risk_score != null ? r.risk_score + \"/100\" : null),\n  row(\"Severity\", r.severity),\n  row(\"Confidence\", r.confidence),\n  rawRow(\"Current Reporting Status\", \"Prepared (development mode — external reporting not connected)\"),\n  \"</table>\"\n].join(\"\");\n\n// 2. Summary (only from available values, no invented facts)\nlet summaryText = \"This incident was flagged by TruthLensAI\";\nif (r.platform) summaryText += \" on the \" + r.platform + \" platform\";\nif (r.threat_type) summaryText += \" as a potential \" + r.threat_type + \" threat\";\nsummaryText += \". \";\nsummaryText += (r.risk_score != null) ? (\"It received a risk score of \" + r.risk_score + \"/100\") : \"A risk score was not recorded\";\nif (r.severity) summaryText += \" with a severity rating of \" + r.severity;\nif (r.confidence) summaryText += \" and \" + r.confidence + \" confidence\";\nsummaryText += \".\";\n\n// 3. Original content\nconst oc = r.original_content || {};\nconst preStyle = \"white-space:pre-wrap;word-break:break-word;background:#f4f4f4;padding:10px;border:1px solid #ddd;font-size:13px;\";\nlet ocHtml;\nif (r.input_type === \"image\" && oc.extracted_text) {\n  ocHtml = \"<p><strong>Extracted OCR Text:</strong></p><pre style=\\\"\" + preStyle + \"\\\">\" + esc(oc.extracted_text) + \"</pre>\";\n} else if (oc.original_text) {\n  ocHtml = \"<p><strong>Original Message (as received):</strong></p><pre style=\\\"\" + preStyle + \"\\\">\" + esc(oc.original_text) + \"</pre>\";\n} else if (oc.extracted_text) {\n  ocHtml = \"<p><strong>Extracted OCR Text:</strong></p><pre style=\\\"\" + preStyle + \"\\\">\" + esc(oc.extracted_text) + \"</pre>\";\n} else {\n  ocHtml = \"<p>Original content not available for this incident.</p>\";\n}\n\n// 4. Detected indicators\nconst signals = Array.isArray(r.detected_signals) ? r.detected_signals : [];\nlet sigHtml;\nif (signals.length) {\n  sigHtml = \"<ul style=\\\"font-size:14px;\\\">\" + signals.map(s => {\n    const text = (s && typeof s === \"object\") ? (s.signal || JSON.stringify(s)) : s;\n    return \"<li>\" + esc(text) + \"</li>\";\n  }).join(\"\") + \"</ul>\";\n} else {\n  sigHtml = \"<p>No specific indicators were recorded for this incident.</p>\";\n}\n\n// 5. Extracted entities (skip empty sections)\nconst ent = r.extracted_entities || {};\nconst entRows = [];\nconst addEnt = (label, a) => { if (Array.isArray(a) && a.length) entRows.push(row(label, a.join(\", \"))); };\naddEnt(\"URLs\", ent.urls);\naddEnt(\"UPI IDs\", ent.upi_ids);\naddEnt(\"Phone Numbers\", ent.phone_numbers);\naddEnt(\"Email Addresses\", ent.emails);\nconst entHtml = entRows.length ? (tableOpen + entRows.join(\"\") + \"</table>\") : \"<p>No entities were extracted from this incident.</p>\";\n\n// 6. AI assessment\nconst ai = r.ai_analysis || {};\nconst aiBool = (v) => v === true ? \"Detected\" : (v === false ? \"Not detected\" : (v == null ? \"Not available\" : esc(v)));\nconst aiHtml = [\n  tableOpen,\n  rawRow(\"Scam Intent\", aiBool(ai.scam_intent)),\n  rawRow(\"Social Engineering\", aiBool(ai.social_engineering)),\n  rawRow(\"Impersonation\", aiBool(ai.impersonation)),\n  rawRow(\"Financial Manipulation\", aiBool(ai.financial_manipulation)),\n  rawRow(\"Urgency\", ai.urgency != null ? esc(ai.urgency) : \"Not available\"),\n  rawRow(\"Confidence\", ai.confidence != null ? esc(ai.confidence) : \"Not available\"),\n  rawRow(\"AI Threat Type\", ai.threat_type != null ? esc(ai.threat_type) : \"Not available\"),\n  rawRow(\"AI Explanation\", ai.explanation != null ? esc(ai.explanation) : \"Not available\"),\n  \"</table>\"\n].join(\"\");\n\n// 7. VirusTotal (r.virustotal is an ARRAY of per-URL results)\nlet vtList = r.virustotal;\nif (vtList === null || vtList === undefined) {\n  vtList = [];\n} else if (!Array.isArray(vtList)) {\n  vtList = [vtList];\n}\nvtList = vtList.filter(v => v && typeof v === \"object\");\nlet vtHtml;\nif (!vtList.length) {\n  vtHtml = \"<p>VirusTotal: No analysis result available.</p>\";\n} else {\n  const vtBlocks = [];\n  for (const v of vtList) {\n    const stats = (v.stats && typeof v.stats === \"object\") ? v.stats : v;\n    const vtUrl = v.url != null ? v.url : (v.value != null ? v.value : null);\n    const vtStatus = v.status != null ? v.status : (v.vt_status != null ? v.vt_status : null);\n    const g = (k) => (stats && stats[k] != null) ? stats[k] : null;\n    const rows2 = [\n      row(\"URL\", vtUrl),\n      row(\"Status\", vtStatus),\n      row(\"Malicious Engines\", g(\"malicious\")),\n      row(\"Suspicious Engines\", g(\"suspicious\")),\n      row(\"Harmless Engines\", g(\"harmless\")),\n      row(\"Undetected Engines\", g(\"undetected\"))\n    ];\n    vtBlocks.push(tableOpen + rows2.join(\"\") + \"</table>\");\n  }\n  vtHtml = vtBlocks.join(\"<div style=\\\"height:12px;\\\"></div>\");\n}\n\n// 8. Recommendation\nconst recHtml = \"<p>\" + (r.recommendation != null ? esc(r.recommendation) : \"No specific recommendation was recorded for this incident.\") + \"</p>\";\n\n// 9. Evidence / reporting status\nconst statusHtml = tableOpen + rawRow(\"Evidence Pack\", \"Prepared\") + rawRow(\"Incident Report\", \"Generated\") + rawRow(\"External Reporting\", \"Not connected\") + \"</table>\";\n\n// Audio transcript & forensics HTML (audio incidents only; empty string otherwise).\nlet audioSectionHtml = \"\";\nif (r.input_type === \"audio\") {\n  const preStyleA = \"white-space:pre-wrap;word-break:break-word;background:#f4f4f4;padding:10px;border:1px solid #ddd;font-size:13px;\";\n  const transcriptHtml = (r.transcript != null && r.transcript !== \"\") ? (\"<pre style=\\\"\" + preStyleA + \"\\\">\" + esc(r.transcript) + \"</pre>\") : \"<p>Transcript not available.</p>\";\n  const af = (r.audio_forensics && typeof r.audio_forensics === \"object\") ? r.audio_forensics : null;\n  let afHtml;\n  if (!af) {\n    afHtml = \"<p>Audio forensic data not available.</p>\";\n  } else {\n    const p = (af.pitch && typeof af.pitch === \"object\") ? af.pitch : {};\n    const sp = (af.spectral && typeof af.spectral === \"object\") ? af.spectral : {};\n    const manip = af.possible_manipulation_indicators;\n    const manipStr = manip === true ? \"Yes\" : (manip === false ? \"No\" : \"Not available\");\n    afHtml = [tableOpen, row(\"Duration (s)\", af.duration_seconds), row(\"Sample Rate (Hz)\", af.sample_rate), row(\"RMS Energy\", af.rms_energy), row(\"Pitch Mean (Hz)\", p.mean_hz), row(\"Pitch Std (Hz)\", p.std_hz), row(\"Spectral Centroid (Hz)\", sp.centroid_mean_hz), row(\"Spectral Bandwidth (Hz)\", sp.bandwidth_mean_hz), rawRow(\"Possible manipulation indicators\", manipStr), \"</table>\"].join(\"\");\n  }\n  audioSectionHtml = section(\"Audio Transcript\", transcriptHtml) + section(\"Audio Forensics\", afHtml);\n}\n\n// Video sections HTML (video incidents only; empty string otherwise).\nlet videoSectionHtml = \"\";\nif (r.input_type === \"video\") {\n  const preStyleV = \"white-space:pre-wrap;word-break:break-word;background:#f4f4f4;padding:10px;border:1px solid #ddd;font-size:13px;\";\n  const vm = (r.video_metadata && typeof r.video_metadata === \"object\") ? r.video_metadata : {};\n  const afv = (r.audio_forensics && typeof r.audio_forensics === \"object\") ? r.audio_forensics : null;\n  const trv = (r.transcription && typeof r.transcription === \"object\") ? r.transcription : {};\n\n  // Video transcript\n  const vTranscriptHtml = (r.transcript != null && r.transcript !== \"\") ? (\"<pre style=\\\"\" + preStyleV + \"\\\">\" + esc(r.transcript) + \"</pre>\") : \"<p>Transcript not available.</p>\";\n\n  // Video metadata\n  const vDuration = (vm.duration_seconds != null ? vm.duration_seconds : (vm.duration != null ? vm.duration : null));\n  let vResolution = null;\n  if (vm.resolution != null && vm.resolution !== \"\") { vResolution = String(vm.resolution); }\n  else if (vm.width != null && vm.height != null) { vResolution = String(vm.width) + \"x\" + String(vm.height); }\n  const vFps = (vm.fps != null ? vm.fps : (vm.frame_rate != null ? vm.frame_rate : null));\n  const vCodec = (vm.codec != null ? vm.codec : (vm.video_codec != null ? vm.video_codec : null));\n  const vAudioPresent = (vm.has_audio != null ? vm.has_audio : (vm.audio_present != null ? vm.audio_present : null));\n  const vMetaHtml = [tableOpen, row(\"Duration (s)\", vDuration), row(\"Resolution\", vResolution), row(\"FPS\", vFps), row(\"Codec\", vCodec), rawRow(\"Audio present\", vAudioPresent === true ? \"Yes\" : (vAudioPresent === false ? \"No\" : \"Not available\")), \"</table>\"].join(\"\");\n\n  // Frame analysis\n  let vFrameCount = null;\n  if (Array.isArray(r.frames)) { vFrameCount = r.frames.length; }\n  else if (r.frames && typeof r.frames === \"object\" && r.frames.count != null) { vFrameCount = r.frames.count; }\n  else if (typeof r.frames === \"number\") { vFrameCount = r.frames; }\n  let vFrameOcr = \"\";\n  if (Array.isArray(r.frame_ocr_text)) { vFrameOcr = r.frame_ocr_text.filter(t => t != null && String(t).trim() !== \"\").join(\"\\n\"); }\n  else if (typeof r.frame_ocr_text === \"string\") { vFrameOcr = r.frame_ocr_text; }\n  const vFrameManip = (vm.possible_manipulation_indicators != null ? vm.possible_manipulation_indicators : null);\n  const vFrameOcrHtml = (vFrameOcr && String(vFrameOcr).trim() !== \"\") ? (\"<pre style=\\\"\" + preStyleV + \"\\\">\" + esc(vFrameOcr) + \"</pre>\") : \"<p>No OCR text found in frames.</p>\";\n  const vFrameHtml = tableOpen + row(\"Sampled frames\", vFrameCount) + rawRow(\"Possible manipulation indicators\", vFrameManip === true ? \"Yes\" : (vFrameManip === false ? \"No\" : \"Not available\")) + \"</table>\" + vFrameOcrHtml;\n\n  // Audio analysis / forensics\n  let vAudioHtml;\n  if (!afv) {\n    vAudioHtml = \"<p>Audio forensic data not available.</p>\";\n  } else {\n    const p = (afv.pitch && typeof afv.pitch === \"object\") ? afv.pitch : {};\n    const sp = (afv.spectral && typeof afv.spectral === \"object\") ? afv.spectral : {};\n    const manip = afv.possible_manipulation_indicators;\n    const manipStr = manip === true ? \"Yes\" : (manip === false ? \"No\" : \"Not available\");\n    vAudioHtml = [tableOpen, row(\"Language\", trv.language), row(\"Duration (s)\", afv.duration_seconds), row(\"Sample Rate (Hz)\", afv.sample_rate), row(\"RMS Energy\", afv.rms_energy), row(\"Pitch Mean (Hz)\", p.mean_hz), row(\"Pitch Std (Hz)\", p.std_hz), row(\"Spectral Centroid (Hz)\", sp.centroid_mean_hz), row(\"Spectral Bandwidth (Hz)\", sp.bandwidth_mean_hz), rawRow(\"Possible manipulation indicators\", manipStr), \"</table>\"].join(\"\");\n  }\n\n  videoSectionHtml = section(\"Video Transcript\", vTranscriptHtml) + section(\"Video Metadata\", vMetaHtml) + section(\"Frame Analysis\", vFrameHtml) + section(\"Audio Analysis\", vAudioHtml);\n}\n\nconst html = [\n  \"<div style=\\\"font-family:Arial,Helvetica,sans-serif;color:#222;max-width:800px;margin:0 auto;\\\">\",\n  \"<div style=\\\"background:#b00020;color:#fff;padding:16px 20px;border-radius:6px;\\\">\",\n  \"<h1 style=\\\"margin:0;font-size:22px;\\\">🚨 TruthLensAI Incident Report</h1>\",\n  \"<p style=\\\"margin:6px 0 0;font-size:13px;\\\">Incident ID: \" + esc(incident_id) + \" &nbsp;|&nbsp; Threat Type: \" + esc(threat_type) + \"</p>\",\n  \"</div>\",\n  \"<p style=\\\"font-size:12px;color:#888;\\\">Development / demo report. This workflow does not contact any external authority.</p>\",\n  section(\"1. Incident Overview\", overview),\n  section(\"2. Incident Summary\", \"<p style=\\\"font-size:14px;\\\">\" + esc(summaryText) + \"</p>\"),\n  section(\"3. Original Content\", ocHtml),\n  audioSectionHtml,\n  videoSectionHtml,\n  section(\"4. Detected Indicators\", sigHtml),\n  section(\"5. Extracted Entities\", entHtml),\n  section(\"6. AI Assessment\", aiHtml),\n  section(\"7. VirusTotal Findings\", vtHtml),\n  section(\"8. Recommended Action\", recHtml),\n  section(\"9. Evidence / Reporting Status\", statusHtml),\n  \"<p style=\\\"font-size:11px;color:#999;margin-top:30px;\\\">Generated by TruthLensAI • Development reporting workflow</p>\",\n  \"</div>\"\n].join(\"\");\n\nconst safeId = String(incident_id).replace(/[^a-zA-Z0-9_-]/g, \"_\");\nconst fileName = \"TruthLensAI_Incident_Report_\" + safeId + \".pdf\";\n\n// ---------------------------------------------------------------------------\n// PDF attachment generation (pure JS, no external deps / no new credentials).\n// This n8n environment has no native HTML->PDF node and the Code sandbox has\n// no headless browser, so the downloadable attachment is built as a valid\n// application/pdf document from the SAME structured report object `r` that\n// produced the HTML email body above. The HTML email body is unchanged.\n// ---------------------------------------------------------------------------\nconst buildIncidentPdf = (r) => {\n  const sanitize = (s) => {\n    if (s === null || s === undefined) return \"\";\n    let out = String(s);\n    out = out.replace(/[‘’]/g, \"'\").replace(/[“”]/g, '\"')\n             .replace(/[–—]/g, \"-\").replace(/•/g, \"-\")\n             .replace(/[─-╿]/g, \"-\");\n    out = out.replace(/[^\\x20-\\x7E\\xA0-\\xFF]/g, \"\");\n    return out;\n  };\n\n  const lines = [];\n  const H = (t) => lines.push({ text: sanitize(t), bold: true, size: 13, gapBefore: 8 });\n  const KV = (k, v) => lines.push({ text: sanitize(k + \": \" + (v === null || v === undefined || v === \"\" ? \"Not available\" : v)), bold: false, size: 10 });\n  const P = (t) => lines.push({ text: sanitize(t), bold: false, size: 10 });\n  const BL = () => lines.push({ text: \"\", bold: false, size: 10 });\n  const val = (v) => (v === null || v === undefined || v === \"\") ? null : v;\n\n  const pdfIncidentId = r.incident_id != null ? r.incident_id : \"N/A\";\n  const pdfThreatType = r.threat_type != null ? r.threat_type : \"Unknown\";\n\n  lines.push({ text: sanitize(\"TruthLensAI Incident Report\"), bold: true, size: 18 });\n  lines.push({ text: sanitize(\"Incident ID: \" + pdfIncidentId + \"   |   Threat Type: \" + pdfThreatType), bold: false, size: 10 });\n  lines.push({ text: sanitize(\"Development / demo report. This workflow does not contact any external authority.\"), bold: false, size: 8 });\n  BL();\n\n  H(\"1. Incident Overview\");\n  KV(\"Incident ID\", val(r.incident_id));\n  KV(\"Scan ID\", val(r.scan_id));\n  KV(\"Timestamp\", val(r.timestamp));\n  KV(\"Platform\", val(r.platform));\n  KV(\"Input Type\", val(r.input_type));\n  KV(\"Threat Type\", val(r.threat_type));\n  KV(\"Risk Score\", r.risk_score != null ? r.risk_score + \"/100\" : null);\n  KV(\"Severity\", val(r.severity));\n  KV(\"Confidence\", val(r.confidence));\n  KV(\"Current Reporting Status\", \"Prepared (development mode - external reporting not connected)\");\n\n  let summaryTextPdf = \"This incident was flagged by TruthLensAI\";\n  if (r.platform) summaryTextPdf += \" on the \" + r.platform + \" platform\";\n  if (r.threat_type) summaryTextPdf += \" as a potential \" + r.threat_type + \" threat\";\n  summaryTextPdf += \". \";\n  summaryTextPdf += (r.risk_score != null) ? (\"It received a risk score of \" + r.risk_score + \"/100\") : \"A risk score was not recorded\";\n  if (r.severity) summaryTextPdf += \" with a severity rating of \" + r.severity;\n  if (r.confidence) summaryTextPdf += \" and \" + r.confidence + \" confidence\";\n  summaryTextPdf += \".\";\n  H(\"2. Incident Summary\");\n  P(summaryTextPdf);\n\n  const ocPdf = r.original_content || {};\n  H(\"3. Original Content\");\n  if (r.input_type === \"image\" && ocPdf.extracted_text) {\n    P(\"Extracted OCR Text:\"); P(ocPdf.extracted_text);\n  } else if (ocPdf.original_text) {\n    P(\"Original Message (as received):\"); P(ocPdf.original_text);\n  } else if (ocPdf.extracted_text) {\n    P(\"Extracted OCR Text:\"); P(ocPdf.extracted_text);\n  } else {\n    P(\"Original content not available for this incident.\");\n  }\n\n  // Audio transcript & forensics (audio incidents only; additive).\n  if (r.input_type === \"audio\") {\n    H(\"Audio Transcript\");\n    P((r.transcript != null && r.transcript !== \"\") ? r.transcript : \"Transcript not available.\");\n    H(\"Audio Forensics\");\n    const afx = (r.audio_forensics && typeof r.audio_forensics === \"object\") ? r.audio_forensics : null;\n    if (!afx) {\n      P(\"Audio forensic data not available.\");\n    } else {\n      const px = (afx.pitch && typeof afx.pitch === \"object\") ? afx.pitch : {};\n      const spx = (afx.spectral && typeof afx.spectral === \"object\") ? afx.spectral : {};\n      KV(\"Duration (s)\", val(afx.duration_seconds));\n      KV(\"Sample Rate (Hz)\", val(afx.sample_rate));\n      KV(\"RMS Energy\", val(afx.rms_energy));\n      KV(\"Pitch Mean (Hz)\", val(px.mean_hz));\n      KV(\"Pitch Std (Hz)\", val(px.std_hz));\n      KV(\"Spectral Centroid (Hz)\", val(spx.centroid_mean_hz));\n      KV(\"Spectral Bandwidth (Hz)\", val(spx.bandwidth_mean_hz));\n      const manipx = afx.possible_manipulation_indicators;\n      KV(\"Possible manipulation indicators\", manipx === true ? \"Yes\" : (manipx === false ? \"No\" : \"Not available\"));\n    }\n  }\n\n  // Video transcript, metadata, frame & audio analysis (video incidents only; additive).\n  if (r.input_type === \"video\") {\n    const vmx = (r.video_metadata && typeof r.video_metadata === \"object\") ? r.video_metadata : {};\n    const afv = (r.audio_forensics && typeof r.audio_forensics === \"object\") ? r.audio_forensics : null;\n    const trv = (r.transcription && typeof r.transcription === \"object\") ? r.transcription : {};\n\n    H(\"Video Transcript\");\n    P((r.transcript != null && r.transcript !== \"\") ? r.transcript : \"Transcript not available.\");\n\n    H(\"Video Metadata\");\n    const vDur = (vmx.duration_seconds != null ? vmx.duration_seconds : (vmx.duration != null ? vmx.duration : null));\n    let vRes = null;\n    if (vmx.resolution != null && vmx.resolution !== \"\") { vRes = String(vmx.resolution); }\n    else if (vmx.width != null && vmx.height != null) { vRes = String(vmx.width) + \"x\" + String(vmx.height); }\n    const vFps = (vmx.fps != null ? vmx.fps : (vmx.frame_rate != null ? vmx.frame_rate : null));\n    const vCodec = (vmx.codec != null ? vmx.codec : (vmx.video_codec != null ? vmx.video_codec : null));\n    const vAudioPresent = (vmx.has_audio != null ? vmx.has_audio : (vmx.audio_present != null ? vmx.audio_present : null));\n    KV(\"Duration (s)\", val(vDur));\n    KV(\"Resolution\", val(vRes));\n    KV(\"FPS\", val(vFps));\n    KV(\"Codec\", val(vCodec));\n    KV(\"Audio present\", vAudioPresent === true ? \"Yes\" : (vAudioPresent === false ? \"No\" : \"Not available\"));\n\n    H(\"Frame Analysis\");\n    let vFrameCount = null;\n    if (Array.isArray(r.frames)) { vFrameCount = r.frames.length; }\n    else if (r.frames && typeof r.frames === \"object\" && r.frames.count != null) { vFrameCount = r.frames.count; }\n    else if (typeof r.frames === \"number\") { vFrameCount = r.frames; }\n    KV(\"Sampled frames\", val(vFrameCount));\n    const vFrameManip = (vmx.possible_manipulation_indicators != null ? vmx.possible_manipulation_indicators : null);\n    KV(\"Possible manipulation indicators\", vFrameManip === true ? \"Yes\" : (vFrameManip === false ? \"No\" : \"Not available\"));\n    let vFrameOcr = \"\";\n    if (Array.isArray(r.frame_ocr_text)) { vFrameOcr = r.frame_ocr_text.filter(t => t != null && String(t).trim() !== \"\").join(\" | \"); }\n    else if (typeof r.frame_ocr_text === \"string\") { vFrameOcr = r.frame_ocr_text; }\n    P(\"OCR text found in frames: \" + ((vFrameOcr && String(vFrameOcr).trim() !== \"\") ? vFrameOcr : \"No OCR text found in frames\"));\n\n    H(\"Audio Analysis\");\n    if (!afv) {\n      P(\"Audio forensic data not available.\");\n    } else {\n      const pv = (afv.pitch && typeof afv.pitch === \"object\") ? afv.pitch : {};\n      const spv = (afv.spectral && typeof afv.spectral === \"object\") ? afv.spectral : {};\n      KV(\"Language\", val(trv.language));\n      KV(\"Duration (s)\", val(afv.duration_seconds));\n      KV(\"Sample Rate (Hz)\", val(afv.sample_rate));\n      KV(\"RMS Energy\", val(afv.rms_energy));\n      KV(\"Pitch Mean (Hz)\", val(pv.mean_hz));\n      KV(\"Pitch Std (Hz)\", val(pv.std_hz));\n      KV(\"Spectral Centroid (Hz)\", val(spv.centroid_mean_hz));\n      KV(\"Spectral Bandwidth (Hz)\", val(spv.bandwidth_mean_hz));\n      const manipv = afv.possible_manipulation_indicators;\n      KV(\"Possible manipulation indicators\", manipv === true ? \"Yes\" : (manipv === false ? \"No\" : \"Not available\"));\n    }\n  }\n\n  const signalsPdf = Array.isArray(r.detected_signals) ? r.detected_signals : [];\n  H(\"4. Detected Indicators\");\n  if (signalsPdf.length) {\n    for (const s of signalsPdf) {\n      const text = (s && typeof s === \"object\") ? (s.signal || JSON.stringify(s)) : s;\n      P(\"- \" + text);\n    }\n  } else {\n    P(\"No specific indicators were recorded for this incident.\");\n  }\n\n  const entPdf = r.extracted_entities || {};\n  H(\"5. Extracted Entities\");\n  const entLine = (label, a) => { if (Array.isArray(a) && a.length) KV(label, a.join(\", \")); };\n  const before5 = lines.length;\n  entLine(\"URLs\", entPdf.urls);\n  entLine(\"UPI IDs\", entPdf.upi_ids);\n  entLine(\"Phone Numbers\", entPdf.phone_numbers);\n  entLine(\"Email Addresses\", entPdf.emails);\n  if (lines.length === before5) P(\"No entities were extracted from this incident.\");\n\n  const aiPdf = r.ai_analysis || {};\n  const aiBoolPdf = (v) => v === true ? \"Detected\" : (v === false ? \"Not detected\" : (v == null ? \"Not available\" : v));\n  H(\"6. AI Assessment\");\n  KV(\"Scam Intent\", aiBoolPdf(aiPdf.scam_intent));\n  KV(\"Social Engineering\", aiBoolPdf(aiPdf.social_engineering));\n  KV(\"Impersonation\", aiBoolPdf(aiPdf.impersonation));\n  KV(\"Financial Manipulation\", aiBoolPdf(aiPdf.financial_manipulation));\n  KV(\"Urgency\", aiPdf.urgency != null ? aiPdf.urgency : \"Not available\");\n  KV(\"Confidence\", aiPdf.confidence != null ? aiPdf.confidence : \"Not available\");\n  KV(\"AI Threat Type\", aiPdf.threat_type != null ? aiPdf.threat_type : \"Not available\");\n  KV(\"AI Explanation\", aiPdf.explanation != null ? aiPdf.explanation : \"Not available\");\n\n  let vtListPdf = r.virustotal;\n  if (vtListPdf === null || vtListPdf === undefined) vtListPdf = [];\n  else if (!Array.isArray(vtListPdf)) vtListPdf = [vtListPdf];\n  vtListPdf = vtListPdf.filter(v => v && typeof v === \"object\");\n  H(\"7. VirusTotal Findings\");\n  if (!vtListPdf.length) {\n    P(\"VirusTotal: No analysis result available.\");\n  } else {\n    let idx = 0;\n    for (const v of vtListPdf) {\n      idx++;\n      if (vtListPdf.length > 1) P(\"Result \" + idx + \":\");\n      const stats = (v.stats && typeof v.stats === \"object\") ? v.stats : v;\n      const g = (k) => (stats && stats[k] != null) ? stats[k] : null;\n      KV(\"URL\", v.url != null ? v.url : (v.value != null ? v.value : null));\n      KV(\"Status\", v.status != null ? v.status : (v.vt_status != null ? v.vt_status : null));\n      KV(\"Malicious Engines\", g(\"malicious\"));\n      KV(\"Suspicious Engines\", g(\"suspicious\"));\n      KV(\"Harmless Engines\", g(\"harmless\"));\n      KV(\"Undetected Engines\", g(\"undetected\"));\n    }\n  }\n\n  H(\"8. Recommended Action\");\n  P(r.recommendation != null ? r.recommendation : \"No specific recommendation was recorded for this incident.\");\n\n  H(\"9. Evidence / Reporting Status\");\n  KV(\"Evidence Pack\", \"Prepared\");\n  KV(\"Incident Report\", \"Generated\");\n  KV(\"External Reporting\", \"Not connected\");\n\n  BL();\n  P(\"Generated by TruthLensAI - Development reporting workflow\");\n\n  const wrapChars = (size) => size >= 18 ? 46 : (size >= 13 ? 70 : 95);\n  const wrapped = [];\n  for (const ln of lines) {\n    const maxc = wrapChars(ln.size);\n    if (ln.text === \"\") { wrapped.push({ text: \"\", bold: ln.bold, size: ln.size, gapBefore: ln.gapBefore || 0 }); continue; }\n    const words = String(ln.text).split(/\\s+/);\n    let cur = \"\";\n    let first = true;\n    for (const w of words) {\n      const candidate = cur ? cur + \" \" + w : w;\n      if (candidate.length > maxc && cur) {\n        wrapped.push({ text: cur, bold: ln.bold, size: ln.size, gapBefore: first ? (ln.gapBefore || 0) : 0 });\n        cur = w; first = false;\n      } else {\n        cur = candidate;\n      }\n    }\n    wrapped.push({ text: cur, bold: ln.bold, size: ln.size, gapBefore: first ? (ln.gapBefore || 0) : 0 });\n  }\n\n  const pageHeight = 842, pageWidth = 595, top = 800, bottom = 50, leftX = 50;\n  const pages = [];\n  let curPage = [];\n  let y = top;\n  for (const ln of wrapped) {\n    const lh = ln.size >= 18 ? 24 : (ln.size >= 13 ? 18 : 14);\n    if (ln.gapBefore) y -= ln.gapBefore;\n    if (y - lh < bottom) { pages.push(curPage); curPage = []; y = top; }\n    curPage.push({ text: ln.text, bold: ln.bold, size: ln.size, y: y });\n    y -= lh;\n  }\n  if (curPage.length) pages.push(curPage);\n  if (!pages.length) pages.push([]);\n\n  const escapePdf = (s) => s.replace(/\\\\/g, \"\\\\\\\\\").replace(/\\(/g, \"\\\\(\").replace(/\\)/g, \"\\\\)\");\n  const objects = [];\n  const pageObjNums = [];\n  const numObjects = 2 + pages.length * 2 + 2;\n  const fontRegularNum = numObjects - 1;\n  const fontBoldNum = numObjects;\n\n  objects[1] = \"<< /Type /Catalog /Pages 2 0 R >>\";\n\n  let objNum = 3;\n  for (let i = 0; i < pages.length; i++) {\n    const pageNum = objNum++;\n    const contentNum = objNum++;\n    pageObjNums.push(pageNum);\n    let stream = \"\";\n    for (const item of pages[i]) {\n      const f = item.bold ? \"/F2\" : \"/F1\";\n      stream += \"BT \" + f + \" \" + item.size + \" Tf \" + leftX + \" \" + item.y + \" Td (\" + escapePdf(item.text) + \") Tj ET\\n\";\n    }\n    objects[pageNum] = \"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 \" + pageWidth + \" \" + pageHeight + \"] /Resources << /Font << /F1 \" + fontRegularNum + \" 0 R /F2 \" + fontBoldNum + \" 0 R >> >> /Contents \" + contentNum + \" 0 R >>\";\n    objects[contentNum] = \"<< /Length \" + Buffer.byteLength(stream, \"latin1\") + \" >>\\nstream\\n\" + stream + \"endstream\";\n  }\n\n  objects[2] = \"<< /Type /Pages /Kids [\" + pageObjNums.map(n => n + \" 0 R\").join(\" \") + \"] /Count \" + pages.length + \" >>\";\n  objects[fontRegularNum] = \"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>\";\n  objects[fontBoldNum] = \"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>\";\n\n  let pdf = \"%PDF-1.4\\n\";\n  const offsets = [];\n  for (let n = 1; n <= numObjects; n++) {\n    offsets[n] = Buffer.byteLength(pdf, \"latin1\");\n    pdf += n + \" 0 obj\\n\" + objects[n] + \"\\nendobj\\n\";\n  }\n  const xrefStart = Buffer.byteLength(pdf, \"latin1\");\n  pdf += \"xref\\n0 \" + (numObjects + 1) + \"\\n\";\n  pdf += \"0000000000 65535 f \\n\";\n  for (let n = 1; n <= numObjects; n++) {\n    pdf += String(offsets[n]).padStart(10, \"0\") + \" 00000 n \\n\";\n  }\n  pdf += \"trailer\\n<< /Size \" + (numObjects + 1) + \" /Root 1 0 R >>\\nstartxref\\n\" + xrefStart + \"\\n%%EOF\";\n\n  return Buffer.from(pdf, \"latin1\");\n};\n\nconst pdfBuffer = buildIncidentPdf(r);\n\nreturn [{\n  json: { subject: subject, incident_id: incident_id, threat_type: threat_type, email_html: html },\n  binary: {\n    report: {\n      data: pdfBuffer.toString(\"base64\"),\n      fileName: fileName,\n      mimeType: \"application/pdf\"\n    }\n  }\n}];"
       },
-      "id": "31eb40e3-6759-48fb-ab54-e3f75f04a469",
       "name": "Build Incident Email HTML",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         816,
-        480
-      ]
+        384
+      ],
+      "id": "21c63fe7-6038-46f5-8fcc-10ca62fffc1e"
     },
     {
       "parameters": {
@@ -741,18 +741,18 @@
           }
         }
       },
-      "id": "c71a3acd-505d-49f2-9563-edd5d47e5096",
       "name": "Send Incident Report Email",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
         1040,
-        480
+        384
       ],
-      "webhookId": "a45f8ceb-2629-42d0-bb92-5a94196fbb79",
+      "webhookId": "33ce59a7-df20-4c48-93ea-cb672a8ed6a7",
+      "id": "51b0bc4e-b778-412e-abe4-80113fafc09c",
       "credentials": {
         "gmailOAuth2": {
-          "id": "AjznBACsKbZXVCeJ",
+          "id": "ZRx2W62xAGslzBpF",
           "name": "Gmail account"
         }
       }
@@ -763,18 +763,18 @@
         "text": "={{ `🚨 Incident report confirmed.\\n\\nIncident ID: ${$('Generate Incident Report').item.json.incident_id != null ? $('Generate Incident Report').item.json.incident_id : \"N/A\"}\\n\\nThe report has been prepared and sent to the configured development reporting email.` }}",
         "additionalFields": {}
       },
-      "id": "95b3ff19-a490-496e-809c-27a1f8a97632",
       "name": "Send Report Confirmation",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
         1264,
-        480
+        384
       ],
-      "webhookId": "8e6ad241-2ef3-4496-9a39-7b06261df95c",
+      "webhookId": "7a92cf0a-933f-4896-b958-d2024e573e8a",
+      "id": "2339788d-60b4-4a14-87fb-5944d96b3b99",
       "credentials": {
         "telegramApi": {
-          "id": "YzqsziR6QE4TPvg3",
+          "id": "fE4fEfsTySkWHA78",
           "name": "Telegram account"
         }
       }
@@ -785,18 +785,18 @@
         "queryId": "={{ $('Telegram Trigger').item.json.callback_query.id }}",
         "additionalFields": {}
       },
-      "id": "a0ed1428-af06-4e7a-b96b-8a80b87dc315",
       "name": "Acknowledge Cancel Callback",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
         144,
-        624
+        560
       ],
-      "webhookId": "0aa0e604-f1b5-4527-a08f-c5630523a5a5",
+      "webhookId": "47ba2ed4-6c5f-4cd7-a784-a7e0d709768d",
+      "id": "2c04fd5a-0f5a-41ca-ade0-77c795180b51",
       "credentials": {
         "telegramApi": {
-          "id": "YzqsziR6QE4TPvg3",
+          "id": "fE4fEfsTySkWHA78",
           "name": "Telegram account"
         }
       }
@@ -807,18 +807,18 @@
         "text": "❌ Incident reporting cancelled.\n\nNo report was sent.",
         "additionalFields": {}
       },
-      "id": "eb6272e1-d159-428b-98cf-1e5ebda24494",
       "name": "Send Cancel Message",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
         368,
-        624
+        560
       ],
-      "webhookId": "dc3478d3-d66d-49b7-8839-8f3cf87378f4",
+      "webhookId": "c04a35c9-7ff4-43f5-8248-9f620943e592",
+      "id": "4b6f9618-42c6-42c7-a3cd-3718146b77d7",
       "credentials": {
         "telegramApi": {
-          "id": "YzqsziR6QE4TPvg3",
+          "id": "fE4fEfsTySkWHA78",
           "name": "Telegram account"
         }
       }
@@ -848,14 +848,14 @@
         },
         "options": {}
       },
-      "id": "bcde6ee9-9d12-4faf-be7d-4449b29ec80f",
       "name": "Has Photo?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
         -80,
-        912
-      ]
+        944
+      ],
+      "id": "a2db7af3-62b2-4907-bbf2-4a5b1bd1cf45"
     },
     {
       "parameters": {
@@ -863,18 +863,18 @@
         "fileId": "={{ $json.message.photo[$json.message.photo.length - 1].file_id }}",
         "additionalFields": {}
       },
-      "id": "46e464d8-9817-492f-848f-39db35e4b5f0",
       "name": "Download Telegram Image",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        144,
-        816
+        368,
+        752
       ],
-      "webhookId": "512ba63c-9831-464a-853d-a9a779c5fade",
+      "webhookId": "11644d10-eaa3-4cd1-920a-b8e823ce138d",
+      "id": "79b138da-6b00-4bce-bc07-89d2da0bcf58",
       "credentials": {
         "telegramApi": {
-          "id": "YzqsziR6QE4TPvg3",
+          "id": "fE4fEfsTySkWHA78",
           "name": "Telegram account"
         }
       }
@@ -909,19 +909,19 @@
         },
         "options": {}
       },
-      "id": "fb5f3781-83e7-43d4-8b97-fc910d2dc7d6",
       "name": "TruthLensAI Image API",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.5,
       "position": [
-        368,
-        816
-      ]
+        592,
+        752
+      ],
+      "id": "505c0e2f-2647-4002-b45a-0157ab5be39e"
     },
     {
       "parameters": {
         "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
-        "text": "={{ `📸 TRUTHLENSAI IMAGE SCAN\\n\\n⚠️ Risk Score: ${$json.risk_score}/100\\n🚨 Severity: ${$json.severity}\\n🎯 Confidence: ${$json.confidence}\\n🛡️ Threat: ${$json.threat_type}\\n\\n━━━━━━━━━━━━━━━━━━\\n🔎 DETECTED SIGNALS\\n━━━━━━━━━━━━━━━━━━\\n\\n${Array.isArray($json.evidence) && $json.evidence.length ? $json.evidence.map(e => (typeof e === 'string' ? '• ' + e : (e && e.signal ? '• ' + e.signal : ''))).filter(s => s).join('\\n') : '• No signals detected'}\\n\\n━━━━━━━━━━━━━━━━━━\\n💡 RECOMMENDED ACTION\\n━━━━━━━━━━━━━━━━━━\\n\\n${$json.recommendation}${$json.extracted_text ? '\\n\\n📝 Extracted Text:\\n' + $json.extracted_text : ''}${(() => { const f = $json.image_forensics || {}; const exif = f.exif || {}; const ela = f.ela || {}; const safeFields = ['Make', 'Model', 'Software', 'DateTime', 'DateTimeOriginal', 'Orientation']; const metadata = safeFields.filter(name => exif.fields && exif.fields[name] !== undefined && exif.fields[name] !== null && exif.fields[name] !== '').map(name => '• ' + name + ': ' + exif.fields[name]).join('\\n'); const editing = ela.supported ? (ela.possible_editing_indicators ? '• Possible editing indicators detected' : '• No strong editing indicators detected') : '• Not available for this image format'; return '\\n\\n📸 IMAGE FORENSICS\\n\\n🧾 EXIF Metadata: ' + (exif.available ? 'Available' : 'Not available') + (metadata ? '\\n' + metadata : '') + '\\n\\n🧪 ELA Analysis: ' + (ela.supported ? 'Supported' : 'Not available for this image format') + '\\n\\nEditing indicators:\\n' + editing; })()}` }}",
+        "text": "={{ `📸 TRUTHLENSAI IMAGE SCAN\n\n⚠️ Risk Score: ${$json.risk_score}/100\n🚨 Severity: ${$json.severity}\n🎯 Confidence: ${$json.confidence}\n🛡️ Threat: ${$json.threat_type}\n\n━━━━━━━━━━━━━━━━━━\n🔎 DETECTED SIGNALS\n━━━━━━━━━━━━━━━━━━\n\n${Array.isArray($json.evidence) && $json.evidence.length ? $json.evidence.map(e => (typeof e === 'string' ? '• ' + e : (e && e.signal ? '• ' + e.signal : ''))).filter(s => s).join('\n') : '• No signals detected'}\n\n━━━━━━━━━━━━━━━━━━\n💡 RECOMMENDED ACTION\n━━━━━━━━━━━━━━━━━━\n\n${$json.recommendation}${$json.extracted_text ? '\n\n📝 Extracted Text:\n' + $json.extracted_text : ''}${(() => { const NL = '\n'; const BAR = '━━━━━━━━━━━━━━━━━━'; const f = $json.image_forensics; let out = NL + NL + BAR + NL + '📸 IMAGE FORENSICS' + NL + BAR + NL + NL; if (!f || typeof f !== 'object') { return out + '🧾 EXIF Metadata: Not available' + NL + '🧪 ELA Analysis: Not available for this image format'; } const exif = (f.exif && typeof f.exif === 'object') ? f.exif : {}; const exifAvailable = exif.available === true; out += '🧾 EXIF Metadata: ' + (exifAvailable ? 'Available' : 'Not available'); if (exifAvailable) { const ef = (exif.fields && typeof exif.fields === 'object') ? exif.fields : {}; const fields = ['Make', 'Model', 'Software', 'DateTime', 'DateTimeOriginal', 'Orientation']; const shown = fields.filter(k => ef[k] !== undefined && ef[k] !== null && ef[k] !== ''); if (shown.length) { out += NL + shown.map(k => '- ' + k + ': ' + ef[k]).join(NL); } } out += NL + NL; const ela = (f.ela && typeof f.ela === 'object') ? f.ela : {}; const elaSupported = ela.supported === true; if (!elaSupported) { out += '🧪 ELA Analysis: Not available for this image format'; } else { const possible = ela.possible_editing_indicators === true; out += '🧪 ELA Analysis: Supported' + NL + NL + 'Editing indicators:' + NL + (possible ? '• ⚠️ Possible editing indicators detected' : '• ✅ No strong editing indicators detected'); } return out; })()}` }}",
         "replyMarkup": "inlineKeyboard",
         "inlineKeyboard": {
           "rows": [
@@ -965,18 +965,18 @@
         },
         "additionalFields": {}
       },
-      "id": "7cb69830-08f5-41bd-8b0c-1357b11cff2c",
       "name": "Send image scan result",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        592,
-        816
+        816,
+        752
       ],
-      "webhookId": "ec0c9417-5934-4bb5-87a8-5af459629f0e",
+      "webhookId": "7d97109e-dcbf-44d2-bcb5-5a0fdc963423",
+      "id": "a5d4dfd1-a15e-458b-9b8f-8ad1a4964d4f",
       "credentials": {
         "telegramApi": {
-          "id": "YzqsziR6QE4TPvg3",
+          "id": "fE4fEfsTySkWHA78",
           "name": "Telegram account"
         }
       }
@@ -985,27 +985,27 @@
       "parameters": {
         "jsCode": "const out = [];\n\nfor (const item of $input.all()) {\n  const d = (item && item.json) ? item.json : {};\n\n  // --- Core gate values (safe reads, no invented values) ---\n  const riskScore = Number(d.risk_score);\n  const confidence = d.confidence;\n\n  // --- Strong corroborating indicators ---\n  // VirusTotal malicious count (check common shapes, default 0)\n  const vt = (d.virustotal && typeof d.virustotal === \"object\") ? d.virustotal : {};\n  const vtStats = (vt.stats && typeof vt.stats === \"object\") ? vt.stats : {};\n  const vtMalicious = Number(\n    vt.malicious != null ? vt.malicious : (vtStats.malicious != null ? vtStats.malicious : 0)\n  ) || 0;\n\n  // AI scam intent (check ai_analysis then top-level, default false)\n  const ai = (d.ai_analysis && typeof d.ai_analysis === \"object\") ? d.ai_analysis : {};\n  const scamIntent = (ai.scam_intent === true) || (d.scam_intent === true);\n\n  // Multiple evidence signals\n  const evidence = Array.isArray(d.evidence) ? d.evidence : [];\n  const multipleSignals = evidence.length >= 2;\n\n  const strongIndicator = (vtMalicious > 0) || (scamIntent === true) || multipleSignals;\n\n  const eligible =\n    Number.isFinite(riskScore) && riskScore >= 85 &&\n    confidence === \"High\" &&\n    strongIndicator;\n\n  // Only eligible incidents continue down this branch.\n  if (eligible) {\n    out.push({ json: d });\n  }\n}\n\nreturn out;"
       },
-      "id": "cf314b87-2622-48a6-b720-67127a9d58c1",
       "name": "Incident Eligibility",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        592,
-        1008
-      ]
+        816,
+        944
+      ],
+      "id": "8c33e940-2d1d-4dca-9f0c-62874cbf83ef"
     },
     {
       "parameters": {
-        "jsCode": "const out = [];\n\nfor (const item of $input.all()) {\n  const d = (item && item.json) ? item.json : {};\n\n  // Detect image scans: they carry extracted OCR text / input_type.\n  const isImage = (d.input_type === \"image\") || (typeof d.extracted_text === \"string\");\n\n  // Original text (text scans): prefer the real Telegram message text.\n  let originalText;\n  try {\n    originalText = $('Telegram Trigger').item.json.message.text;\n  } catch (e) {\n    originalText = undefined;\n  }\n  if ((originalText === undefined || originalText === null) && typeof d.input === \"string\") {\n    originalText = d.input;\n  }\n\n  const entities = (d.extracted_entities && typeof d.extracted_entities === \"object\") ? d.extracted_entities : {};\n\n  const evidencePack = {\n    scan_id: d.scan_id != null ? d.scan_id : (d.id != null ? d.id : null),\n    timestamp: d.timestamp != null ? d.timestamp : null,\n    platform: d.platform != null ? d.platform : \"telegram\",\n    risk_score: d.risk_score != null ? d.risk_score : null,\n    severity: d.severity != null ? d.severity : null,\n    confidence: d.confidence != null ? d.confidence : null,\n    threat_type: d.threat_type != null ? d.threat_type : null,\n    extracted_entities: {\n      urls: Array.isArray(entities.urls) ? entities.urls : [],\n      upi_ids: Array.isArray(entities.upi_ids) ? entities.upi_ids : [],\n      phone_numbers: Array.isArray(entities.phone_numbers) ? entities.phone_numbers : [],\n      emails: Array.isArray(entities.emails) ? entities.emails : []\n    },\n    evidence: Array.isArray(d.evidence) ? d.evidence : [],\n    ai_analysis: d.ai_analysis != null ? d.ai_analysis : null,\n    virustotal: d.virustotal != null ? d.virustotal : null,\n    recommendation: d.recommendation != null ? d.recommendation : null\n  };\n\n  // Original text only when actually available.\n  if (originalText !== undefined && originalText !== null && originalText !== \"\") {\n    evidencePack.original_text = originalText;\n  }\n\n  // Image scans: preserve extracted_text and mark input_type.\n  if (isImage) {\n    evidencePack.input_type = \"image\";\n    if (typeof d.extracted_text === \"string\") {\n      evidencePack.extracted_text = d.extracted_text;\n    }\n  } else {\n    evidencePack.input_type = \"text\";\n  }\n\n  out.push({ json: { incident_evidence: evidencePack } });\n}\n\nreturn out;"
+        "jsCode": "const out = [];\n\nfor (const item of $input.all()) {\n  const d = (item && item.json) ? item.json : {};\n\n  // Detect image scans: they carry extracted OCR text / input_type.\n  const isImage = (d.input_type === \"image\") || (typeof d.extracted_text === \"string\");\n  const isAudio = (d.input_type === \"audio\");\n  const isVideo = (d.input_type === \"video\");\n\n  // Original text (text scans): prefer the real Telegram message text.\n  let originalText;\n  try {\n    originalText = $('Telegram Trigger').item.json.message.text;\n  } catch (e) {\n    originalText = undefined;\n  }\n  if ((originalText === undefined || originalText === null) && typeof d.input === \"string\") {\n    originalText = d.input;\n  }\n\n  const entities = (d.extracted_entities && typeof d.extracted_entities === \"object\") ? d.extracted_entities : {};\n\n  const evidencePack = {\n    scan_id: d.scan_id != null ? d.scan_id : (d.id != null ? d.id : null),\n    timestamp: d.timestamp != null ? d.timestamp : null,\n    platform: d.platform != null ? d.platform : \"telegram\",\n    risk_score: d.risk_score != null ? d.risk_score : null,\n    severity: d.severity != null ? d.severity : null,\n    confidence: d.confidence != null ? d.confidence : null,\n    threat_type: d.threat_type != null ? d.threat_type : null,\n    extracted_entities: {\n      urls: Array.isArray(entities.urls) ? entities.urls : [],\n      upi_ids: Array.isArray(entities.upi_ids) ? entities.upi_ids : [],\n      phone_numbers: Array.isArray(entities.phone_numbers) ? entities.phone_numbers : [],\n      emails: Array.isArray(entities.emails) ? entities.emails : []\n    },\n    evidence: Array.isArray(d.evidence) ? d.evidence : [],\n    ai_analysis: d.ai_analysis != null ? d.ai_analysis : null,\n    virustotal: d.virustotal != null ? d.virustotal : null,\n    recommendation: d.recommendation != null ? d.recommendation : null\n  };\n\n  // Original text only when actually available.\n  if (originalText !== undefined && originalText !== null && originalText !== \"\") {\n    evidencePack.original_text = originalText;\n  }\n\n  // Audio scans: preserve transcript, transcription metadata, and forensics.\n  if (isAudio) {\n    evidencePack.input_type = \"audio\";\n    if (d.transcript !== undefined && d.transcript !== null) {\n      evidencePack.transcript = d.transcript;\n    }\n    if (d.transcription !== undefined && d.transcription !== null) {\n      evidencePack.transcription = d.transcription;\n    }\n    if (d.audio_forensics !== undefined && d.audio_forensics !== null) {\n      evidencePack.audio_forensics = d.audio_forensics;\n    }\n  } else if (isVideo) {\n    // Video scans: preserve transcript, transcription, video metadata,\n    // frame data, frame OCR text, and audio forensics.\n    evidencePack.input_type = \"video\";\n    if (d.transcript !== undefined && d.transcript !== null) {\n      evidencePack.transcript = d.transcript;\n    }\n    if (d.transcription !== undefined && d.transcription !== null) {\n      evidencePack.transcription = d.transcription;\n    }\n    if (d.video_metadata !== undefined && d.video_metadata !== null) {\n      evidencePack.video_metadata = d.video_metadata;\n    }\n    if (d.frames !== undefined && d.frames !== null) {\n      evidencePack.frames = d.frames;\n    }\n    if (d.frame_ocr_text !== undefined && d.frame_ocr_text !== null) {\n      evidencePack.frame_ocr_text = d.frame_ocr_text;\n    }\n    if (d.audio_forensics !== undefined && d.audio_forensics !== null) {\n      evidencePack.audio_forensics = d.audio_forensics;\n    }\n  } else if (isImage) {\n    // Image scans: preserve extracted_text and mark input_type.\n    evidencePack.input_type = \"image\";\n    if (typeof d.extracted_text === \"string\") {\n      evidencePack.extracted_text = d.extracted_text;\n    }\n  } else {\n    evidencePack.input_type = \"text\";\n  }\n\n  out.push({ json: { incident_evidence: evidencePack } });\n}\n\nreturn out;"
       },
-      "id": "fc1d10fb-d743-4455-96a1-b2d510eef392",
       "name": "Build Evidence Pack",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        816,
-        1008
-      ]
+        1040,
+        944
+      ],
+      "id": "699878cf-49b0-4619-bfee-452f01fac4b5"
     },
     {
       "parameters": {
@@ -1020,7 +1020,7 @@
                   {
                     "text": "🚨 Report Incident",
                     "additionalFields": {
-                      "callback_data": "report_incident"
+                      "callback_data": "={{ \"report_incident:\" + $json.incident_evidence.scan_id }}"
                     }
                   }
                 ]
@@ -1042,18 +1042,18 @@
         },
         "additionalFields": {}
       },
-      "id": "6d4f1d21-5700-4e16-905d-d91eadd73765",
       "name": "Send Incident Confirmation",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1040,
-        912
+        1264,
+        848
       ],
-      "webhookId": "a4fa93d0-ceab-4ea7-903d-48efe8f5a47f",
+      "webhookId": "89b4d65e-9780-4505-8baf-b607bc410e59",
+      "id": "4edafabb-e7f2-402b-a15f-a1b689e9fe1d",
       "credentials": {
         "telegramApi": {
-          "id": "YzqsziR6QE4TPvg3",
+          "id": "fE4fEfsTySkWHA78",
           "name": "Telegram account"
         }
       }
@@ -1082,18 +1082,145 @@
           ]
         }
       },
-      "id": "01d857ae-5248-4930-9d10-4939fa5cd8b8",
       "name": "Store Incident Evidence",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1040,
-        1104
+        1264,
+        1040
       ],
+      "id": "e8e4eac7-0591-4141-ad9c-8cfabf2642c3",
       "credentials": {
         "supabaseApi": {
-          "id": "d2lD9Yxursie0cww",
+          "id": "sjrJaO6ku8joiwtU",
           "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "au000000-0000-4000-8000-000000000001",
+              "leftValue": "={{ $json.message.voice !== undefined }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "au000000-0000-4000-8000-000000000002",
+              "leftValue": "={{ $json.message.audio !== undefined }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "name": "Has Audio?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        144,
+        1088
+      ],
+      "id": "994357e8-03c8-41ce-946c-3861230f874c"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice ? $json.message.voice.file_id : $json.message.audio.file_id }}",
+        "additionalFields": {}
+      },
+      "name": "Download Telegram Audio",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        368,
+        1136
+      ],
+      "webhookId": "4b8605a2-ddbb-4e8b-baf5-2048a3eac1f3",
+      "id": "34885f89-ab91-47d3-aba6-6cfa5113f3a4",
+      "credentials": {
+        "telegramApi": {
+          "id": "fE4fEfsTySkWHA78",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://elsewhere-unmovable-deprive.ngrok-free.dev/api/scan/audio",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "ngrok-skip-browser-warning",
+              "value": "true"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "platform",
+              "value": "telegram"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "TruthLensAI Audio API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        592,
+        1136
+      ],
+      "id": "23a232db-12dc-4a06-a9e9-00512d010a7f"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ (() => { const NL = '\n'; const BAR = '━━━━━━━━━━━━━━━━━━'; const j = $json || {}; let err = j.error || j.detail || j.message; const f = j.audio_forensics; if (err || !f || typeof f !== 'object') { if (err && typeof err === 'object') { err = JSON.stringify(err); } return '🎵 TRUTHLENSAI AUDIO SCAN' + NL + NL + '⚠️ Could not analyze this audio.' + NL + 'Error: ' + (err ? err : 'The backend did not return audio forensics data.'); } const withUnit = (v, u) => (v === undefined || v === null || v === '') ? 'N/A' : (String(v) + ' ' + u); const plain = (v) => (v === undefined || v === null || v === '') ? 'N/A' : String(v); const pitch = (f.pitch && typeof f.pitch === 'object') ? f.pitch : {}; const spectral = (f.spectral && typeof f.spectral === 'object') ? f.spectral : {}; const evidence = Array.isArray(j.evidence) && j.evidence.length ? j.evidence.map(e => (typeof e === 'string' ? '• ' + e : (e && e.signal ? '• ' + e.signal : ''))).filter(s => s).join(NL) : '• No signals detected'; const recommendation = (j.recommendation !== undefined && j.recommendation !== null && j.recommendation !== '') ? j.recommendation : 'N/A'; const tr = (j.transcription && typeof j.transcription === 'object') ? j.transcription : {}; const status = tr.status; let transcriptBlock; if (status === 'success') { transcriptBlock = (j.transcript !== undefined && j.transcript !== null && j.transcript !== '') ? j.transcript : (tr.text ? tr.text : 'N/A'); } else if (status === 'no_speech') { transcriptBlock = 'No readable speech detected'; } else if (status === 'unintelligible') { transcriptBlock = 'Speech detected but transcript was not reliable'; } else if (status === 'error') { let te = tr.error || tr.message || tr.detail; if (te && typeof te === 'object') { te = JSON.stringify(te); } transcriptBlock = 'Transcription error: ' + (te ? te : 'unknown error'); } else { transcriptBlock = (j.transcript !== undefined && j.transcript !== null && j.transcript !== '') ? j.transcript : 'N/A'; } const manip = f.possible_manipulation_indicators; const manipStr = manip === true ? 'Yes' : (manip === false ? 'No' : 'N/A'); return '🎵 TRUTHLENSAI AUDIO SCAN' + NL + NL + '⚠️ Risk Score: ' + plain(j.risk_score) + '/100' + NL + '🚨 Severity: ' + plain(j.severity) + NL + '🎯 Confidence: ' + plain(j.confidence) + NL + '🛡️ Threat: ' + plain(j.threat_type) + NL + NL + BAR + NL + '🔎 DETECTED SIGNALS' + NL + BAR + NL + NL + evidence + NL + NL + BAR + NL + '💡 RECOMMENDED ACTION' + NL + BAR + NL + NL + recommendation + NL + NL + BAR + NL + '📝 TRANSCRIPT' + NL + BAR + NL + NL + transcriptBlock + NL + NL + BAR + NL + '🎧 AUDIO FORENSICS' + NL + BAR + NL + NL + '🎚️ Duration: ' + withUnit(f.duration_seconds, 's') + NL + '📊 Sample Rate: ' + withUnit(f.sample_rate, 'Hz') + NL + '🔊 RMS Energy: ' + plain(f.rms_energy) + NL + NL + '🎼 Pitch Analysis' + NL + '• Mean pitch: ' + withUnit(pitch.mean_hz, 'Hz') + NL + '• Pitch variation: ' + withUnit(pitch.std_hz, 'Hz') + NL + NL + '📈 Spectral Analysis' + NL + '• Spectral centroid: ' + withUnit(spectral.centroid_mean_hz, 'Hz') + NL + '• Spectral bandwidth: ' + withUnit(spectral.bandwidth_mean_hz, 'Hz') + NL + NL + '🧠 Assessment' + NL + '• Possible manipulation indicators: ' + manipStr; })() }}",
+        "additionalFields": {}
+      },
+      "name": "Send audio scan result",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        816,
+        1184
+      ],
+      "webhookId": "409b7150-e350-4322-b4c5-8a462569cd87",
+      "id": "497cdcb6-1070-4518-8144-4de08675d176",
+      "credentials": {
+        "telegramApi": {
+          "id": "fE4fEfsTySkWHA78",
+          "name": "Telegram account"
         }
       }
     },
@@ -1119,14 +1246,14 @@
         "jsonBody": "={{ JSON.stringify({ input: $('Telegram Trigger').item.json.message.text, platform: 'telegram' }) }}",
         "options": {}
       },
-      "id": "9f287690-4361-4be3-8dc3-0f0fe84339d5",
       "name": "HTTP Request3",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.5,
       "position": [
-        368,
-        1056
-      ]
+        592,
+        944
+      ],
+      "id": "b3df9613-dac8-40df-a4f3-a08c16033acf"
     },
     {
       "parameters": {
@@ -1152,14 +1279,14 @@
         },
         "options": {}
       },
-      "id": "aa000000-0000-4000-8000-000000000003",
       "name": "Has URL?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -1872,
-        768
-      ]
+        -1648,
+        800
+      ],
+      "id": "15575262-e419-4e8b-9e68-c9b1f9d484ed"
     },
     {
       "parameters": {
@@ -1167,18 +1294,137 @@
         "text": "🔍 No URL found in your message. Please send a link (http:// or https://) so I can scan it.",
         "additionalFields": {}
       },
-      "id": "aa000000-0000-4000-8000-000000000005",
       "name": "No URL reply",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -1648,
-        816
+        -1424,
+        848
       ],
-      "webhookId": "9586a09a-6b37-4f96-925e-49ebed4d18b4",
+      "webhookId": "1177c7d6-d5cf-4663-8805-7c356ef84d92",
+      "id": "236e7657-b506-4d1a-b979-2ecc8f68494f",
       "credentials": {
         "telegramApi": {
-          "id": "YzqsziR6QE4TPvg3",
+          "id": "fE4fEfsTySkWHA78",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "vd000000-0000-4000-8000-000000000001",
+              "leftValue": "={{ $json.message.video !== undefined }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Has Video?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        368,
+        1328
+      ],
+      "id": "9b4b3117-d917-4902-bd3c-e5a56420dfd6"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.video.file_id }}",
+        "additionalFields": {}
+      },
+      "name": "Download Telegram Video",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        592,
+        1328
+      ],
+      "webhookId": "798dc71c-a698-4aba-a4c4-a8c0e28babc3",
+      "id": "9b2ea503-3e60-485f-bae6-d026c1930ee9",
+      "credentials": {
+        "telegramApi": {
+          "id": "fE4fEfsTySkWHA78",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://elsewhere-unmovable-deprive.ngrok-free.dev/api/scan/video",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "ngrok-skip-browser-warning",
+              "value": "true"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "platform",
+              "value": "telegram"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "TruthLensAI Video API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        816,
+        1376
+      ],
+      "id": "9230b589-2ded-471c-8315-ceef5d63916b"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ (() => { const __esc = (s) => String(s === undefined || s === null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); return __esc((() => { const NL = '\\n'; const BAR = '━━━━━━━━━━━━━━━━━━'; const j = $json || {}; let err = j.error || j.detail || j.message; if (err) { if (err && typeof err === 'object') { err = JSON.stringify(err); } return '🎬 TRUTHLENSAI VIDEO SCAN' + NL + NL + '⚠️ Could not analyze this video.' + NL + 'Error: ' + err; } const plain = (v) => (v === undefined || v === null || v === '') ? 'N/A' : String(v); const withUnit = (v, u) => (v === undefined || v === null || v === '') ? 'N/A' : (String(v) + ' ' + u); const boolStr = (v) => v === true ? 'Yes' : (v === false ? 'No' : 'N/A'); const vm = (j.video_metadata && typeof j.video_metadata === 'object') ? j.video_metadata : {}; const af = (j.audio_forensics && typeof j.audio_forensics === 'object') ? j.audio_forensics : {}; const pitch = (af.pitch && typeof af.pitch === 'object') ? af.pitch : {}; const spectral = (af.spectral && typeof af.spectral === 'object') ? af.spectral : {}; const tr = (j.transcription && typeof j.transcription === 'object') ? j.transcription : {}; const evidence = Array.isArray(j.evidence) && j.evidence.length ? j.evidence.map(e => (typeof e === 'string' ? '• ' + e : (e && e.signal ? '• ' + e.signal : ''))).filter(s => s).join(NL) : '• No signals detected'; const recommendation = (j.recommendation !== undefined && j.recommendation !== null && j.recommendation !== '') ? j.recommendation : 'N/A'; let transcriptBlock; const status = tr.status; if (status === 'success') { transcriptBlock = (j.transcript !== undefined && j.transcript !== null && j.transcript !== '') ? j.transcript : (tr.text ? tr.text : 'N/A'); } else if (status === 'no_speech') { transcriptBlock = 'No readable speech detected'; } else if (status === 'unintelligible') { transcriptBlock = 'Speech detected but transcript was not reliable'; } else if (status === 'error') { let te = tr.error || tr.message || tr.detail; if (te && typeof te === 'object') { te = JSON.stringify(te); } transcriptBlock = 'Transcription error: ' + (te ? te : 'unknown error'); } else { transcriptBlock = (j.transcript !== undefined && j.transcript !== null && j.transcript !== '') ? j.transcript : 'N/A'; } const duration = (vm.duration_seconds !== undefined ? vm.duration_seconds : (vm.duration !== undefined ? vm.duration : undefined)); let resolution; if (vm.resolution !== undefined && vm.resolution !== null && vm.resolution !== '') { resolution = String(vm.resolution); } else if ((vm.width !== undefined && vm.width !== null) && (vm.height !== undefined && vm.height !== null)) { resolution = String(vm.width) + 'x' + String(vm.height); } else { resolution = 'N/A'; } const fps = (vm.fps !== undefined ? vm.fps : (vm.frame_rate !== undefined ? vm.frame_rate : undefined)); const codec = (vm.codec !== undefined ? vm.codec : (vm.video_codec !== undefined ? vm.video_codec : undefined)); const audioPresent = (vm.has_audio !== undefined ? vm.has_audio : (vm.audio_present !== undefined ? vm.audio_present : undefined)); let frameCount; if (Array.isArray(j.frames)) { frameCount = j.frames.length; } else if (j.frames && typeof j.frames === 'object' && j.frames.count !== undefined) { frameCount = j.frames.count; } else if (j.frame_count !== undefined) { frameCount = j.frame_count; } else if (typeof j.frames === 'number') { frameCount = j.frames; } else { frameCount = undefined; } let frameOcr; if (Array.isArray(j.frame_ocr_text)) { frameOcr = j.frame_ocr_text.filter(t => t !== undefined && t !== null && String(t).trim() !== '').join(NL); } else if (typeof j.frame_ocr_text === 'string') { frameOcr = j.frame_ocr_text; } else { frameOcr = ''; } if (!frameOcr || String(frameOcr).trim() === '') { frameOcr = 'No OCR text found in frames'; } const frameManip = (vm.possible_manipulation_indicators !== undefined ? vm.possible_manipulation_indicators : (j.possible_manipulation_indicators !== undefined ? j.possible_manipulation_indicators : (af.possible_manipulation_indicators !== undefined ? af.possible_manipulation_indicators : undefined))); const language = (tr.language !== undefined ? tr.language : (j.language !== undefined ? j.language : undefined)); const audioDuration = (af.duration_seconds !== undefined ? af.duration_seconds : undefined); const audioManip = af.possible_manipulation_indicators; const vf = (j.video_forensics && typeof j.video_forensics === 'object') ? j.video_forensics : {}; const asKey = j.analysis_source; const analysisSource = asKey === 'speech_and_frame_ocr' ? 'Speech + On-screen text' : asKey === 'speech' ? 'Speech only' : asKey === 'frame_ocr' ? 'On-screen text only' : asKey === 'none' ? 'No textual content' : 'N/A'; const frameEdit = vf.frame_possible_editing_indicators === true ? 'Yes' : (vf.frame_possible_editing_indicators === false ? 'No' : 'N/A'); return '🎬 TRUTHLENSAI VIDEO SCAN' + NL + NL + '⚠️ Risk Score: ' + plain(j.risk_score) + '/100' + NL + '🚨 Severity: ' + plain(j.severity) + NL + '🎯 Confidence: ' + plain(j.confidence) + NL + '🛡️ Threat: ' + plain(j.threat_type) + NL + NL + BAR + NL + '🔎 DETECTED SIGNALS' + NL + BAR + NL + NL + evidence + NL + NL + BAR + NL + '💡 RECOMMENDED ACTION' + NL + BAR + NL + NL + recommendation + NL + NL + BAR + NL + '🧠 ANALYSIS SOURCE' + NL + BAR + NL + NL + analysisSource + NL + NL + BAR + NL + '📝 VIDEO TRANSCRIPT' + NL + BAR + NL + NL + transcriptBlock + NL + NL + BAR + NL + '🎥 VIDEO METADATA' + NL + BAR + NL + NL + '🎚️ Duration: ' + withUnit(duration, 's') + NL + '📐 Resolution: ' + resolution + NL + '🎞️ FPS: ' + plain(fps) + NL + '🧬 Codec: ' + plain(codec) + NL + '🔈 Audio present: ' + boolStr(audioPresent) + NL + NL + BAR + NL + '🖼️ FRAME ANALYSIS' + NL + BAR + NL + NL + '🔢 Sampled frames: ' + plain(frameCount) + NL + NL + '🔠 OCR text found in frames:' + NL + frameOcr + NL + NL + '• Possible frame manipulation indicators: ' + frameEdit + NL + NL + BAR + NL + '🎧 AUDIO ANALYSIS' + NL + BAR + NL + NL + '📝 Transcription status: ' + plain(status) + NL + '🌐 Language: ' + plain(language) + NL + '🎚️ Audio duration: ' + withUnit(audioDuration, 's') + NL + NL + '🎼 Pitch Analysis' + NL + '• Mean pitch: ' + withUnit(pitch.mean_hz, 'Hz') + NL + '• Pitch variation: ' + withUnit(pitch.std_hz, 'Hz') + NL + NL + '📈 Spectral Analysis' + NL + '• Spectral centroid: ' + withUnit(spectral.centroid_mean_hz, 'Hz') + NL + '• Spectral bandwidth: ' + withUnit(spectral.bandwidth_mean_hz, 'Hz') + NL + NL + '🧠 Assessment' + NL + '• Possible manipulation indicators: ' + boolStr(audioManip); })()); })() }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "name": "Send video scan result",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1040,
+        1056
+      ],
+      "webhookId": "1c973e55-0139-46e4-80ac-dff6ba3a8566",
+      "id": "c5a3bca2-b655-4eb4-9199-793fa1bd1bf3",
+      "credentials": {
+        "telegramApi": {
+          "id": "fE4fEfsTySkWHA78",
           "name": "Telegram account"
         }
       }
@@ -1498,7 +1744,7 @@
         ],
         [
           {
-            "node": "HTTP Request3",
+            "node": "Has Audio?",
             "type": "main",
             "index": 0
           }
@@ -1559,6 +1805,51 @@
         ]
       ]
     },
+    "Has Audio?": {
+      "main": [
+        [
+          {
+            "node": "Download Telegram Audio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Has Video?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Telegram Audio": {
+      "main": [
+        [
+          {
+            "node": "TruthLensAI Audio API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TruthLensAI Audio API": {
+      "main": [
+        [
+          {
+            "node": "Send audio scan result",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Incident Eligibility",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "HTTP Request3": {
       "main": [
         [
@@ -1592,19 +1883,67 @@
           }
         ]
       ]
+    },
+    "Has Video?": {
+      "main": [
+        [
+          {
+            "node": "Download Telegram Video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Telegram Video": {
+      "main": [
+        [
+          {
+            "node": "TruthLensAI Video API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TruthLensAI Video API": {
+      "main": [
+        [
+          {
+            "node": "Send video scan result",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Incident Eligibility",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
     "executionOrder": "v1",
-    "binaryMode": "separate"
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
   },
-  "versionId": "0d9e22a6-b009-4998-b011-2f1b119a1ea2",
+  "versionId": "246e4e0e-007c-48cd-aa72-7c78a638ae21",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "1e54a653d47f10aabbcb8d9b8994a7ebda3b965f421338444cb12418c525beea"
+    "instanceId": "054d1698fe10f7a316e9790af95bb5b0560abe03e94f05b30472d732229237ab"
   },
   "nodeGroups": [],
-  "id": "jJR7e0H2fjFeALw9",
+  "id": "yo8lpjZl3UvNhyL4",
   "tags": []
 }
