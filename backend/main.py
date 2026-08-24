@@ -5,6 +5,7 @@ from uuid import uuid4
 import tempfile
 import os
 import subprocess
+from pathlib import Path
 
 from detector import detect_signals
 from risk_engine import calculate_risk
@@ -13,6 +14,13 @@ from virustotal import scan_url
 from image_analyzer import analyze_image_forensics, extract_text_from_image
 from audio_analyzer import analyze_audio_forensics
 from audio_transcriber import transcribe_audio
+from video_analyzer import (
+    VideoProcessingError,
+    extract_audio,
+    extract_frames,
+    probe_video,
+    select_frame_timestamps,
+)
 
 
 app = FastAPI(title="TruthLensAI Detection Engine")
@@ -21,6 +29,13 @@ app = FastAPI(title="TruthLensAI Detection Engine")
 class ScanRequest(BaseModel):
     input: str
     platform: str
+
+
+MAX_VIDEO_BYTES = 50 * 1024 * 1024
+MAX_VIDEO_DURATION_SECONDS = 120
+MAX_VIDEO_WIDTH = 1920
+MAX_VIDEO_HEIGHT = 1080
+SUPPORTED_VIDEO_EXTENSIONS = {".mp4", ".mov", ".webm", ".mkv"}
 
 
 @app.get("/")
@@ -391,3 +406,220 @@ async def scan_audio(
             os.remove(temp_path)
         if os.path.exists(normalized_path):
             os.remove(normalized_path)
+
+
+# -----------------------------------------
+# VIDEO SCANNING
+# -----------------------------------------
+
+@app.post("/api/scan/video")
+async def scan_video(
+    file: UploadFile | None = File(None),
+    platform: str = Form("web")
+):
+
+    if file is None or not file.filename:
+        return {
+            "error": {
+                "code": "video_file_missing",
+                "message": "No video file provided",
+            }
+        }
+
+    suffix = Path(file.filename).suffix.lower()
+    content_type = file.content_type or ""
+    if suffix not in SUPPORTED_VIDEO_EXTENSIONS or (
+        content_type
+        and not (
+            content_type.startswith("video/")
+            or content_type == "application/octet-stream"
+        )
+    ):
+        return {
+            "error": {
+                "code": "unsupported_video_type",
+                "message": "Supported video formats are MP4, MOV, WebM, and MKV",
+            }
+        }
+
+    contents = await file.read(MAX_VIDEO_BYTES + 1)
+    if not contents:
+        return {
+            "error": {
+                "code": "video_file_empty",
+                "message": "Empty video file",
+            }
+        }
+    if len(contents) > MAX_VIDEO_BYTES:
+        return {
+            "error": {
+                "code": "video_file_too_large",
+                "message": "Video file exceeds the 50 MB limit",
+            }
+        }
+
+    with tempfile.TemporaryDirectory(prefix="truthlens-video-") as temp_directory:
+        video_path = str(Path(temp_directory) / f"input{suffix}")
+        Path(video_path).write_bytes(contents)
+
+        try:
+            video_metadata = probe_video(video_path)
+        except VideoProcessingError as error:
+            return {"error": {"code": error.code, "message": error.message}}
+
+        duration_seconds = video_metadata["duration_seconds"]
+        width = video_metadata.get("width")
+        height = video_metadata.get("height")
+        if duration_seconds > MAX_VIDEO_DURATION_SECONDS:
+            return {
+                "error": {
+                    "code": "video_duration_too_long",
+                    "message": "Video duration exceeds the 60 second limit",
+                }
+            }
+        if not isinstance(width, int) or not isinstance(height, int):
+            return {
+                "error": {
+                    "code": "invalid_video_dimensions",
+                    "message": "Video dimensions are unavailable",
+                }
+            }
+        if width > MAX_VIDEO_WIDTH or height > MAX_VIDEO_HEIGHT:
+            return {
+                "error": {
+                    "code": "video_dimensions_too_large",
+                    "message": "Video dimensions must not exceed 1920x1080",
+                }
+            }
+
+        try:
+            frame_records = extract_frames(
+                video_path,
+                select_frame_timestamps(duration_seconds),
+                temp_directory,
+            )
+        except VideoProcessingError as error:
+            return {"error": {"code": error.code, "message": error.message}}
+
+        frames = []
+        frame_ocr_parts = []
+        for frame_record in frame_records:
+            frame_path = frame_record["path"]
+            frame_bytes = Path(frame_path).read_bytes()
+            try:
+                ocr_text = extract_text_from_image(frame_path)
+            except Exception as error:
+                ocr_text = ""
+                ocr_error = str(error)
+            else:
+                ocr_error = None
+
+            image_forensics = analyze_image_forensics(frame_bytes)
+            frame = {
+                "timestamp_seconds": frame_record["timestamp_seconds"],
+                "ocr_text": ocr_text,
+                "image_forensics": image_forensics,
+            }
+            if ocr_error:
+                frame["ocr_error"] = ocr_error
+            frames.append(frame)
+            if ocr_text:
+                frame_ocr_parts.append(ocr_text)
+
+        frame_ocr_text = "\n".join(frame_ocr_parts)
+        audio_forensics = None
+        if video_metadata["has_audio"]:
+            audio_path = str(Path(temp_directory) / "audio.wav")
+            try:
+                extract_audio(video_path, audio_path)
+            except VideoProcessingError as error:
+                transcription = {
+                    "status": "error",
+                    "text": None,
+                    "code": error.code,
+                    "message": error.message,
+                }
+                audio_forensics = {
+                    "error": {
+                        "code": "audio_forensics_unavailable",
+                        "message": error.message,
+                    }
+                }
+            else:
+                try:
+                    transcription = transcribe_audio(audio_path)
+                except Exception as error:
+                    transcription = {
+                        "status": "error",
+                        "text": None,
+                        "code": "transcription_failed",
+                        "message": str(error),
+                    }
+                try:
+                    audio_forensics = analyze_audio_forensics(audio_path)
+                except Exception as error:
+                    audio_forensics = {
+                        "error": {
+                            "code": "audio_forensics_failed",
+                            "message": str(error),
+                        }
+                    }
+        else:
+            transcription = {
+                "status": "no_audio",
+                "text": None,
+                "reason": "No audio stream found",
+            }
+
+        base_response = {
+            "scan_id": str(uuid4()),
+            "input_type": "video",
+            "platform": platform,
+            "transcript": transcription.get("text"),
+            "transcription": transcription,
+            "risk_score": None,
+            "severity": None,
+            "confidence": None,
+            "threat_type": None,
+            "evidence": [],
+            "ai_analysis": None,
+            "virustotal": [],
+            "recommendation": "No usable speech transcript was available; visual and audio forensics are informational only.",
+            "extracted_entities": {
+                "urls": [],
+                "upi_ids": [],
+                "phone_numbers": [],
+                "emails": [],
+            },
+            "video_metadata": video_metadata,
+            "frames": frames,
+            "frame_ocr_text": frame_ocr_text,
+            "audio_forensics": audio_forensics,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
+        if transcription.get("status") != "success":
+            return base_response
+
+        try:
+            result = process_text(transcription["text"])
+        except Exception as error:
+            return {
+                **base_response,
+                "error": {
+                    "code": "video_text_analysis_failed",
+                    "message": str(error),
+                },
+            }
+
+        result.update({
+            "input_type": "video",
+            "platform": platform,
+            "transcript": transcription["text"],
+            "transcription": transcription,
+            "video_metadata": video_metadata,
+            "frames": frames,
+            "frame_ocr_text": frame_ocr_text,
+            "audio_forensics": audio_forensics,
+        })
+        return result
