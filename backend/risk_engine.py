@@ -62,6 +62,61 @@ def calculate_risk(signals):
         })
 
     # -------------------------
+    # PRIZE / REWARD SCAM
+    # -------------------------
+
+    if signals.get("prize_signals"):
+        score += 15
+        evidence.append({
+            "signal": "Prize or reward scam pattern detected",
+            "points": 15
+        })
+
+    # -------------------------
+    # INVESTMENT SCAM
+    # -------------------------
+
+    if signals.get("investment_signals"):
+        score += 15
+        evidence.append({
+            "signal": "Suspicious investment or guaranteed-return pattern detected",
+            "points": 15
+        })
+
+    # -------------------------
+    # TECH SUPPORT / REMOTE ACCESS
+    # -------------------------
+
+    if signals.get("tech_support_signals"):
+        score += 15
+        evidence.append({
+            "signal": "Suspicious technical-support or remote-access pattern detected",
+            "points": 15
+        })
+
+    # -------------------------
+    # KYC / ACCOUNT UPDATE
+    # -------------------------
+
+    if signals.get("kyc_signals"):
+        score += 10
+        evidence.append({
+            "signal": "KYC or account-update pattern detected",
+            "points": 10
+        })
+
+    # -------------------------
+    # REWARD / CARD EXPIRY
+    # -------------------------
+
+    if signals.get("reward_signals"):
+        score += 10
+        evidence.append({
+            "signal": "Reward or card-expiry pattern detected",
+            "points": 10
+        })
+
+    # -------------------------
     # CREDENTIALS
     # -------------------------
 
@@ -157,40 +212,49 @@ def calculate_risk(signals):
         malicious = vt.get("malicious", 0)
         suspicious = vt.get("suspicious", 0)
 
-        # Strong external confirmation
         if malicious >= 10:
             score += 40
             evidence.append({
-                "signal": f"VirusTotal strongly flagged URL as malicious ({malicious} engines)",
+                "signal": (
+                    "VirusTotal strongly flagged URL as malicious "
+                    f"({malicious} engines)"
+                ),
                 "points": 40
             })
 
         elif malicious >= 3:
             score += 30
             evidence.append({
-                "signal": f"VirusTotal flagged URL as malicious ({malicious} engines)",
+                "signal": (
+                    "VirusTotal flagged URL as malicious "
+                    f"({malicious} engines)"
+                ),
                 "points": 30
             })
 
         elif malicious > 0:
             score += 20
             evidence.append({
-                "signal": f"VirusTotal flagged URL as malicious ({malicious} engines)",
+                "signal": (
+                    "VirusTotal flagged URL as malicious "
+                    f"({malicious} engines)"
+                ),
                 "points": 20
             })
 
         elif suspicious > 0:
             score += 15
             evidence.append({
-                "signal": f"VirusTotal flagged URL as suspicious ({suspicious} engines)",
+                "signal": (
+                    "VirusTotal flagged URL as suspicious "
+                    f"({suspicious} engines)"
+                ),
                 "points": 15
             })
 
     # -------------------------
     # CROSS-SIGNAL CORROBORATION
     # -------------------------
-    # Multiple independent systems
-    # agreeing should increase confidence/risk.
 
     has_malicious_url = any(
         vt.get("malicious", 0) > 0
@@ -222,6 +286,23 @@ def calculate_risk(signals):
         for vt in vt_results
     )
 
+    # Strong deterministic evidence should not be suppressed
+    # by an AI-benign result.
+    strong_deterministic_evidence = any([
+        bool(signals.get("otp_signals")),
+        bool(signals.get("credential_signals")),
+        bool(signals.get("threat_signals")),
+        bool(signals.get("investment_signals")),
+        bool(signals.get("tech_support_signals")),
+        bool(signals.get("kyc_signals")),
+        bool(
+            signals.get("prize_signals")
+            and signals.get("payment_signals")
+        ),
+        bool(signals.get("reward_signals")),
+        has_malicious_url
+    ])
+
     ai_benign_high_confidence = (
         ai.get("threat_type") == "benign"
         and ai.get("scam_intent") is False
@@ -229,7 +310,7 @@ def calculate_risk(signals):
         and not has_vt_alert
     )
 
-    if ai_benign_high_confidence:
+    if ai_benign_high_confidence and not strong_deterministic_evidence:
         score = min(score, 20)
 
     # -------------------------
@@ -268,7 +349,6 @@ def calculate_risk(signals):
     # THREAT TYPE
     # -------------------------
 
-    ai = signals.get("ai", {})
     ai_threat_type = ai.get("threat_type")
 
     threat_type_map = {
@@ -307,11 +387,23 @@ def calculate_risk(signals):
         elif signals["urgency_signals"] and signals["payment_signals"]:
             threat_type = "Financial Social Engineering"
 
+        elif signals.get("investment_signals"):
+            threat_type = "Investment Scam"
+
+        elif signals.get("tech_support_signals"):
+            threat_type = "Tech Support Scam"
+
+        elif signals.get("prize_signals"):
+            threat_type = "Prize / Reward Scam"
+
+        elif signals.get("reward_signals"):
+            threat_type = "Reward / Card Scam"
+
+        elif signals.get("kyc_signals"):
+            threat_type = "KYC / Account Scam"
+
         elif signals["threat_signals"]:
             threat_type = "Threat / Account Scam"
-
-        elif has_malicious_url:
-            threat_type = "Malicious Link"
 
         elif signals["urls"]:
             threat_type = "Suspicious Link"

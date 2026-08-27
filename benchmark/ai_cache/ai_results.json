@@ -1,0 +1,1922 @@
+{
+  "EN-S-001": {
+    "id": "EN-S-001",
+    "language": "english",
+    "label": "scam",
+    "text": "URGENT! Your bank account will be blocked today. Share your OTP immediately to verify your account.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Requests OTP via urgency to compromise account security.",
+      "threat_type": "credential_phishing"
+    }
+  },
+  "EN-S-002": {
+    "id": "EN-S-002",
+    "language": "english",
+    "label": "scam",
+    "text": "Your KYC has expired. Click this link now and enter your bank username, password and OTP.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Requests sensitive credentials via suspicious link.",
+      "threat_type": "credential_phishing"
+    }
+  },
+  "EN-S-003": {
+    "id": "EN-S-003",
+    "language": "english",
+    "label": "scam",
+    "text": "Congratulations! You won a cash prize. Pay the processing fee immediately to receive your reward.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Requests payment for a prize, classic scam tactic.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "EN-S-004": {
+    "id": "EN-S-004",
+    "language": "english",
+    "label": "scam",
+    "text": "Your parcel is on hold. Pay the customs fee now using the attached payment link.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Payment scam requesting customs fee via link",
+      "threat_type": "payment_scam"
+    }
+  },
+  "EN-S-005": {
+    "id": "EN-S-005",
+    "language": "english",
+    "label": "scam",
+    "text": "This is your bank support team. Tell me the OTP you just received so I can secure your account.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Requests OTP via impersonation tactic",
+      "threat_type": "impersonation"
+    }
+  },
+  "EN-B-001": {
+    "id": "EN-B-001",
+    "language": "english",
+    "label": "benign",
+    "text": "The project meeting is scheduled for tomorrow at 10 AM. Please bring your laptop and notes.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Benign meeting reminder with no scam elements.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-002": {
+    "id": "EN-B-002",
+    "language": "english",
+    "label": "benign",
+    "text": "Your order has been shipped and will arrive on Friday. You can track it from the official app.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Order confirmation with tracking link via official app.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-003": {
+    "id": "EN-B-003",
+    "language": "english",
+    "label": "benign",
+    "text": "Please send me the project presentation before the college meeting tomorrow.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Request for project presentation before meeting.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-004": {
+    "id": "EN-B-004",
+    "language": "english",
+    "label": "benign",
+    "text": "Your monthly electricity bill is due on the 28th. You can pay it through the official website.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "No scam elements detected.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-005": {
+    "id": "EN-B-005",
+    "language": "english",
+    "label": "benign",
+    "text": "Mom, I will reach home around 7 PM. Please keep dinner ready.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "No suspicious elements detected in the message.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-S-001": {
+    "id": "HI-S-001",
+    "language": "hindi",
+    "label": "scam",
+    "text": "आपका बैंक खाता आज बंद हो जाएगा। सत्यापन के लिए अभी अपना OTP साझा करें।",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Threatens account closure to obtain OTP, classic scam tactic.",
+      "threat_type": "impersonation"
+    }
+  },
+  "HI-S-002": {
+    "id": "HI-S-002",
+    "language": "hindi",
+    "label": "scam",
+    "text": "आपका KYC समाप्त हो गया है। तुरंत इस लिंक पर क्लिक करके अपना बैंक विवरण अपडेट करें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "medium",
+      "confidence": "high",
+      "explanation": "KYC expiration notice with link to update bank details.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-S-003": {
+    "id": "HI-S-003",
+    "language": "hindi",
+    "label": "scam",
+    "text": "बधाई हो, आपने लकी ड्रॉ में 50,000 रुपये जीते हैं। पुरस्कार लेने के लिए प्रोसेसिंग फीस जमा करें।",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": true,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Requests payment for a fake prize win.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HI-S-004": {
+    "id": "HI-S-004",
+    "language": "hindi",
+    "label": "scam",
+    "text": "आपका बिजली कनेक्शन आज काट दिया जाएगा। तुरंत भुगतान करने के लिए इस लिंक का उपयोग करें।",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Threatens service cutoff and demands payment via link, classic scam tactic.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HI-S-005": {
+    "id": "HI-S-005",
+    "language": "hindi",
+    "label": "scam",
+    "text": "मैं बैंक से बोल रहा हूँ। आपके खाते की सुरक्षा जांच के लिए अभी OTP बताइए।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "medium",
+      "confidence": "high",
+      "explanation": "Legitimate bank security request for OTP verification.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-001": {
+    "id": "HI-B-001",
+    "language": "hindi",
+    "label": "benign",
+    "text": "कल हमारी प्रोजेक्ट मीटिंग सुबह 10 बजे है। कृपया अपना लैपटॉप साथ लेकर आएं।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Meeting reminder with laptop request, no suspicious elements.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-002": {
+    "id": "HI-B-002",
+    "language": "hindi",
+    "label": "benign",
+    "text": "आपका ऑर्डर भेज दिया गया है और शुक्रवार तक पहुंच जाएगा।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Benign order confirmation with no scam indicators.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-003": {
+    "id": "HI-B-003",
+    "language": "hindi",
+    "label": "benign",
+    "text": "कृपया कल की कॉलेज प्रेजेंटेशन मुझे शाम तक भेज दें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Harmless request for academic material",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-004": {
+    "id": "HI-B-004",
+    "language": "hindi",
+    "label": "benign",
+    "text": "इस महीने का बिजली बिल 28 तारीख को जमा करना है।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Simple bill payment reminder without scam elements.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-005": {
+    "id": "HI-B-005",
+    "language": "hindi",
+    "label": "benign",
+    "text": "मैं शाम 7 बजे तक घर पहुंच जाऊंगा। खाने के लिए मेरा इंतजार मत करना।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Simple time update with no scam indicators.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-S-001": {
+    "id": "HING-S-001",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Aapka bank account aaj block ho jayega. Verification ke liye OTP abhi share karo.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Threatens account blockage to pressure OTP sharing.",
+      "threat_type": "social_engineering"
+    }
+  },
+  "HING-S-002": {
+    "id": "HING-S-002",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "KYC expire ho gaya hai. Is link par click karke apna bank password aur OTP enter karo.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Phishing attempt to steal credentials via malicious link.",
+      "threat_type": "credential_phishing"
+    }
+  },
+  "HING-S-003": {
+    "id": "HING-S-003",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Congratulations, aapne 50,000 rupees jeete hain. Prize claim karne ke liye processing fee pay karo.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Requests payment for prize, classic scam tactic.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HING-S-004": {
+    "id": "HING-S-004",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Aapka electricity connection cut ho jayega. Payment immediately karo warna service band ho jayegi.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Threatens service cutoff for non-payment.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HING-S-005": {
+    "id": "HING-S-005",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Main bank support se bol raha hoon. Security verification ke liye jo OTP aaya hai woh batao.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Requesting OTP from impersonated bank support",
+      "threat_type": "impersonation"
+    }
+  },
+  "HING-B-001": {
+    "id": "HING-B-001",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Kal project meeting 10 baje hai. Please laptop aur notes le aana.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Meeting reminder with no financial or malicious elements.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-002": {
+    "id": "HING-B-002",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Your order has been shipped and Friday ko deliver hoga.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Delivery confirmation with no scam elements detected.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-003": {
+    "id": "HING-B-003",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Please mujhe project presentation aaj evening tak send kar dena.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Request for project presentation with no malicious indicators.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-004": {
+    "id": "HING-B-004",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Monthly electricity bill 28th ko due hai, official app se pay kar dena.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Reminder to pay electricity bill via official app with no suspicious elements.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-005": {
+    "id": "HING-B-005",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Main 7 PM tak ghar aa jaunga, dinner mere liye rakh dena.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Benign request for dinner preparation.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-S-006": {
+    "id": "EN-S-006",
+    "language": "english",
+    "label": "scam",
+    "text": "Your bank account needs immediate security verification. Send the OTP you received to complete the verification.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Urgent request to send OTP without verification context.",
+      "threat_type": "social_engineering"
+    }
+  },
+  "EN-S-007": {
+    "id": "EN-S-007",
+    "language": "english",
+    "label": "scam",
+    "text": "Your card has been suspended due to unusual activity. Click the link and confirm your card details now.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Message uses urgency to prompt click on unknown link.",
+      "threat_type": "social_engineering"
+    }
+  },
+  "EN-S-008": {
+    "id": "EN-S-008",
+    "language": "english",
+    "label": "scam",
+    "text": "Your KYC update is pending. Failure to update today will permanently restrict your account.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Urgency used to pressure action without malicious elements.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-S-009": {
+    "id": "EN-S-009",
+    "language": "english",
+    "label": "scam",
+    "text": "A refund is waiting for you. Enter your UPI PIN and bank details to receive the money.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Requests sensitive financial information",
+      "threat_type": "payment_scam"
+    }
+  },
+  "EN-S-010": {
+    "id": "EN-S-010",
+    "language": "english",
+    "label": "scam",
+    "text": "You have been selected for a government benefit. Pay a small registration fee to claim it.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Requests payment for a claimed government benefit.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "EN-S-011": {
+    "id": "EN-S-011",
+    "language": "english",
+    "label": "scam",
+    "text": "Your delivery is held at customs. Pay the clearance charge immediately using this payment link.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Payment requested via link for customs clearance, indicating potential scam.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "EN-S-012": {
+    "id": "EN-S-012",
+    "language": "english",
+    "label": "scam",
+    "text": "Congratulations, you have won the lottery. Send the processing fee to release your prize.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Requests payment for a lottery prize, classic scam pattern.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "EN-S-013": {
+    "id": "EN-S-013",
+    "language": "english",
+    "label": "scam",
+    "text": "Your job application has been shortlisted. Pay the security deposit today to confirm your position.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Requests payment for job confirmation, typical scam tactic.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "EN-S-014": {
+    "id": "EN-S-014",
+    "language": "english",
+    "label": "scam",
+    "text": "Invest now and double your money in seven days. Transfer the minimum amount before the offer expires.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Promises high returns with deadline, typical scam tactic.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "EN-S-015": {
+    "id": "EN-S-015",
+    "language": "english",
+    "label": "scam",
+    "text": "This is a police notice. Pay the penalty immediately to avoid legal action and arrest.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Requests payment to avoid legal action, common scam tactic.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "EN-S-016": {
+    "id": "EN-S-016",
+    "language": "english",
+    "label": "scam",
+    "text": "Our technical support team detected a virus on your computer. Install this remote access tool immediately.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Remote access tool request via fake support.",
+      "threat_type": "malware"
+    }
+  },
+  "EN-S-017": {
+    "id": "EN-S-017",
+    "language": "english",
+    "label": "scam",
+    "text": "Your mobile number will be disconnected unless you complete KYC verification immediately.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Threatens disconnection to pressure KYC verification",
+      "threat_type": "social_engineering"
+    }
+  },
+  "EN-S-018": {
+    "id": "EN-S-018",
+    "language": "english",
+    "label": "scam",
+    "text": "Your credit card reward points are expiring today. Share your card details to redeem them.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Requests card details under false urgency.",
+      "threat_type": "credential_phishing"
+    }
+  },
+  "EN-S-019": {
+    "id": "EN-S-019",
+    "language": "english",
+    "label": "scam",
+    "text": "Your electricity connection will be disconnected tonight. Make the pending payment immediately.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Warning without clear scam elements.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-S-020": {
+    "id": "EN-S-020",
+    "language": "english",
+    "label": "scam",
+    "text": "Your account has been compromised. Give me the security code so I can secure it for you.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "medium",
+      "confidence": "high",
+      "explanation": "Requests security code to compromise account",
+      "threat_type": "credential_phishing"
+    }
+  },
+  "EN-B-006": {
+    "id": "EN-B-006",
+    "language": "english",
+    "label": "benign",
+    "text": "Please verify your attendance for tomorrow's college workshop using the official student portal.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Legitimate attendance verification request via official portal",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-007": {
+    "id": "EN-B-007",
+    "language": "english",
+    "label": "benign",
+    "text": "Your bank statement is available in the official mobile banking application.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Legitimate message about accessing bank statement via official app.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-008": {
+    "id": "EN-B-008",
+    "language": "english",
+    "label": "benign",
+    "text": "Please pay the college semester fee through the official university payment portal.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Legitimate payment request via official portal",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-009": {
+    "id": "EN-B-009",
+    "language": "english",
+    "label": "benign",
+    "text": "Your electricity bill is due tomorrow. You can pay it through the official electricity provider website.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Benign bill payment reminder with no deception detected.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-010": {
+    "id": "EN-B-010",
+    "language": "english",
+    "label": "benign",
+    "text": "The courier company has delivered your package successfully.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Standard delivery confirmation with no suspicious elements.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-011": {
+    "id": "EN-B-011",
+    "language": "english",
+    "label": "benign",
+    "text": "The customer support team asked me to verify my order number before discussing the delivery.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Legitimate customer support request with no suspicious elements.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-012": {
+    "id": "EN-B-012",
+    "language": "english",
+    "label": "benign",
+    "text": "Our team will meet at 3 PM to discuss the final project presentation.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "No scam indicators detected.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-013": {
+    "id": "EN-B-013",
+    "language": "english",
+    "label": "benign",
+    "text": "The official bank app is requesting a routine security update.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Routine security update from official bank app",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-014": {
+    "id": "EN-B-014",
+    "language": "english",
+    "label": "benign",
+    "text": "Please transfer the agreed amount for the shared dinner after everyone confirms the total.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Benign request for group dinner payment.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-015": {
+    "id": "EN-B-015",
+    "language": "english",
+    "label": "benign",
+    "text": "The university scholarship application closes next Friday.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "No scam elements detected in the message.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-016": {
+    "id": "EN-B-016",
+    "language": "english",
+    "label": "benign",
+    "text": "I received a message that my train ticket has been confirmed.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "No suspicious elements detected.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-017": {
+    "id": "EN-B-017",
+    "language": "english",
+    "label": "benign",
+    "text": "Please send me the payment receipt after you complete the registration fee.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Requests receipt after payment, no clear scam intent.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-018": {
+    "id": "EN-B-018",
+    "language": "english",
+    "label": "benign",
+    "text": "The company will process my monthly salary on the last working day.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Standard HR communication about salary processing.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-019": {
+    "id": "EN-B-019",
+    "language": "english",
+    "label": "benign",
+    "text": "My internet provider has scheduled routine maintenance for tonight.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Routine maintenance announcement with no suspicious elements.",
+      "threat_type": "benign"
+    }
+  },
+  "EN-B-020": {
+    "id": "EN-B-020",
+    "language": "english",
+    "label": "benign",
+    "text": "I will call customer support tomorrow to check the status of my refund.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "No scam indicators detected in refund status check plan.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-S-006": {
+    "id": "HI-S-006",
+    "language": "hindi",
+    "label": "scam",
+    "text": "आपका बैंक खाता संदिग्ध गतिविधि के कारण बंद किया जा रहा है। अभी OTP बताइए।",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Requests OTP via suspicious account closure pretext",
+      "threat_type": "impersonation"
+    }
+  },
+  "HI-S-007": {
+    "id": "HI-S-007",
+    "language": "hindi",
+    "label": "scam",
+    "text": "आपका KYC अपडेट नहीं हुआ है। आज ही बैंक विवरण देकर सत्यापन पूरा करें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Requests bank details for KYC update without clear malicious context.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-S-008": {
+    "id": "HI-S-008",
+    "language": "hindi",
+    "label": "scam",
+    "text": "आपके नाम पर इनाम निकला है। पुरस्कार लेने के लिए प्रोसेसिंग फीस जमा करें।",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Reward claim with payment request",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HI-S-009": {
+    "id": "HI-S-009",
+    "language": "hindi",
+    "label": "scam",
+    "text": "आपका बिजली कनेक्शन आज काट दिया जाएगा। तुरंत बकाया भुगतान करें।",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Threatens disconnection to demand payment.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HI-S-010": {
+    "id": "HI-S-010",
+    "language": "hindi",
+    "label": "scam",
+    "text": "आपका पार्सल कस्टम्स में रुका है। डिलीवरी के लिए शुल्क अभी जमा करें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Message appears to be a legitimate customs notice without clear scam indicators.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-S-011": {
+    "id": "HI-S-011",
+    "language": "hindi",
+    "label": "scam",
+    "text": "आपकी लॉटरी में पचास हजार रुपये की जीत हुई है। इनाम लेने के लिए फीस भेजें।",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Requests fee for lottery prize, classic payment scam.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HI-S-012": {
+    "id": "HI-S-012",
+    "language": "hindi",
+    "label": "scam",
+    "text": "पुलिस शिकायत दर्ज होने वाली है। कानूनी कार्रवाई से बचने के लिए तुरंत जुर्माना भरें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "medium",
+      "confidence": "high",
+      "explanation": "Threatens legal action to pressure payment.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-S-013": {
+    "id": "HI-S-013",
+    "language": "hindi",
+    "label": "scam",
+    "text": "निवेश की यह योजना सात दिनों में आपका पैसा दोगुना करेगी। अभी पैसे ट्रांसफर करें।",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Promises quick financial gain through fake investment plan.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HI-S-014": {
+    "id": "HI-S-014",
+    "language": "hindi",
+    "label": "scam",
+    "text": "आपका कार्ड सुरक्षा कारणों से बंद है। इसे चालू करने के लिए कार्ड नंबर और OTP बताएं।",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Requesting card details for reactivation is phishing.",
+      "threat_type": "credential_phishing"
+    }
+  },
+  "HI-S-015": {
+    "id": "HI-S-015",
+    "language": "hindi",
+    "label": "scam",
+    "text": "तकनीकी सहायता से बोल रहा हूँ। आपके कंप्यूटर में वायरस है, यह ऐप तुरंत इंस्टॉल करें।",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Technical support scam with virus claim and urgent action request.",
+      "threat_type": "impersonation"
+    }
+  },
+  "HI-S-016": {
+    "id": "HI-S-016",
+    "language": "hindi",
+    "label": "scam",
+    "text": "आपका मोबाइल नंबर बंद हो जाएगा। KYC सत्यापन अभी पूरा करें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Threat of disconnection with urgency, no clear malicious intent.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-S-017": {
+    "id": "HI-S-017",
+    "language": "hindi",
+    "label": "scam",
+    "text": "रिफंड पाने के लिए अपने बैंक खाते और OTP की जानकारी साझा करें।",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Requests sensitive financial details for refund, indicating phishing attempt.",
+      "threat_type": "credential_phishing"
+    }
+  },
+  "HI-S-018": {
+    "id": "HI-S-018",
+    "language": "hindi",
+    "label": "scam",
+    "text": "आपको सरकारी लाभ मिला है। इसे प्राप्त करने के लिए पंजीकरण शुल्क जमा करें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Generic government benefit claim without malicious elements.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-S-007": {
+    "id": "HING-S-007",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "KYC update pending hai. Aaj hi bank details dekar verification complete karo.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "medium",
+      "confidence": "high",
+      "explanation": "Urgent request for bank details to complete verification",
+      "threat_type": "social_engineering"
+    }
+  },
+  "HING-S-008": {
+    "id": "HING-S-008",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Aapne lottery jeeti hai. Prize lene ke liye processing fee abhi pay karo.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Lottery win scam with payment request.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HING-S-009": {
+    "id": "HING-S-009",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Aapka electricity connection aaj cut ho jayega. Pending payment turant karo.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Threatens service cut to pressure payment.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HING-S-010": {
+    "id": "HING-S-010",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Aapka parcel customs mein hold hai. Delivery ke liye clearance fee immediately pay karo.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Requests payment for parcel release, classic scam tactic.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HING-S-011": {
+    "id": "HING-S-011",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Congratulations, aapne fifty thousand rupees jeete hain. Prize release karne ke liye fee bhejo.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Requests payment for a non-existent prize.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HING-S-012": {
+    "id": "HING-S-012",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Police complaint file hone wali hai. Legal action se bachne ke liye penalty abhi pay karo.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Scam attempts to extort payment via legal threat",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HING-S-013": {
+    "id": "HING-S-013",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Ye investment plan seven days mein paisa double karega. Offer expire hone se pehle transfer karo.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Promises high returns with urgent deadline for payment.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HING-S-014": {
+    "id": "HING-S-014",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Aapka card security reason se blocked hai. Card number aur OTP share karo.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Requests sensitive card details for security verification.",
+      "threat_type": "credential_phishing"
+    }
+  },
+  "HING-S-015": {
+    "id": "HING-S-015",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Main technical support se bol raha hoon. Computer mein virus hai, remote access app install karo.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Claiming technical support to install remote access app",
+      "threat_type": "malware"
+    }
+  },
+  "HING-S-016": {
+    "id": "HING-S-016",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Aapka mobile number disconnect ho jayega. KYC verification immediately complete karo.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Uses urgency to pressure KYC verification.",
+      "threat_type": "social_engineering"
+    }
+  },
+  "HING-S-017": {
+    "id": "HING-S-017",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Refund receive karne ke liye bank account details aur OTP share karo.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Requests bank details and OTP for refund, indicating payment scam.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HING-S-018": {
+    "id": "HING-S-018",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Aapko government benefit mila hai. Claim karne ke liye registration fee pay karo.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": true,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Requests payment for claimed government benefit, classic scam pattern.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-S-019": {
+    "id": "HING-S-019",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Aapka bank account tonight block ho jayega. Verification code abhi batao.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Threatens account block to obtain verification code.",
+      "threat_type": "credential_phishing"
+    }
+  },
+  "HING-S-020": {
+    "id": "HING-S-020",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Credit card reward points aaj expire ho rahe hain. Card details share karo.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": true,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Urgent request for card details under pretext of expiring rewards.",
+      "threat_type": "payment_scam"
+    }
+  },
+  "HING-B-006": {
+    "id": "HING-B-006",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Kal college workshop hai, please official student portal par attendance verify kar dena.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Benign request for attendance verification on official portal.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-007": {
+    "id": "HING-B-007",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Your bank statement official mobile banking app mein available hai.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Announcement of bank statement availability in official app.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-008": {
+    "id": "HING-B-008",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Semester fee official university payment portal se pay kar dena.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Legitimate payment reminder from university portal.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-010": {
+    "id": "HING-B-010",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Courier company ne parcel successfully deliver kar diya hai.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Delivery confirmation with no malicious intent.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-011": {
+    "id": "HING-B-011",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Customer support ne order discuss karne se pehle mera order number verify kiya.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Legitimate customer support verification process.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-012": {
+    "id": "HING-B-012",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Hamari team 3 PM par project presentation discuss karegi.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Benign team meeting announcement with no scam elements.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-014": {
+    "id": "HING-B-014",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Dinner ka total confirm hone ke baad sab apna share transfer kar dena.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Request for share transfer after dinner confirmation appears to be a group expense arrangement.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-015": {
+    "id": "HING-B-015",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "University scholarship application next Friday close ho jayegi.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Notification about scholarship deadline lacks scam indicators.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-016": {
+    "id": "HING-B-016",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Meri train ticket confirm ho gayi hai.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Benign message about train ticket confirmation.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-018": {
+    "id": "HING-B-018",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Company month ke last working day par salary process karegi.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Standard payroll announcement with no scam indicators.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-019": {
+    "id": "HING-B-019",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Internet provider ne aaj raat routine maintenance schedule kiya hai.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Routine maintenance notice with no scam indicators.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-020": {
+    "id": "HING-B-020",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Main kal customer support ko call karke refund ka status check karunga.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Legitimate refund status check via customer support",
+      "threat_type": "benign"
+    }
+  },
+  "HI-S-019": {
+    "id": "HI-S-019",
+    "language": "hindi",
+    "label": "scam",
+    "text": "आपका बैंक खाता आज रात ब्लॉक हो जाएगा। अभी सत्यापन कोड बताइए।",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Requests verification code under false account block threat.",
+      "threat_type": "credential_phishing"
+    }
+  },
+  "HI-S-020": {
+    "id": "HI-S-020",
+    "language": "hindi",
+    "label": "scam",
+    "text": "आपके क्रेडिट कार्ड के रिवॉर्ड पॉइंट आज समाप्त हो रहे हैं। कार्ड की जानकारी दें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Asks for card info without clear malicious intent.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-006": {
+    "id": "HI-B-006",
+    "language": "hindi",
+    "label": "benign",
+    "text": "कल कॉलेज की कार्यशाला में उपस्थित होने के लिए आधिकारिक पोर्टल पर अपनी उपस्थिति दर्ज करें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "No scam indicators detected. Legitimate attendance registration request.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-007": {
+    "id": "HI-B-007",
+    "language": "hindi",
+    "label": "benign",
+    "text": "आपका बैंक स्टेटमेंट आधिकारिक मोबाइल बैंकिंग ऐप में उपलब्ध है।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Official app notification, no malicious intent.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-008": {
+    "id": "HI-B-008",
+    "language": "hindi",
+    "label": "benign",
+    "text": "कृपया सेमेस्टर शुल्क विश्वविद्यालय के आधिकारिक भुगतान पोर्टल से जमा करें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Official payment instruction via legitimate portal.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-009": {
+    "id": "HI-B-009",
+    "language": "hindi",
+    "label": "benign",
+    "text": "आपका बिजली बिल कल जमा करना है। आप आधिकारिक वेबसाइट से भुगतान कर सकते हैं।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Legitimate bill payment reminder with no malicious elements.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-011": {
+    "id": "HI-B-011",
+    "language": "hindi",
+    "label": "benign",
+    "text": "ग्राहक सहायता टीम ने ऑर्डर की जानकारी देखने से पहले मेरा ऑर्डर नंबर सत्यापित किया।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Legitimate customer support verification process described.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-012": {
+    "id": "HI-B-012",
+    "language": "hindi",
+    "label": "benign",
+    "text": "हमारी टीम आज शाम तीन बजे प्रोजेक्ट प्रस्तुति पर चर्चा करेगी।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Routine meeting announcement with no suspicious elements.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-013": {
+    "id": "HI-B-013",
+    "language": "hindi",
+    "label": "benign",
+    "text": "बैंक के आधिकारिक ऐप में सामान्य सुरक्षा अपडेट उपलब्ध है।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Notices a legitimate security update from the official app.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-014": {
+    "id": "HI-B-014",
+    "language": "hindi",
+    "label": "benign",
+    "text": "सब लोग कुल राशि तय करने के बाद रात के खाने का अपना हिस्सा भुगतान कर देना।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "No scam elements detected; meal cost sharing request.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-015": {
+    "id": "HI-B-015",
+    "language": "hindi",
+    "label": "benign",
+    "text": "विश्वविद्यालय की छात्रवृत्ति के लिए आवेदन अगले शुक्रवार को बंद होंगे।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Notification about scholarship application deadline.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-016": {
+    "id": "HI-B-016",
+    "language": "hindi",
+    "label": "benign",
+    "text": "मुझे संदेश मिला कि मेरी ट्रेन टिकट की पुष्टि हो गई है।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Benign confirmation message about train ticket status.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-018": {
+    "id": "HI-B-018",
+    "language": "hindi",
+    "label": "benign",
+    "text": "कंपनी महीने के आखिरी कार्य दिवस पर मेरा वेतन भेजेगी।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Statement about salary payment on last working day.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-019": {
+    "id": "HI-B-019",
+    "language": "hindi",
+    "label": "benign",
+    "text": "मेरे इंटरनेट प्रदाता ने आज रात सामान्य रखरखाव की सूचना दी है।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Routine maintenance notice from internet provider, no suspicious elements.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-020": {
+    "id": "HI-B-020",
+    "language": "hindi",
+    "label": "benign",
+    "text": "मैं कल ग्राहक सहायता से बात करके अपने रिफंड की स्थिति पूछूंगा।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Routine refund status inquiry via customer support.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-009": {
+    "id": "HING-B-009",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Electricity bill kal due hai, official website se payment kar dena.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Legitimate bill reminder with official payment instruction.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-013": {
+    "id": "HING-B-013",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Official bank app mein routine security update available hai.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Legitimate update notification from official bank app.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-B-017": {
+    "id": "HING-B-017",
+    "language": "hinglish",
+    "label": "benign",
+    "text": "Registration fee pay karne ke baad payment receipt mujhe send kar dena.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Routine payment receipt request with no suspicious elements.",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-010": {
+    "id": "HI-B-010",
+    "language": "hindi",
+    "label": "benign",
+    "text": "कूरियर कंपनी ने आपका पार्सल सफलतापूर्वक पहुंचा दिया है।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Simple delivery confirmation, no scam elements",
+      "threat_type": "benign"
+    }
+  },
+  "HI-B-017": {
+    "id": "HI-B-017",
+    "language": "hindi",
+    "label": "benign",
+    "text": "पंजीकरण शुल्क जमा करने के बाद कृपया भुगतान की रसीद भेज दें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "high",
+      "explanation": "Standard request for payment receipt after fee payment.",
+      "threat_type": "benign"
+    }
+  },
+  "HING-S-006": {
+    "id": "HING-S-006",
+    "language": "hinglish",
+    "label": "scam",
+    "text": "Aapka bank account suspicious activity ki wajah se block ho raha hai. OTP abhi batao.",
+    "ai_analysis": {
+      "scam_intent": true,
+      "social_engineering": true,
+      "impersonation": true,
+      "financial_manipulation": false,
+      "urgency": "high",
+      "confidence": "high",
+      "explanation": "Requests OTP under false pretense.",
+      "threat_type": "credential_phishing"
+    }
+  }
+}

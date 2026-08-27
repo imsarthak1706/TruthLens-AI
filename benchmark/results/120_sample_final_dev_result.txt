@@ -1,0 +1,30 @@
+TruthLensAI 120-Sample Development Benchmark
+
+Evaluated: 120
+
+TP: 56
+TN: 60
+FP: 0
+FN: 4
+
+Accuracy: 96.67%
+Precision: 100.00%
+Recall: 93.33%
+F1: 96.55%
+False Positive Rate: 0.00%
+
+English:
+Precision: 100.00%
+Recall: 100.00%
+
+Hindi:
+Precision: 100.00%
+Recall: 80.00%
+
+Hinglish:
+Precision: 100.00%
+Recall: 100.00%
+
+IMPORTANT:
+This is a development benchmark on a 120-sample hand-built evaluation set.
+It is not a claim of real-world accuracy.
