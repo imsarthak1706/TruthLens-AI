@@ -60,11 +60,15 @@ def home():
 
 
 def process_text(text: str):
+    pipeline_start = time.perf_counter()
 
     # 1. Deterministic detection
+    stage_start = time.perf_counter()
     signals = detect_signals(text)
+    detector_ms = (time.perf_counter() - stage_start) * 1000
 
     # 2. Hugging Face AI analysis
+    stage_start = time.perf_counter()
     try:
         ai_result = analyze_text(text)
     except Exception:
@@ -77,25 +81,27 @@ def process_text(text: str):
             "confidence": "low",
             "explanation": "AI analysis unavailable"
         }
+    llm_ms = (time.perf_counter() - stage_start) * 1000
 
     # 3. VirusTotal URL analysis
+    stage_start = time.perf_counter()
     vt_results = []
 
     for url in signals["urls"]:
         try:
             vt_result = scan_url(url)
-
             vt_results.append({
                 "url": url,
                 **vt_result
             })
-
         except Exception as error:
             vt_results.append({
                 "url": url,
                 "status": "error",
                 "error": str(error)
             })
+
+    virustotal_ms = (time.perf_counter() - stage_start) * 1000
 
     # 4. Combine intelligence
     combined_signals = {
@@ -105,7 +111,11 @@ def process_text(text: str):
     }
 
     # 5. Final risk engine
+    stage_start = time.perf_counter()
     result = calculate_risk(combined_signals)
+    risk_engine_ms = (time.perf_counter() - stage_start) * 1000
+
+    total_pipeline_ms = (time.perf_counter() - pipeline_start) * 1000
 
     return {
         "scan_id": str(uuid4()),
@@ -122,6 +132,13 @@ def process_text(text: str):
             "upi_ids": signals["upi_ids"],
             "phone_numbers": signals["phone_numbers"],
             "emails": signals["emails"]
+        },
+        "timing": {
+            "detector_ms": round(detector_ms, 2),
+            "llm_ms": round(llm_ms, 2),
+            "virustotal_ms": round(virustotal_ms, 2),
+            "risk_engine_ms": round(risk_engine_ms, 2),
+            "pipeline_total_ms": round(total_pipeline_ms, 2)
         },
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
