@@ -205,6 +205,8 @@ async def scan_image(
         temp_file.write(contents)
         temp_path = temp_file.name
 
+    pipeline_start = time.perf_counter()
+
     try:
         try:
             # 1. OCR and image preprocessing
@@ -216,6 +218,7 @@ async def scan_image(
 
         if not extracted_text.strip():
             # A valid image can contain no readable text; forensics remain useful.
+            forensics_start = time.perf_counter()
             try:
                 image_forensics = analyze_image_forensics(contents)
             except Exception as error:
@@ -231,15 +234,30 @@ async def scan_image(
                         "reason": str(error),
                     },
                 }
+            forensics_ms = (time.perf_counter() - forensics_start) * 1000
+            total_pipeline_ms = (time.perf_counter() - pipeline_start) * 1000
 
             return {
                 "scan_id": str(uuid4()),
-                "risk_score": None,
-                "severity": None,
-                "confidence": None,
-                "threat_type": None,
-                "evidence": [],
-                "ai_analysis": None,
+                "risk_score": 0,
+                "severity": "SAFE",
+                "confidence": "Low",
+                "threat_type": "Clean / Informational (No Text Detected)",
+                "evidence": [
+                    {
+                        "signal": "Image forensics evaluated (No readable text or threat patterns detected)",
+                        "points": 0
+                    }
+                ],
+                "ai_analysis": {
+                    "scam_intent": False,
+                    "social_engineering": False,
+                    "impersonation": False,
+                    "financial_manipulation": False,
+                    "urgency": "none",
+                    "confidence": "low",
+                    "explanation": "No readable text detected in uploaded image. Forensic telemetry is informational."
+                },
                 "virustotal": [],
                 "recommendation": "No readable text detected; image forensics are informational only.",
                 "extracted_entities": {
@@ -254,6 +272,13 @@ async def scan_image(
                 "extracted_text": "",
                 "ocr_status": "No readable text detected",
                 "image_forensics": image_forensics,
+                "timing": {
+                    "detector_ms": 0.0,
+                    "llm_ms": 0.0,
+                    "virustotal_ms": 0.0,
+                    "risk_engine_ms": round(forensics_ms, 2),
+                    "pipeline_total_ms": round(total_pipeline_ms, 2)
+                }
             }
 
         try:
@@ -268,6 +293,7 @@ async def scan_image(
         result["input_type"] = "image"
         result["platform"] = platform
         result["extracted_text"] = extracted_text
+        result["ocr_status"] = "Text successfully extracted"
         # Image forensics is informational and does not affect risk scoring.
         try:
             result["image_forensics"] = analyze_image_forensics(contents)
@@ -284,6 +310,10 @@ async def scan_image(
                     "reason": str(error),
                 },
             }
+
+        total_pipeline_ms = (time.perf_counter() - pipeline_start) * 1000
+        if "timing" in result:
+            result["timing"]["pipeline_total_ms"] = round(total_pipeline_ms, 2)
 
         return result
 
