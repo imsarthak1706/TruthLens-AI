@@ -158,18 +158,10 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "=https://elsewhere-unmovable-deprive.ngrok-free.dev/api/scan",
+        "url": "https://truthlens-ai-1-7unv.onrender.com/api/scan",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "x-apikey",
-              "value": "cf5fdae6c37eb59df17d2156f7a8b1e5c45840668204ee15c13e438487c8ea91"
-            },
-            {
-              "name": "ngrok-skip-browser-warning",
-              "value": "true"
-            },
             {
               "name": "Content-Type",
               "value": "application/json"
@@ -894,16 +886,8 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://elsewhere-unmovable-deprive.ngrok-free.dev/api/scan/image",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "ngrok-skip-browser-warning",
-              "value": "true"
-            }
-          ]
-        },
+        "url": "https://truthlens-ai-1-7unv.onrender.com/api/scan/image",
+        "sendHeaders": false,
         "sendBody": true,
         "contentType": "multipart-form-data",
         "bodyParameters": {
@@ -1190,16 +1174,8 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://elsewhere-unmovable-deprive.ngrok-free.dev/api/scan/audio",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "ngrok-skip-browser-warning",
-              "value": "true"
-            }
-          ]
-        },
+        "url": "https://truthlens-ai-1-7unv.onrender.com/api/scan/audio",
+        "sendHeaders": false,
         "sendBody": true,
         "contentType": "multipart-form-data",
         "bodyParameters": {
@@ -1268,17 +1244,13 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://elsewhere-unmovable-deprive.ngrok-free.dev/api/scan",
+        "url": "https://truthlens-ai-1-7unv.onrender.com/api/scan",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "Content-Type",
               "value": "application/json"
-            },
-            {
-              "name": "ngrok-skip-browser-warning",
-              "value": "true"
             }
           ]
         },
@@ -1410,16 +1382,8 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://elsewhere-unmovable-deprive.ngrok-free.dev/api/scan/video",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "ngrok-skip-browser-warning",
-              "value": "true"
-            }
-          ]
-        },
+        "url": "https://truthlens-ai-1-7unv.onrender.com/api/scan/video",
+        "sendHeaders": false,
         "sendBody": true,
         "contentType": "multipart-form-data",
         "bodyParameters": {
