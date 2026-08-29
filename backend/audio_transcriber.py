@@ -1,6 +1,7 @@
 """Speech-to-text helper for audio scans."""
 
 import re
+import time
 from threading import Lock
 from typing import Any
 
@@ -19,11 +20,15 @@ def _get_model() -> WhisperModel:
     if _MODEL is None:
         with _MODEL_LOCK:
             if _MODEL is None:
+                print(f"[AUDIO_SCAN] WHISPER_MODEL_START: initializing faster-whisper 'base' model on CPU...", flush=True)
+                t0 = time.perf_counter()
                 _MODEL = WhisperModel(
                     "base",
                     device="cpu",
                     compute_type="int8",
                 )
+                elapsed_ms = (time.perf_counter() - t0) * 1000
+                print(f"[AUDIO_SCAN] WHISPER_MODEL_LOADED: faster-whisper ready in {elapsed_ms:.1f}ms", flush=True)
     return _MODEL
 
 
@@ -42,6 +47,8 @@ def transcribe_audio(audio_path: str) -> dict:
 
     try:
         model = _get_model()
+        print(f"[AUDIO_SCAN] WHISPER_INFERENCE_START: processing audio transcription...", flush=True)
+        t_infer_start = time.perf_counter()
         segments, info = model.transcribe(
             audio_path,
             beam_size=1,
@@ -62,10 +69,14 @@ def transcribe_audio(audio_path: str) -> dict:
                 "text": segment_text,
             })
 
+        t_infer_ms = (time.perf_counter() - t_infer_start) * 1000
+        print(f"[AUDIO_SCAN] WHISPER_INFERENCE_DONE: inference finished in {t_infer_ms:.1f}ms", flush=True)
+
         transcript = " ".join(transcript_parts).strip()
         duration_seconds = round(float(info.duration), 3)
 
         if not serialized_segments:
+            print(f"[AUDIO_SCAN] TRANSCRIPTION_DONE: no voiced speech detected ({duration_seconds}s audio)", flush=True)
             return {
                 "status": "no_speech",
                 "text": None,
@@ -73,12 +84,14 @@ def transcribe_audio(audio_path: str) -> dict:
             }
 
         if not _has_meaningful_text(transcript):
+            print(f"[AUDIO_SCAN] TRANSCRIPTION_DONE: unintelligible speech ({duration_seconds}s audio)", flush=True)
             return {
                 "status": "unintelligible",
                 "text": None,
                 "reason": "Speech was detected but no reliable transcript was produced",
             }
 
+        print(f"[AUDIO_SCAN] TRANSCRIPTION_DONE: transcribed {len(transcript)} chars ({duration_seconds}s audio)", flush=True)
         return {
             "status": "success",
             "text": transcript,
@@ -87,6 +100,7 @@ def transcribe_audio(audio_path: str) -> dict:
             "segments": serialized_segments,
         }
     except Exception as error:
+        print(f"[AUDIO_SCAN] TRANSCRIPTION_FAILED: {error}", flush=True)
         return {
             "status": "error",
             "text": None,

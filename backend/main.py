@@ -8,8 +8,8 @@ import os
 import subprocess
 from pathlib import Path
 import time
-
 import threading
+import asyncio
 
 from detector import detect_signals
 from risk_engine import calculate_risk
@@ -335,12 +335,148 @@ async def scan_image(
 # AUDIO FORENSICS
 # -----------------------------------------
 
+def _sync_scan_audio(contents: bytes, filename: str, suffix: str, platform: str) -> dict:
+    req_start = time.perf_counter()
+    print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] AUDIO_REQUEST_START: filename={filename}, platform={platform}", flush=True)
+    print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] FILE_RECEIVED: {len(contents)} bytes, suffix={suffix}", flush=True)
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp_file:
+        temp_file.write(contents)
+        temp_path = temp_file.name
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as normalized_file:
+        normalized_path = normalized_file.name
+
+    try:
+        print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] FFMPEG_START: normalizing to 16kHz mono WAV...", flush=True)
+        t_ff_start = time.perf_counter()
+        try:
+            subprocess.run(
+                [
+                    "ffmpeg",
+                    "-y",
+                    "-i",
+                    temp_path,
+                    "-ac",
+                    "1",
+                    "-ar",
+                    "16000",
+                    "-f",
+                    "wav",
+                    normalized_path,
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=30,
+                stdin=subprocess.DEVNULL,
+            )
+            t_ff_ms = (time.perf_counter() - t_ff_start) * 1000
+            print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] FFMPEG_DONE: normalization finished in {t_ff_ms:.1f}ms", flush=True)
+        except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
+            message = getattr(error, "stderr", None) or str(error)
+            print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] FFMPEG_FAILED: {message}", flush=True)
+            try:
+                audio_forensics = analyze_audio_forensics(temp_path)
+            except Exception as analyzer_error:
+                audio_forensics = {
+                    "error": {
+                        "code": "audio_forensics_failed",
+                        "message": str(analyzer_error),
+                    }
+                }
+            return {
+                "error": {
+                    "code": "audio_conversion_failed",
+                    "message": message.strip() if isinstance(message, str) else str(message),
+                },
+                "audio_forensics": audio_forensics,
+            }
+
+        print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] AUDIO_FORENSICS_START: extracting features...", flush=True)
+        t_forensics_start = time.perf_counter()
+        try:
+            audio_forensics = analyze_audio_forensics(normalized_path)
+            t_forensics_ms = (time.perf_counter() - t_forensics_start) * 1000
+            print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] AUDIO_FORENSICS_DONE: features extracted in {t_forensics_ms:.1f}ms (duration={audio_forensics.get('duration_seconds')}s)", flush=True)
+        except Exception as error:
+            print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] AUDIO_FORENSICS_FAILED: {error}", flush=True)
+            audio_forensics = {
+                "error": {
+                    "code": "audio_forensics_failed",
+                    "message": str(error),
+                }
+            }
+
+        transcription = transcribe_audio(normalized_path)
+
+        base_response = {
+            "scan_id": str(uuid4()),
+            "input_type": "audio",
+            "platform": platform,
+            "transcript": transcription.get("text"),
+            "transcription": transcription,
+            "risk_score": None,
+            "severity": None,
+            "confidence": None,
+            "threat_type": None,
+            "evidence": [],
+            "ai_analysis": None,
+            "virustotal": [],
+            "recommendation": "No usable speech transcript was available; audio forensics are informational only.",
+            "extracted_entities": {
+                "urls": [],
+                "upi_ids": [],
+                "phone_numbers": [],
+                "emails": [],
+            },
+            "audio_forensics": audio_forensics,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
+        if transcription.get("status") != "success" or not transcription.get("text"):
+            req_ms = (time.perf_counter() - req_start) * 1000
+            print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] AUDIO_REQUEST_END: completed (no speech) in {req_ms:.1f}ms", flush=True)
+            return base_response
+
+        print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] AI_ANALYSIS_START: classifying transcript...", flush=True)
+        t_ai_start = time.perf_counter()
+        try:
+            result = process_text(transcription["text"])
+            t_ai_ms = (time.perf_counter() - t_ai_start) * 1000
+            print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] AI_ANALYSIS_DONE: finished in {t_ai_ms:.1f}ms", flush=True)
+            print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] RISK_ANALYSIS_DONE: risk_score={result.get('risk_score')}, severity={result.get('severity')}", flush=True)
+        except Exception as error:
+            print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] AI_ANALYSIS_FAILED: {error}", flush=True)
+            return {
+                **base_response,
+                "error": {
+                    "code": "audio_text_analysis_failed",
+                    "message": str(error),
+                },
+            }
+
+        result["input_type"] = "audio"
+        result["platform"] = platform
+        result["transcript"] = transcription["text"]
+        result["transcription"] = transcription
+        result["audio_forensics"] = audio_forensics
+
+        req_ms = (time.perf_counter() - req_start) * 1000
+        print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] AUDIO_REQUEST_END: total audio scan completed in {req_ms:.1f}ms (scan_id={result.get('scan_id')})", flush=True)
+        return result
+    finally:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+        if os.path.exists(normalized_path):
+            os.remove(normalized_path)
+
+
 @app.post("/api/scan/audio")
 async def scan_audio(
     file: UploadFile | None = File(None),
     platform: str = Form("web")
 ):
-
     if file is None or not file.filename:
         return {
             "error": {
@@ -372,172 +508,17 @@ async def scan_audio(
 
     suffix = os.path.splitext(file.filename)[1] or ".audio"
 
-    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp_file:
-        temp_file.write(contents)
-        temp_path = temp_file.name
-
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as normalized_file:
-        normalized_path = normalized_file.name
-
-    try:
-        try:
-            subprocess.run(
-                [
-                    "ffmpeg",
-                    "-y",
-                    "-i",
-                    temp_path,
-                    "-ac",
-                    "1",
-                    "-ar",
-                    "16000",
-                    "-f",
-                    "wav",
-                    normalized_path,
-                ],
-                check=True,
-                capture_output=True,
-                text=True,
-            )
-        except (OSError, subprocess.CalledProcessError) as error:
-            message = getattr(error, "stderr", None) or str(error)
-            try:
-                audio_forensics = analyze_audio_forensics(temp_path)
-            except Exception as analyzer_error:
-                audio_forensics = {
-                    "error": {
-                        "code": "audio_forensics_failed",
-                        "message": str(analyzer_error),
-                    }
-                }
-            return {
-                "error": {
-                    "code": "audio_conversion_failed",
-                    "message": message.strip(),
-                },
-                "audio_forensics": audio_forensics,
-            }
-
-        try:
-            transcription = transcribe_audio(normalized_path)
-        except Exception as error:
-            transcription = {
-                "status": "error",
-                "text": None,
-                "code": "transcription_failed",
-                "message": str(error),
-            }
-
-        try:
-            audio_forensics = analyze_audio_forensics(normalized_path)
-        except Exception as error:
-            audio_forensics = {
-                "error": {
-                    "code": "audio_forensics_failed",
-                    "message": str(error),
-                }
-            }
-
-        base_response = {
-            "scan_id": str(uuid4()),
-            "input_type": "audio",
-            "platform": platform,
-            "transcript": transcription.get("text"),
-            "transcription": transcription,
-            "risk_score": None,
-            "severity": None,
-            "confidence": None,
-            "threat_type": None,
-            "evidence": [],
-            "ai_analysis": None,
-            "virustotal": [],
-            "recommendation": "No usable speech transcript was available; audio forensics are informational only.",
-            "extracted_entities": {
-                "urls": [],
-                "upi_ids": [],
-                "phone_numbers": [],
-                "emails": [],
-            },
-            "audio_forensics": audio_forensics,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-        }
-
-        if transcription.get("status") != "success":
-            return base_response
-
-        try:
-            result = process_text(transcription["text"])
-        except Exception as error:
-            return {
-                **base_response,
-                "error": {
-                    "code": "audio_text_analysis_failed",
-                    "message": str(error),
-                },
-            }
-
-        result["input_type"] = "audio"
-        result["platform"] = platform
-        result["transcript"] = transcription["text"]
-        result["transcription"] = transcription
-        result["audio_forensics"] = audio_forensics
-        return result
-    finally:
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
-        if os.path.exists(normalized_path):
-            os.remove(normalized_path)
+    return await asyncio.to_thread(_sync_scan_audio, contents, file.filename, suffix, platform)
 
 
 # -----------------------------------------
 # VIDEO SCANNING
 # -----------------------------------------
 
-@app.post("/api/scan/video")
-async def scan_video(
-    file: UploadFile | None = File(None),
-    platform: str = Form("web")
-):
-
-    if file is None or not file.filename:
-        return {
-            "error": {
-                "code": "video_file_missing",
-                "message": "No video file provided",
-            }
-        }
-
-    suffix = Path(file.filename).suffix.lower()
-    content_type = file.content_type or ""
-    if suffix not in SUPPORTED_VIDEO_EXTENSIONS or (
-        content_type
-        and not (
-            content_type.startswith("video/")
-            or content_type == "application/octet-stream"
-        )
-    ):
-        return {
-            "error": {
-                "code": "unsupported_video_type",
-                "message": "Supported video formats are MP4, MOV, WebM, and MKV",
-            }
-        }
-
-    contents = await file.read(MAX_VIDEO_BYTES + 1)
-    if not contents:
-        return {
-            "error": {
-                "code": "video_file_empty",
-                "message": "Empty video file",
-            }
-        }
-    if len(contents) > MAX_VIDEO_BYTES:
-        return {
-            "error": {
-                "code": "video_file_too_large",
-                "message": "Video file exceeds the 50 MB limit",
-            }
-        }
+def _sync_scan_video(contents: bytes, filename: str, suffix: str, platform: str) -> dict:
+    req_start = time.perf_counter()
+    print(f"[{datetime.now().isoformat()}] [VIDEO_SCAN] VIDEO_REQUEST_START: filename={filename}, platform={platform}", flush=True)
+    print(f"[{datetime.now().isoformat()}] [VIDEO_SCAN] FILE_RECEIVED: {len(contents)} bytes, suffix={suffix}", flush=True)
 
     with tempfile.TemporaryDirectory(prefix="truthlens-video-") as temp_directory:
         video_path = str(Path(temp_directory) / f"input{suffix}")
@@ -749,4 +730,54 @@ async def scan_video(
             "audio_forensics": audio_forensics,
             "analysis_source": analysis_source,
         })
+        req_ms = (time.perf_counter() - req_start) * 1000
+        print(f"[{datetime.now().isoformat()}] [VIDEO_SCAN] VIDEO_REQUEST_END: completed in {req_ms:.1f}ms (scan_id={result.get('scan_id')})", flush=True)
         return result
+
+
+@app.post("/api/scan/video")
+async def scan_video(
+    file: UploadFile | None = File(None),
+    platform: str = Form("web")
+):
+    if file is None or not file.filename:
+        return {
+            "error": {
+                "code": "video_file_missing",
+                "message": "No video file provided",
+            }
+        }
+
+    suffix = Path(file.filename).suffix.lower()
+    content_type = file.content_type or ""
+    if suffix not in SUPPORTED_VIDEO_EXTENSIONS or (
+        content_type
+        and not (
+            content_type.startswith("video/")
+            or content_type == "application/octet-stream"
+        )
+    ):
+        return {
+            "error": {
+                "code": "unsupported_video_type",
+                "message": "Supported video formats are MP4, MOV, WebM, and MKV",
+            }
+        }
+
+    contents = await file.read(MAX_VIDEO_BYTES + 1)
+    if not contents:
+        return {
+            "error": {
+                "code": "video_file_empty",
+                "message": "Empty video file",
+            }
+        }
+    if len(contents) > MAX_VIDEO_BYTES:
+        return {
+            "error": {
+                "code": "video_file_too_large",
+                "message": "Video file exceeds the 50 MB limit",
+            }
+        }
+
+    return await asyncio.to_thread(_sync_scan_video, contents, file.filename, suffix, platform)
