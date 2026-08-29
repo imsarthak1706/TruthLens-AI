@@ -20,3 +20,6 @@ requests
 Pillow
 pytesseract
 librosa
+
+faster-whisper
+numpy
