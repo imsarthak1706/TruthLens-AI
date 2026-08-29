@@ -333,6 +333,18 @@
               "row": {
                 "buttons": [
                   {
+                    "text": "🔎 View Full Forensic Report",
+                    "additionalFields": {
+                      "url": "={{ 'https://truthlensai-dashboard.onrender.com/scan/' + $json.scan_id }}"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "row": {
+                "buttons": [
+                  {
                     "text": "🔍 Why is this suspicious?",
                     "additionalFields": {
                       "callback_data": "why_suspicious"
@@ -929,6 +941,18 @@
               "row": {
                 "buttons": [
                   {
+                    "text": "🔎 View Full Forensic Report",
+                    "additionalFields": {
+                      "url": "={{ 'https://truthlensai-dashboard.onrender.com/scan/' + $json.scan_id }}"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "row": {
+                "buttons": [
+                  {
                     "text": "🔍 Why is this suspicious?",
                     "additionalFields": {
                       "callback_data": "why_suspicious"
@@ -1206,6 +1230,23 @@
       "parameters": {
         "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
         "text": "={{ (() => { const NL = '\n'; const BAR = '━━━━━━━━━━━━━━━━━━'; const j = $json || {}; let err = j.error || j.detail || j.message; const f = j.audio_forensics; if (err || !f || typeof f !== 'object') { if (err && typeof err === 'object') { err = JSON.stringify(err); } return '🎵 TRUTHLENSAI AUDIO SCAN' + NL + NL + '⚠️ Could not analyze this audio.' + NL + 'Error: ' + (err ? err : 'The backend did not return audio forensics data.'); } const withUnit = (v, u) => (v === undefined || v === null || v === '') ? 'N/A' : (String(v) + ' ' + u); const plain = (v) => (v === undefined || v === null || v === '') ? 'N/A' : String(v); const pitch = (f.pitch && typeof f.pitch === 'object') ? f.pitch : {}; const spectral = (f.spectral && typeof f.spectral === 'object') ? f.spectral : {}; const evidence = Array.isArray(j.evidence) && j.evidence.length ? j.evidence.map(e => (typeof e === 'string' ? '• ' + e : (e && e.signal ? '• ' + e.signal : ''))).filter(s => s).join(NL) : '• No signals detected'; const recommendation = (j.recommendation !== undefined && j.recommendation !== null && j.recommendation !== '') ? j.recommendation : 'N/A'; const tr = (j.transcription && typeof j.transcription === 'object') ? j.transcription : {}; const status = tr.status; let transcriptBlock; if (status === 'success') { transcriptBlock = (j.transcript !== undefined && j.transcript !== null && j.transcript !== '') ? j.transcript : (tr.text ? tr.text : 'N/A'); } else if (status === 'no_speech') { transcriptBlock = 'No readable speech detected'; } else if (status === 'unintelligible') { transcriptBlock = 'Speech detected but transcript was not reliable'; } else if (status === 'error') { let te = tr.error || tr.message || tr.detail; if (te && typeof te === 'object') { te = JSON.stringify(te); } transcriptBlock = 'Transcription error: ' + (te ? te : 'unknown error'); } else { transcriptBlock = (j.transcript !== undefined && j.transcript !== null && j.transcript !== '') ? j.transcript : 'N/A'; } const manip = f.possible_manipulation_indicators; const manipStr = manip === true ? 'Yes' : (manip === false ? 'No' : 'N/A'); return '🎵 TRUTHLENSAI AUDIO SCAN' + NL + NL + '⚠️ Risk Score: ' + plain(j.risk_score) + '/100' + NL + '🚨 Severity: ' + plain(j.severity) + NL + '🎯 Confidence: ' + plain(j.confidence) + NL + '🛡️ Threat: ' + plain(j.threat_type) + NL + NL + BAR + NL + '🔎 DETECTED SIGNALS' + NL + BAR + NL + NL + evidence + NL + NL + BAR + NL + '💡 RECOMMENDED ACTION' + NL + BAR + NL + NL + recommendation + NL + NL + BAR + NL + '📝 TRANSCRIPT' + NL + BAR + NL + NL + transcriptBlock + NL + NL + BAR + NL + '🎧 AUDIO FORENSICS' + NL + BAR + NL + NL + '🎚️ Duration: ' + withUnit(f.duration_seconds, 's') + NL + '📊 Sample Rate: ' + withUnit(f.sample_rate, 'Hz') + NL + '🔊 RMS Energy: ' + plain(f.rms_energy) + NL + NL + '🎼 Pitch Analysis' + NL + '• Mean pitch: ' + withUnit(pitch.mean_hz, 'Hz') + NL + '• Pitch variation: ' + withUnit(pitch.std_hz, 'Hz') + NL + NL + '📈 Spectral Analysis' + NL + '• Spectral centroid: ' + withUnit(spectral.centroid_mean_hz, 'Hz') + NL + '• Spectral bandwidth: ' + withUnit(spectral.bandwidth_mean_hz, 'Hz') + NL + NL + '🧠 Assessment' + NL + '• Possible manipulation indicators: ' + manipStr; })() }}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "🔎 View Full Forensic Report",
+                    "additionalFields": {
+                      "url": "={{ 'https://truthlensai-dashboard.onrender.com/scan/' + $json.scan_id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
         "additionalFields": {}
       },
       "name": "Send audio scan result",
@@ -1409,6 +1450,23 @@
       "parameters": {
         "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
         "text": "={{ (() => { const __esc = (s) => String(s === undefined || s === null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); return __esc((() => { const NL = '\\n'; const BAR = '━━━━━━━━━━━━━━━━━━'; const j = $json || {}; let err = j.error || j.detail || j.message; if (err) { if (err && typeof err === 'object') { err = JSON.stringify(err); } return '🎬 TRUTHLENSAI VIDEO SCAN' + NL + NL + '⚠️ Could not analyze this video.' + NL + 'Error: ' + err; } const plain = (v) => (v === undefined || v === null || v === '') ? 'N/A' : String(v); const withUnit = (v, u) => (v === undefined || v === null || v === '') ? 'N/A' : (String(v) + ' ' + u); const boolStr = (v) => v === true ? 'Yes' : (v === false ? 'No' : 'N/A'); const vm = (j.video_metadata && typeof j.video_metadata === 'object') ? j.video_metadata : {}; const af = (j.audio_forensics && typeof j.audio_forensics === 'object') ? j.audio_forensics : {}; const pitch = (af.pitch && typeof af.pitch === 'object') ? af.pitch : {}; const spectral = (af.spectral && typeof af.spectral === 'object') ? af.spectral : {}; const tr = (j.transcription && typeof j.transcription === 'object') ? j.transcription : {}; const evidence = Array.isArray(j.evidence) && j.evidence.length ? j.evidence.map(e => (typeof e === 'string' ? '• ' + e : (e && e.signal ? '• ' + e.signal : ''))).filter(s => s).join(NL) : '• No signals detected'; const recommendation = (j.recommendation !== undefined && j.recommendation !== null && j.recommendation !== '') ? j.recommendation : 'N/A'; let transcriptBlock; const status = tr.status; if (status === 'success') { transcriptBlock = (j.transcript !== undefined && j.transcript !== null && j.transcript !== '') ? j.transcript : (tr.text ? tr.text : 'N/A'); } else if (status === 'no_speech') { transcriptBlock = 'No readable speech detected'; } else if (status === 'unintelligible') { transcriptBlock = 'Speech detected but transcript was not reliable'; } else if (status === 'error') { let te = tr.error || tr.message || tr.detail; if (te && typeof te === 'object') { te = JSON.stringify(te); } transcriptBlock = 'Transcription error: ' + (te ? te : 'unknown error'); } else { transcriptBlock = (j.transcript !== undefined && j.transcript !== null && j.transcript !== '') ? j.transcript : 'N/A'; } const duration = (vm.duration_seconds !== undefined ? vm.duration_seconds : (vm.duration !== undefined ? vm.duration : undefined)); let resolution; if (vm.resolution !== undefined && vm.resolution !== null && vm.resolution !== '') { resolution = String(vm.resolution); } else if ((vm.width !== undefined && vm.width !== null) && (vm.height !== undefined && vm.height !== null)) { resolution = String(vm.width) + 'x' + String(vm.height); } else { resolution = 'N/A'; } const fps = (vm.fps !== undefined ? vm.fps : (vm.frame_rate !== undefined ? vm.frame_rate : undefined)); const codec = (vm.codec !== undefined ? vm.codec : (vm.video_codec !== undefined ? vm.video_codec : undefined)); const audioPresent = (vm.has_audio !== undefined ? vm.has_audio : (vm.audio_present !== undefined ? vm.audio_present : undefined)); let frameCount; if (Array.isArray(j.frames)) { frameCount = j.frames.length; } else if (j.frames && typeof j.frames === 'object' && j.frames.count !== undefined) { frameCount = j.frames.count; } else if (j.frame_count !== undefined) { frameCount = j.frame_count; } else if (typeof j.frames === 'number') { frameCount = j.frames; } else { frameCount = undefined; } let frameOcr; if (Array.isArray(j.frame_ocr_text)) { frameOcr = j.frame_ocr_text.filter(t => t !== undefined && t !== null && String(t).trim() !== '').join(NL); } else if (typeof j.frame_ocr_text === 'string') { frameOcr = j.frame_ocr_text; } else { frameOcr = ''; } if (!frameOcr || String(frameOcr).trim() === '') { frameOcr = 'No OCR text found in frames'; } const frameManip = (vm.possible_manipulation_indicators !== undefined ? vm.possible_manipulation_indicators : (j.possible_manipulation_indicators !== undefined ? j.possible_manipulation_indicators : (af.possible_manipulation_indicators !== undefined ? af.possible_manipulation_indicators : undefined))); const language = (tr.language !== undefined ? tr.language : (j.language !== undefined ? j.language : undefined)); const audioDuration = (af.duration_seconds !== undefined ? af.duration_seconds : undefined); const audioManip = af.possible_manipulation_indicators; const vf = (j.video_forensics && typeof j.video_forensics === 'object') ? j.video_forensics : {}; const asKey = j.analysis_source; const analysisSource = asKey === 'speech_and_frame_ocr' ? 'Speech + On-screen text' : asKey === 'speech' ? 'Speech only' : asKey === 'frame_ocr' ? 'On-screen text only' : asKey === 'none' ? 'No textual content' : 'N/A'; const frameEdit = vf.frame_possible_editing_indicators === true ? 'Yes' : (vf.frame_possible_editing_indicators === false ? 'No' : 'N/A'); return '🎬 TRUTHLENSAI VIDEO SCAN' + NL + NL + '⚠️ Risk Score: ' + plain(j.risk_score) + '/100' + NL + '🚨 Severity: ' + plain(j.severity) + NL + '🎯 Confidence: ' + plain(j.confidence) + NL + '🛡️ Threat: ' + plain(j.threat_type) + NL + NL + BAR + NL + '🔎 DETECTED SIGNALS' + NL + BAR + NL + NL + evidence + NL + NL + BAR + NL + '💡 RECOMMENDED ACTION' + NL + BAR + NL + NL + recommendation + NL + NL + BAR + NL + '🧠 ANALYSIS SOURCE' + NL + BAR + NL + NL + analysisSource + NL + NL + BAR + NL + '📝 VIDEO TRANSCRIPT' + NL + BAR + NL + NL + transcriptBlock + NL + NL + BAR + NL + '🎥 VIDEO METADATA' + NL + BAR + NL + NL + '🎚️ Duration: ' + withUnit(duration, 's') + NL + '📐 Resolution: ' + resolution + NL + '🎞️ FPS: ' + plain(fps) + NL + '🧬 Codec: ' + plain(codec) + NL + '🔈 Audio present: ' + boolStr(audioPresent) + NL + NL + BAR + NL + '🖼️ FRAME ANALYSIS' + NL + BAR + NL + NL + '🔢 Sampled frames: ' + plain(frameCount) + NL + NL + '🔠 OCR text found in frames:' + NL + frameOcr + NL + NL + '• Possible frame manipulation indicators: ' + frameEdit + NL + NL + BAR + NL + '🎧 AUDIO ANALYSIS' + NL + BAR + NL + NL + '📝 Transcription status: ' + plain(status) + NL + '🌐 Language: ' + plain(language) + NL + '🎚️ Audio duration: ' + withUnit(audioDuration, 's') + NL + NL + '🎼 Pitch Analysis' + NL + '• Mean pitch: ' + withUnit(pitch.mean_hz, 'Hz') + NL + '• Pitch variation: ' + withUnit(pitch.std_hz, 'Hz') + NL + NL + '📈 Spectral Analysis' + NL + '• Spectral centroid: ' + withUnit(spectral.centroid_mean_hz, 'Hz') + NL + '• Spectral bandwidth: ' + withUnit(spectral.bandwidth_mean_hz, 'Hz') + NL + NL + '🧠 Assessment' + NL + '• Possible manipulation indicators: ' + boolStr(audioManip); })()); })() }}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "🔎 View Full Forensic Report",
+                    "additionalFields": {
+                      "url": "={{ 'https://truthlensai-dashboard.onrender.com/scan/' + $json.scan_id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
         "additionalFields": {
           "parse_mode": "HTML"
         }

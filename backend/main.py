@@ -1,8 +1,9 @@
-from fastapi import FastAPI, UploadFile, File, Form, Request
+from fastapi import FastAPI, UploadFile, File, Form, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from datetime import datetime, timezone
 from uuid import uuid4
+from collections import OrderedDict
 import tempfile
 import os
 import subprocess
@@ -10,6 +11,29 @@ from pathlib import Path
 import time
 import threading
 import asyncio
+
+# -----------------------------------------
+# BOUNDED IN-MEMORY SCAN CACHE
+# -----------------------------------------
+SCAN_CACHE_MAX_SIZE = 1000
+_scan_cache = OrderedDict()
+_scan_cache_lock = threading.Lock()
+
+def _save_scan_result(result: dict):
+    if not isinstance(result, dict):
+        return
+    scan_id = result.get("scan_id")
+    if scan_id:
+        with _scan_cache_lock:
+            _scan_cache[str(scan_id)] = result
+            while len(_scan_cache) > SCAN_CACHE_MAX_SIZE:
+                _scan_cache.popitem(last=False)
+
+def _get_scan_result(scan_id: str) -> dict | None:
+    if not scan_id:
+        return None
+    with _scan_cache_lock:
+        return _scan_cache.get(str(scan_id))
 
 from detector import detect_signals
 from risk_engine import calculate_risk
@@ -138,8 +162,9 @@ def process_text(text: str):
 
     total_pipeline_ms = (time.perf_counter() - pipeline_start) * 1000
 
-    return {
+    res = {
         "scan_id": str(uuid4()),
+        "input": text,
         "risk_score": result["risk_score"],
         "severity": result["severity"],
         "confidence": result["confidence"],
@@ -163,6 +188,8 @@ def process_text(text: str):
         },
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
+    _save_scan_result(res)
+    return res
 
 
 # -----------------------------------------
@@ -171,8 +198,15 @@ def process_text(text: str):
 
 @app.post("/api/scan")
 def scan(request: ScanRequest):
-
     return process_text(request.input)
+
+
+@app.get("/api/scan/{scan_id}")
+def get_scan(scan_id: str):
+    res = _get_scan_result(scan_id)
+    if not res:
+        raise HTTPException(status_code=404, detail="Scan result not found or expired")
+    return res
 
 
 # -----------------------------------------
@@ -245,7 +279,7 @@ async def scan_image(
             forensics_ms = (time.perf_counter() - forensics_start) * 1000
             total_pipeline_ms = (time.perf_counter() - pipeline_start) * 1000
 
-            return {
+            res = {
                 "scan_id": str(uuid4()),
                 "risk_score": 0,
                 "severity": "SAFE",
@@ -288,6 +322,8 @@ async def scan_image(
                     "pipeline_total_ms": round(total_pipeline_ms, 2)
                 }
             }
+            _save_scan_result(res)
+            return res
 
         try:
             # 2. Run complete text pipeline
@@ -323,6 +359,7 @@ async def scan_image(
         if "timing" in result:
             result["timing"]["pipeline_total_ms"] = round(total_pipeline_ms, 2)
 
+        _save_scan_result(result)
         return result
 
     finally:
@@ -437,6 +474,7 @@ def _sync_scan_audio(contents: bytes, filename: str, suffix: str, platform: str)
         if transcription.get("status") != "success" or not transcription.get("text"):
             req_ms = (time.perf_counter() - req_start) * 1000
             print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] AUDIO_REQUEST_END: completed (no speech) in {req_ms:.1f}ms", flush=True)
+            _save_scan_result(base_response)
             return base_response
 
         print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] AI_ANALYSIS_START: classifying transcript...", flush=True)
@@ -448,13 +486,15 @@ def _sync_scan_audio(contents: bytes, filename: str, suffix: str, platform: str)
             print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] RISK_ANALYSIS_DONE: risk_score={result.get('risk_score')}, severity={result.get('severity')}", flush=True)
         except Exception as error:
             print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] AI_ANALYSIS_FAILED: {error}", flush=True)
-            return {
+            err_res = {
                 **base_response,
                 "error": {
                     "code": "audio_text_analysis_failed",
                     "message": str(error),
                 },
             }
+            _save_scan_result(err_res)
+            return err_res
 
         result["input_type"] = "audio"
         result["platform"] = platform
@@ -464,6 +504,7 @@ def _sync_scan_audio(contents: bytes, filename: str, suffix: str, platform: str)
 
         req_ms = (time.perf_counter() - req_start) * 1000
         print(f"[{datetime.now().isoformat()}] [AUDIO_SCAN] AUDIO_REQUEST_END: total audio scan completed in {req_ms:.1f}ms (scan_id={result.get('scan_id')})", flush=True)
+        _save_scan_result(result)
         return result
     finally:
         if os.path.exists(temp_path):
@@ -703,18 +744,21 @@ def _sync_scan_video(contents: bytes, filename: str, suffix: str, platform: str)
         base_response["analysis_source"] = analysis_source
 
         if analysis_input is None:
+            _save_scan_result(base_response)
             return base_response
 
         try:
             result = process_text(analysis_input)
         except Exception as error:
-            return {
+            err_res = {
                 **base_response,
                 "error": {
                     "code": "video_text_analysis_failed",
                     "message": str(error),
                 },
             }
+            _save_scan_result(err_res)
+            return err_res
 
         result.update({
             "input_type": "video",
@@ -732,6 +776,7 @@ def _sync_scan_video(contents: bytes, filename: str, suffix: str, platform: str)
         })
         req_ms = (time.perf_counter() - req_start) * 1000
         print(f"[{datetime.now().isoformat()}] [VIDEO_SCAN] VIDEO_REQUEST_END: completed in {req_ms:.1f}ms (scan_id={result.get('scan_id')})", flush=True)
+        _save_scan_result(result)
         return result
 
 
