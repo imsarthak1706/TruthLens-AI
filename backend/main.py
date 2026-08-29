@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, Form, Request
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from datetime import datetime, timezone
 from uuid import uuid4
@@ -25,6 +26,18 @@ from video_analyzer import (
 
 
 app = FastAPI(title="TruthLensAI Detection Engine")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 
 @app.middleware("http")
