@@ -9,13 +9,15 @@ import subprocess
 from pathlib import Path
 import time
 
+import threading
+
 from detector import detect_signals
 from risk_engine import calculate_risk
 from ai_analyzer import analyze_text
 from virustotal import scan_url
 from image_analyzer import analyze_image_forensics, extract_text_from_image
 from audio_analyzer import analyze_audio_forensics
-from audio_transcriber import transcribe_audio
+from audio_transcriber import transcribe_audio, _get_model
 from video_analyzer import (
     VideoProcessingError,
     extract_audio,
@@ -26,6 +28,11 @@ from video_analyzer import (
 
 
 app = FastAPI(title="TruthLensAI Detection Engine")
+
+@app.on_event("startup")
+async def startup_warmup():
+    """Pre-warm Whisper model in a daemon thread so it is cached in memory before requests arrive."""
+    threading.Thread(target=_get_model, daemon=True).start()
 
 app.add_middleware(
     CORSMiddleware,
@@ -598,8 +605,9 @@ async def scan_video(
             if ocr_error:
                 frame["ocr_error"] = ocr_error
             frames.append(frame)
-            if ocr_text.strip():
-                frame_ocr_parts.append(ocr_text.strip())
+            clean_ocr = ocr_text.strip()
+            if clean_ocr and (not frame_ocr_parts or frame_ocr_parts[-1] != clean_ocr):
+                frame_ocr_parts.append(clean_ocr)
 
             possible_editing_indicators = (
                 image_forensics.get("ela", {}).get("possible_editing_indicators")

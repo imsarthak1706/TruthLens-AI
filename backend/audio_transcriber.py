@@ -44,7 +44,7 @@ def transcribe_audio(audio_path: str) -> dict:
         model = _get_model()
         segments, info = model.transcribe(
             audio_path,
-            beam_size=5,
+            beam_size=1,
             condition_on_previous_text=False,
             vad_filter=True,
             no_speech_threshold=0.6,

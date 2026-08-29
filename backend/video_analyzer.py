@@ -117,8 +117,8 @@ def probe_video(video_path: str) -> dict:
     }
 
 
-def select_frame_timestamps(duration_seconds: float, max_frames: int = 12) -> list[float]:
-    """Select approximately one frame per second, capped at max_frames."""
+def select_frame_timestamps(duration_seconds: float, max_frames: int = 5) -> list[float]:
+    """Select representative keyframe timestamps across the duration, capped at max_frames."""
 
     if duration_seconds <= 0 or max_frames <= 0:
         return []
@@ -156,7 +156,7 @@ def extract_frames(
                 "-frames:v",
                 "1",
                 "-vf",
-                "scale=1280:1280:force_original_aspect_ratio=decrease",
+                "scale=960:960:force_original_aspect_ratio=decrease",
                 "-q:v",
                 "2",
                 str(frame_path),

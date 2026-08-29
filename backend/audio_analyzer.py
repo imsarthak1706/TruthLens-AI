@@ -70,6 +70,7 @@ def analyze_audio_forensics(audio_path: str) -> dict:
             fmin=librosa.note_to_hz("C2"),
             fmax=librosa.note_to_hz("C7"),
             sr=sample_rate,
+            hop_length=1024,
         )
         valid_pitch = pitch_values[voiced_flag & np.isfinite(pitch_values)]
         mean_hz = _rounded_or_none(np.mean(valid_pitch), 2) if valid_pitch.size else None
