@@ -16,3 +16,4 @@ uvicorn==0.52.4
  huggingface_hub
 
 huggingface_hub
+requests
