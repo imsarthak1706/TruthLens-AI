@@ -11,6 +11,8 @@ from pathlib import Path
 import time
 import threading
 import asyncio
+import json
+import httpx
 
 # -----------------------------------------
 # BOUNDED IN-MEMORY SCAN CACHE
@@ -34,6 +36,172 @@ def _get_scan_result(scan_id: str) -> dict | None:
         return None
     with _scan_cache_lock:
         return _scan_cache.get(str(scan_id))
+
+
+# -----------------------------------------
+# SUPABASE SECURE CONFIGURATION & HELPERS
+# -----------------------------------------
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "").strip()
+
+
+def _get_supabase_headers() -> dict:
+    if not SUPABASE_SERVICE_ROLE_KEY:
+        return {}
+    return {
+        "apikey": SUPABASE_SERVICE_ROLE_KEY,
+        "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
+    }
+
+
+async def _supabase_exact_count(endpoint: str, query_filter: str = "") -> int:
+    """Return an exact PostgREST row count without returning row data."""
+    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
+        return 0
+
+    url = f"{SUPABASE_URL}/rest/v1/{endpoint}?limit=0"
+    if query_filter:
+        url = f"{url}&{query_filter}"
+
+    headers = {
+        **_get_supabase_headers(),
+        "Prefer": "count=exact",
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=8.0) as client:
+            response = await client.head(url, headers=headers)
+            content_range = response.headers.get("content-range", "")
+            if "/" not in content_range:
+                return 0
+            total = content_range.rsplit("/", 1)[-1].strip()
+            return int(total) if total.isdigit() else 0
+    except Exception as error:
+        print(f"[Supabase] Count error on {endpoint}: {error}")
+        return 0
+
+
+def _sanitize_scan_message(msg: str | None) -> str:
+    """Strip Telegram envelopes/identity and return a clean public preview."""
+    if not msg:
+        return "Forensic Scan"
+
+    msg = str(msg).strip()
+
+    if msg.startswith("{") and msg.endswith("}"):
+        try:
+            parsed = json.loads(msg)
+            if isinstance(parsed, dict):
+                if isinstance(parsed.get("text"), str):
+                    return parsed["text"].strip()[:120]
+                message = parsed.get("message")
+                if isinstance(message, dict) and isinstance(message.get("text"), str):
+                    return message["text"].strip()[:120]
+        except Exception:
+            pass
+
+    if "TRUTHLENSAI" in msg.upper() or "FORENSIC" in msg.upper():
+        lines = [
+            line.strip()
+            for line in msg.splitlines()
+            if line.strip() and not line.strip().startswith(("---", "==="))
+        ]
+        for line in lines:
+            if "http://" in line or "https://" in line or line.lower().startswith("text:"):
+                return line[:120]
+        return lines[0][:120] if lines else "Forensic Analysis"
+
+    return msg[:120]
+
+
+def _derive_severity(
+    risk_score: int | float | None,
+    verdict: str | None,
+) -> str:
+    score = float(risk_score) if isinstance(risk_score, (int, float)) else 0.0
+    verdict_upper = (verdict or "").upper()
+
+    if score >= 80 or verdict_upper == "SCAM":
+        return "critical"
+    if score >= 60:
+        return "high"
+    if score >= 40 or verdict_upper == "SUSPICIOUS":
+        return "suspicious"
+    return "safe"
+
+
+async def _get_scan_from_supabase(scan_id: str) -> dict | None:
+    """Async persistence fallback using incident_reports.evidence_json."""
+    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY or not scan_id:
+        return None
+
+    url = f"{SUPABASE_URL}/rest/v1/incident_reports?scan_id=eq.{scan_id}&select=evidence_json&limit=1"
+    headers = _get_supabase_headers()
+    try:
+        async with httpx.AsyncClient(timeout=8.0) as client:
+            resp = await client.get(url, headers=headers)
+            if resp.status_code == 200:
+                rows = resp.json()
+                if rows and isinstance(rows, list) and len(rows) > 0:
+                    ev_raw = rows[0].get("evidence_json")
+                    if isinstance(ev_raw, str):
+                        try:
+                            return json.loads(ev_raw)
+                        except json.JSONDecodeError:
+                            return None
+                    elif isinstance(ev_raw, dict):
+                        return ev_raw
+    except Exception as e:
+        print(f"[Supabase] Error loading scan {scan_id}: {e}")
+    return None
+
+
+def _parse_incident_row(row: dict) -> dict:
+    evidence = row.get("evidence_json") or {}
+    if isinstance(evidence, str):
+        try:
+            evidence = json.loads(evidence)
+        except json.JSONDecodeError:
+            evidence = {}
+
+    risk_score = evidence.get("risk_score")
+    verdict = evidence.get("verdict")
+    severity = str(
+        evidence.get("severity")
+        or _derive_severity(risk_score, verdict)
+    ).lower()
+
+    threat_type = (
+        evidence.get("threat_type")
+        or evidence.get("scam_type")
+        or "Suspicious Activity"
+    )
+
+    platform = evidence.get("platform") or "Telegram"
+    confidence = evidence.get("confidence") or "N/A"
+    recommendation = evidence.get("recommendation") or ""
+    original_text = evidence.get("original_text") or evidence.get("message") or ""
+    summary = _sanitize_scan_message(original_text)
+
+    incident_number = row.get("id")
+    return {
+        "id": f"INC-{int(incident_number):04d}" if str(incident_number).isdigit() else str(incident_number),
+        "scan_id": row.get("scan_id"),
+        "title": str(threat_type),
+        "channel": str(platform),
+        "severity": severity,
+        "risk_score": risk_score,
+        "confidence": confidence,
+        "status": str(evidence.get("status") or "investigating").lower(),
+        "created_at": row.get("created_at"),
+        "summary": summary or recommendation[:180],
+    }
 
 from detector import detect_signals
 from risk_engine import calculate_risk
@@ -202,11 +370,196 @@ def scan(request: ScanRequest):
 
 
 @app.get("/api/scan/{scan_id}")
-def get_scan(scan_id: str):
+async def get_scan(scan_id: str):
     res = _get_scan_result(scan_id)
-    if not res:
-        raise HTTPException(status_code=404, detail="Scan result not found or expired")
-    return res
+    if res:
+        return res
+
+    supabase_res = await _get_scan_from_supabase(scan_id)
+    if supabase_res:
+        _save_scan_result(supabase_res)
+        return supabase_res
+
+    raise HTTPException(status_code=404, detail="Scan result not found or expired")
+
+
+# -----------------------------------------
+# PLATFORM TELEMETRY & SHARED DATA ENDPOINTS
+# -----------------------------------------
+
+@app.get("/api/telemetry/overview")
+async def get_telemetry_overview():
+    try:
+        # 1. Exact platform-wide counts
+        total_scans = await _supabase_exact_count("scans")
+        threats_detected = await _supabase_exact_count("scans", "risk_score=gte.40")
+        critical_threats = await _supabase_exact_count("scans", "or=(risk_score.gte.80,verdict.eq.SCAM)")
+        community_indicators = await _supabase_exact_count("community_indicator_reputation", "normalized_value=neq.")
+
+        # 2. Historical distribution & activity timeline (bounded query)
+        url = f"{SUPABASE_URL}/rest/v1/scans?select=timestamp,risk_score,verdict&order=timestamp.desc&limit=500"
+        headers = _get_supabase_headers()
+        distribution = {"critical": 0, "high": 0, "suspicious": 0, "safe": 0, "total": total_scans}
+        activity_map: dict[str, dict[str, int]] = {}
+
+        if SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY:
+            async with httpx.AsyncClient(timeout=8.0) as client:
+                resp = await client.get(url, headers=headers)
+                if resp.status_code == 200:
+                    rows = resp.json()
+                    for r in rows:
+                        score = r.get("risk_score")
+                        verdict = r.get("verdict")
+                        sev = _derive_severity(score, verdict)
+                        distribution[sev] = distribution.get(sev, 0) + 1
+
+                        # Date grouping for chart
+                        ts = r.get("timestamp") or ""
+                        date_key = ts[:10] if len(ts) >= 10 else "Unknown"
+                        if date_key != "Unknown":
+                            if date_key not in activity_map:
+                                activity_map[date_key] = {"threats": 0, "clean": 0}
+                            if sev in ["critical", "high", "suspicious"]:
+                                activity_map[date_key]["threats"] += 1
+                            else:
+                                activity_map[date_key]["clean"] += 1
+
+        # Format sorted activity series
+        sorted_dates = sorted(activity_map.keys())
+        threat_activity = [
+            {"time": d, "threats": activity_map[d]["threats"], "clean": activity_map[d]["clean"]}
+            for d in sorted_dates
+        ]
+
+        return {
+            "total_scans": total_scans,
+            "threats_detected": threats_detected,
+            "critical_threats": critical_threats,
+            "community_reports_indexed": community_indicators,
+            "severity_distribution": distribution,
+            "threat_activity": threat_activity,
+        }
+    except Exception as e:
+        print(f"[Telemetry] Overview failed: {e}")
+        return {
+            "total_scans": 0,
+            "threats_detected": 0,
+            "critical_threats": 0,
+            "community_reports_indexed": 0,
+            "severity_distribution": {"critical": 0, "high": 0, "suspicious": 0, "safe": 0, "total": 0},
+            "threat_activity": [],
+        }
+
+
+@app.get("/api/scans")
+async def get_scans(limit: int = 10, offset: int = 0):
+    limit = max(1, min(limit, 50))
+    offset = max(0, offset)
+    try:
+        total = await _supabase_exact_count("scans")
+        url = (
+            f"{SUPABASE_URL}/rest/v1/scans?"
+            f"select=id,timestamp,platform,message,risk_score,verdict,scam_type,has_image&"
+            f"order=id.desc&limit={limit}&offset={offset}"
+        )
+        headers = _get_supabase_headers()
+        items = []
+        if SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY:
+            async with httpx.AsyncClient(timeout=8.0) as client:
+                resp = await client.get(url, headers=headers)
+                if resp.status_code == 200:
+                    for row in resp.json():
+                        score = row.get("risk_score") if isinstance(row.get("risk_score"), (int, float)) else 0
+                        verdict = row.get("verdict")
+                        items.append({
+                            "id": str(row.get("id")),
+                            "timestamp": row.get("timestamp") or "Recently",
+                            "platform": row.get("platform") or "Web",
+                            "target_input": _sanitize_scan_message(row.get("message")),
+                            "modality": "image" if row.get("has_image") else "text",
+                            "risk_score": score,
+                            "severity": _derive_severity(score, verdict),
+                            "verdict": verdict or "ANALYZING",
+                            "threat_type": row.get("scam_type") or verdict or "Forensic Analysis",
+                            "status": "analyzing" if verdict == "ANALYZING" else "complete",
+                        })
+        return {
+            "items": items,
+            "total": total,
+            "limit": limit,
+            "offset": offset,
+        }
+    except Exception as e:
+        print(f"[Telemetry] get_scans failed: {e}")
+        return {"items": [], "total": 0, "limit": limit, "offset": offset}
+
+
+@app.get("/api/incidents")
+async def get_incidents(limit: int = 10, offset: int = 0):
+    limit = max(1, min(limit, 50))
+    offset = max(0, offset)
+    try:
+        total = await _supabase_exact_count("incident_reports")
+        url = (
+            f"{SUPABASE_URL}/rest/v1/incident_reports?"
+            f"select=id,scan_id,evidence_json,created_at&"
+            f"order=id.desc&limit={limit}&offset={offset}"
+        )
+        headers = _get_supabase_headers()
+        items = []
+        if SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY:
+            async with httpx.AsyncClient(timeout=8.0) as client:
+                resp = await client.get(url, headers=headers)
+                if resp.status_code == 200:
+                    for row in resp.json():
+                        items.append(_parse_incident_row(row))
+        return {
+            "items": items,
+            "total": total,
+            "limit": limit,
+            "offset": offset,
+        }
+    except Exception as e:
+        print(f"[Telemetry] get_incidents failed: {e}")
+        return {"items": [], "total": 0, "limit": limit, "offset": offset}
+
+
+@app.get("/api/community/feed")
+async def get_community_feed(limit: int = 20):
+    limit = max(1, min(limit, 50))
+    try:
+        total = await _supabase_exact_count("community_indicator_reputation", "normalized_value=neq.")
+        url = (
+            f"{SUPABASE_URL}/rest/v1/community_indicator_reputation?"
+            f"normalized_value=neq.&order=report_count.desc&limit={limit}"
+        )
+        headers = _get_supabase_headers()
+        items = []
+        if SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY:
+            async with httpx.AsyncClient(timeout=8.0) as client:
+                resp = await client.get(url, headers=headers)
+                if resp.status_code == 200:
+                    for row in resp.json():
+                        val = str(row.get("normalized_value") or "").strip()
+                        if not val:
+                            continue
+                        cnt = int(row.get("report_count") or 0)
+                        tier = "critical" if cnt > 50 else "high" if cnt > 10 else "suspicious" if cnt > 3 else "safe"
+                        items.append({
+                            "indicator": val,
+                            "indicator_type": str(row.get("indicator_type") or "URL").upper(),
+                            "report_count": cnt,
+                            "risk_tier": tier,
+                            "first_seen": row.get("first_seen"),
+                            "last_seen": row.get("last_seen"),
+                        })
+        return {
+            "items": items,
+            "total": len(items) if total == 0 else total,
+        }
+    except Exception as e:
+        print(f"[Telemetry] get_community_feed failed: {e}")
+        return {"items": [], "total": 0}
 
 
 # -----------------------------------------
