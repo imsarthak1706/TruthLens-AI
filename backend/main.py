@@ -136,6 +136,83 @@ def _derive_severity(
     return "safe"
 
 
+async def _persist_scan_to_supabase(result: dict, platform: str = "Web", has_image: int = 0):
+    """
+    Asynchronously record a completed scan to the Supabase scans table.
+    Non-blocking, safe against failures, and never leaks credentials.
+    """
+    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY or not isinstance(result, dict):
+        return
+
+    try:
+        # 1. Derive stored verdict consistently:
+        # risk >= 80 -> SCAM, risk >= 40 -> SUSPICIOUS, otherwise SAFE
+        risk_score = int(result.get("risk_score") or 0)
+        if risk_score >= 80:
+            verdict = "SCAM"
+        elif risk_score >= 40:
+            verdict = "SUSPICIOUS"
+        else:
+            verdict = "SAFE"
+
+        # 2. Safe preview / primary input:
+        # text input when available, extracted text when available, transcript when available,
+        # otherwise "Multimedia Forensic Scan"
+        target_input = (
+            result.get("input")
+            or result.get("extracted_text")
+            or result.get("transcript")
+            or "Multimedia Forensic Scan"
+        )
+        safe_message = _sanitize_scan_message(str(target_input))[:500]
+
+        # 3. URL and domain extraction from entities
+        entities = result.get("extracted_entities") or {}
+        if not isinstance(entities, dict):
+            entities = {}
+        urls_list = entities.get("urls") or []
+        if not isinstance(urls_list, list):
+            urls_list = []
+        url_count = len(urls_list)
+
+        # 4. Reasons/evidence as JSON string
+        evidence = result.get("evidence") or []
+        if isinstance(evidence, (list, dict)):
+            reasons_json = json.dumps(evidence)
+        else:
+            reasons_json = str(evidence)
+
+        # 5. Build payload matching Supabase scans table
+        payload = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "platform": str(platform or "Web"),
+            "message": safe_message,
+            "risk_score": risk_score,
+            "verdict": verdict,
+            "scam_type": str(result.get("threat_type") or "Forensic Analysis"),
+            "reasons": reasons_json,
+            "has_image": int(has_image),
+            "url_count": url_count,
+            "urls": json.dumps(urls_list) if urls_list else None,
+            "domains": None,
+            "chat_id": None,
+        }
+
+        url = f"{SUPABASE_URL}/rest/v1/scans"
+        headers = {
+            **_get_supabase_headers(),
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal",
+        }
+
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            resp = await client.post(url, json=payload, headers=headers)
+            if resp.status_code not in (200, 201):
+                print(f"[Supabase] Warning: Failed to persist scan (HTTP {resp.status_code}): {resp.text}")
+    except Exception as error:
+        print(f"[Supabase] Warning: Scan persistence error: {error}")
+
+
 async def _get_scan_from_supabase(scan_id: str) -> dict | None:
     """Async persistence fallback using incident_reports.evidence_json."""
     if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY or not scan_id:
@@ -254,7 +331,7 @@ async def add_request_timing(request: Request, call_next):
 
 class ScanRequest(BaseModel):
     input: str
-    platform: str
+    platform: str = "web"
 
 
 MAX_VIDEO_BYTES = 50 * 1024 * 1024
@@ -365,8 +442,16 @@ def process_text(text: str):
 # -----------------------------------------
 
 @app.post("/api/scan")
-def scan(request: ScanRequest):
-    return process_text(request.input)
+async def scan(request: ScanRequest):
+    res = process_text(request.input)
+    asyncio.create_task(
+        _persist_scan_to_supabase(
+            res,
+            platform=getattr(request, "platform", "Web") or "Web",
+            has_image=0,
+        )
+    )
+    return res
 
 
 @app.get("/api/scan/{scan_id}")
@@ -676,6 +761,7 @@ async def scan_image(
                 }
             }
             _save_scan_result(res)
+            asyncio.create_task(_persist_scan_to_supabase(res, platform=platform, has_image=1))
             return res
 
         try:
@@ -713,6 +799,7 @@ async def scan_image(
             result["timing"]["pipeline_total_ms"] = round(total_pipeline_ms, 2)
 
         _save_scan_result(result)
+        asyncio.create_task(_persist_scan_to_supabase(result, platform=platform, has_image=1))
         return result
 
     finally:
@@ -900,9 +987,10 @@ async def scan_audio(
             }
         }
 
-    suffix = os.path.splitext(file.filename)[1] or ".audio"
-
-    return await asyncio.to_thread(_sync_scan_audio, contents, file.filename, suffix, platform)
+    res = await asyncio.to_thread(_sync_scan_audio, contents, file.filename, suffix, platform)
+    if isinstance(res, dict) and "error" not in res and res.get("scan_id"):
+        asyncio.create_task(_persist_scan_to_supabase(res, platform=platform, has_image=0))
+    return res
 
 
 # -----------------------------------------
@@ -1178,4 +1266,7 @@ async def scan_video(
             }
         }
 
-    return await asyncio.to_thread(_sync_scan_video, contents, file.filename, suffix, platform)
+    res = await asyncio.to_thread(_sync_scan_video, contents, file.filename, suffix, platform)
+    if isinstance(res, dict) and "error" not in res and res.get("scan_id"):
+        asyncio.create_task(_persist_scan_to_supabase(res, platform=platform, has_image=0))
+    return res
