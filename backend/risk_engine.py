@@ -303,14 +303,14 @@ def calculate_risk(signals):
         has_malicious_url
     ])
 
-    ai_benign_high_confidence = (
+    ai_benign_confidence = (
         ai.get("threat_type") == "benign"
         and ai.get("scam_intent") is False
-        and ai.get("confidence") == "high"
+        and ai.get("confidence") in ("high", "medium")
         and not has_vt_alert
     )
 
-    if ai_benign_high_confidence and not strong_deterministic_evidence:
+    if ai_benign_confidence and not strong_deterministic_evidence:
         score = min(score, 20)
 
     # -------------------------
@@ -364,6 +364,15 @@ def calculate_risk(signals):
 
     if has_malicious_url:
         threat_type = "Malicious Link"
+
+    elif ai_threat_type == "malicious_link" and not signals.get("urls") and not has_malicious_url:
+        # Invariant: Cannot be "Malicious Link" without an extracted URL or malicious VT detection
+        if signals.get("payment_signals") or ai.get("financial_manipulation"):
+            threat_type = "Payment Scam"
+        elif ai.get("social_engineering"):
+            threat_type = "Financial Social Engineering"
+        else:
+            threat_type = "Social Engineering"
 
     elif ai_threat_type in threat_type_map and ai_threat_type != "unknown":
         threat_type = threat_type_map[ai_threat_type]

@@ -192,7 +192,18 @@ def detect_signals(text: str):
         "send ₹",
         "transfer",
         "payment",
-        "pay",
+        "pay now",
+        "pay here",
+        "pay fee",
+        "pay to",
+        "must pay",
+        "pay immediately",
+        "payment request",
+        "approve payment",
+        "approve the payment",
+        "approve request",
+        "payment approve",
+        "payment approval",
         "upi",
         "refund",
         "bank account",
@@ -653,6 +664,45 @@ def detect_signals(text: str):
         phrase for phrase in reward_keywords
         if phrase in lower_text
     ]
+
+    # -------------------------
+    # BENIGN REPAYMENT SUPPRESSION
+    # -------------------------
+
+    benign_repayment_patterns = [
+        "pay you back",
+        "pay back",
+        "will pay back",
+        "pay tomorrow",
+        "pay later",
+        "repay you",
+        "repay tomorrow",
+        "wapas kar dunga",
+        "waapis kar dunga",
+        "lautaa dunga",
+        "वापस कर दूंगा",
+        "लौटा दूंगा",
+    ]
+
+    has_benign_repayment = any(
+        phrase in lower_text for phrase in benign_repayment_patterns
+    )
+    if has_benign_repayment:
+        has_corroborating_scam_signals = any([
+            bool(urls),
+            bool(upi_ids),
+            bool(otp_signals),
+            bool(urgency_signals),
+            bool(credential_signals),
+            bool(threat_signals),
+            bool(investment_signals),
+            bool(tech_support_signals),
+            bool(prize_signals),
+            bool(kyc_signals),
+            bool(reward_signals),
+        ])
+        if not has_corroborating_scam_signals:
+            payment_signals = []
 
     # -------------------------
     # RETURN ALL SIGNALS

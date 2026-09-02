@@ -61,6 +61,9 @@ Rules:
 - Do not classify based on keywords alone.
 - Judge the complete context of the message.
 - Words such as verify, payment, account, login, urgent, or link can appear in legitimate messages.
+- Ordinary personal borrowing, splitting, or reimbursement requests (such as asking to split dinner or borrow small amounts with a promise to repay, with no impersonation, urgency pressure, threats, credential requests, OTP requests, or suspicious links) are benign.
+- Use malicious_link ONLY when an actual URL, link destination, or hyperlink is present in the message. Merely mentioning the word "link" is not sufficient.
+- Refund lures, UPI collect-requests, or payment approval requests without an actual URL must be classified as payment_scam when appropriate.
 - threat_type must represent the primary threat.
 - Use benign when there is no meaningful scam behavior.
 - Use unknown when there is insufficient information to classify.
