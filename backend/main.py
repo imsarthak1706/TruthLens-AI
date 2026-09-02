@@ -13,6 +13,7 @@ import threading
 import asyncio
 import json
 import httpx
+import urllib.parse
 
 # -----------------------------------------
 # BOUNDED IN-MEMORY SCAN CACHE
@@ -622,6 +623,19 @@ async def get_community_feed(limit: int = 20):
         items = []
         if SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY:
             async with httpx.AsyncClient(timeout=8.0) as client:
+                # Query blocked threat_indicators values
+                blocked_values = set()
+                try:
+                    blocked_url = f"{SUPABASE_URL}/rest/v1/threat_indicators?status=eq.blocked&select=value"
+                    blocked_resp = await client.get(blocked_url, headers=headers)
+                    if blocked_resp.status_code == 200:
+                        for b_row in blocked_resp.json():
+                            b_val = str(b_row.get("value") or "").strip()
+                            if b_val:
+                                blocked_values.add(b_val)
+                except Exception as b_err:
+                    print(f"[Telemetry] Warning: Failed to query blocked indicators: {b_err}")
+
                 resp = await client.get(url, headers=headers)
                 if resp.status_code == 200:
                     for row in resp.json():
@@ -637,6 +651,7 @@ async def get_community_feed(limit: int = 20):
                             "risk_tier": tier,
                             "first_seen": row.get("first_seen"),
                             "last_seen": row.get("last_seen"),
+                            "is_blocked": val in blocked_values,
                         })
         return {
             "items": items,
@@ -645,6 +660,60 @@ async def get_community_feed(limit: int = 20):
     except Exception as e:
         print(f"[Telemetry] get_community_feed failed: {e}")
         return {"items": [], "total": 0}
+
+
+class BlockIndicatorRequest(BaseModel):
+    indicator: str
+    blocked: bool = True
+
+
+@app.post("/api/community/block")
+async def block_community_indicator(request: BlockIndicatorRequest):
+    indicator = (request.indicator or "").strip()
+    if not indicator:
+        raise HTTPException(status_code=400, detail="Indicator string cannot be empty")
+
+    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
+        raise HTTPException(status_code=503, detail="Database credentials not configured")
+
+    headers = {
+        **_get_supabase_headers(),
+        "Content-Type": "application/json",
+        "Prefer": "return=representation",
+    }
+
+    # When blocked=True -> status="blocked", when blocked=False -> status=None
+    new_status = "blocked" if request.blocked else None
+
+    # PostgREST PATCH to threat_indicators with exact match on value
+    safe_val = urllib.parse.quote(indicator, safe="")
+    patch_url = f"{SUPABASE_URL}/rest/v1/threat_indicators?value=eq.{safe_val}"
+
+    try:
+        async with httpx.AsyncClient(timeout=8.0) as client:
+            resp = await client.patch(
+                patch_url,
+                json={"status": new_status},
+                headers=headers
+            )
+            if resp.status_code not in (200, 204):
+                print(f"[Supabase] Failed to update threat_indicators: {resp.status_code} {resp.text}")
+                raise HTTPException(status_code=502, detail="Failed to persist indicator block state in database")
+
+            updated_rows = resp.json() if resp.status_code == 200 else []
+            updated_count = len(updated_rows) if isinstance(updated_rows, list) else 0
+
+            return {
+                "success": True,
+                "indicator": indicator,
+                "blocked": request.blocked,
+                "updated_count": updated_count,
+            }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[Supabase] Error blocking indicator: {e}")
+        raise HTTPException(status_code=502, detail="Database connection error")
 
 
 # -----------------------------------------
