@@ -6,28 +6,69 @@ export type IncidentEvidence = { original_text?: string; extracted_text?: string
 export type IncidentRecord = Incident & { chatId: string | null; evidence: IncidentEvidence; originalText: string; extractedText: string | null; extractedEntities: unknown; evidenceDetails: unknown; aiAnalysis: unknown; virustotal: unknown; recommendation: unknown }
 export type ScanAnalysisResponse = { scan_id?: string; risk_score?: number; severity?: string; confidence?: string | number; threat_type?: string; evidence?: unknown; ai_analysis?: unknown; virustotal?: unknown; recommendation?: unknown; extracted_entities?: unknown; extracted_text?: string; timestamp?: string }
 
-export const scans: Scan[] = [
-  { id: 'SCN-84291', source: 'Telegram', preview: 'Your account will be suspended today. Verify now at secure-telegram-auth.com', type: 'Credential Phishing', severity: 'critical', score: 100, confidence: 99, created: '2 min ago', status: 'Prepared' },
-  { id: 'SCN-84290', source: 'Telegram', preview: 'Confirm your one-time password to keep your delivery scheduled.', type: 'Payment Scam', severity: 'high', score: 78, confidence: 89, created: '18 min ago', status: 'Review' },
-  { id: 'SCN-84287', source: 'Telegram', preview: 'The support team needs your verification code to unlock your account.', type: 'Possible Impersonation Scam', severity: 'high', score: 82, confidence: 91, created: '41 min ago', status: 'Review' },
-  { id: 'SCN-84284', source: 'Direct input', preview: 'Hey, can you send me the verification code?', type: 'Social Engineering', severity: 'suspicious', score: 62, confidence: 84, created: '1 hr ago', status: 'Review' },
-  { id: 'SCN-84277', source: 'Telegram', preview: 'https://secure-telegram-auth.com/login', type: 'Malicious Link', severity: 'critical', score: 91, confidence: 98, created: '3 hrs ago', status: 'Reported' },
-  { id: 'SCN-84261', source: 'Telegram', preview: 'Your identity review is incomplete. Upload your ID to avoid restrictions.', type: 'Identity / KYC Scam', severity: 'high', score: 86, confidence: 93, created: '5 hrs ago', status: 'Review' },
-  { id: 'SCN-84242', source: 'Direct input', preview: 'Weekly team update: the deployment is ready for review.', type: 'No Strong Threat Detected', severity: 'safe', score: 20, confidence: 96, created: 'Yesterday', status: 'Safe' },
+// Real runtime empty collections (mock records removed)
+export const scans: Scan[] = []
+export const incidents: Incident[] = []
+export const riskTrend: { day: string; critical: number; high: number; safe: number }[] = []
+export const threatTypes: { name: string; value: number }[] = []
+
+export const severityLabel = (s: Severity) => ({ critical: 'Critical', high: 'High', suspicious: 'Suspicious', safe: 'Safe' }[s] || 'Unknown')
+export const severityClass = (s: Severity) => ({ critical: 'severity-critical', high: 'severity-high', suspicious: 'severity-suspicious', safe: 'severity-safe' }[s] || 'severity-safe')
+
+export const scanApi = {
+  scan: async (input: string) => {
+    const { api } = await import('@/lib/api');
+    return api.scanText(input);
+  }
+}
+
+export const imageScanApi = {
+  scan: async (image: File) => {
+    const { api } = await import('@/lib/api');
+    return api.scanImage(image);
+  }
+}
+
+export type PageKey = 'Overview' | 'Scan Analyzer' | 'Incident Center' | 'Scan History' | 'Community Intelligence' | 'Analytics' | 'Settings'
+export const navItems: { label: PageKey; icon: string }[] = [
+  { label: 'Overview', icon: 'grid' },
+  { label: 'Scan Analyzer', icon: 'scan' },
+  { label: 'Incident Center', icon: 'alert' },
+  { label: 'Scan History', icon: 'history' },
+  { label: 'Community Intelligence', icon: 'shield' },
+  { label: 'Analytics', icon: 'barChart' },
+  { label: 'Settings', icon: 'settings' }
 ]
-export const incidents: Incident[] = [
-  { id: 'INC-00421', scanId: 'SCN-84291', title: 'Credential Phishing', channel: 'Telegram', severity: 'critical', score: 100, confidence: 'High', status: 'Prepared', created: '2 min ago', entities: 4 },
-  { id: 'INC-00420', scanId: 'SCN-84277', title: 'Malicious Link', channel: 'Telegram', severity: 'critical', score: 91, confidence: 'High', status: 'Reported', created: '3 hrs ago', entities: 3 },
-  { id: 'INC-00419', scanId: 'SCN-84261', title: 'Identity / KYC Scam', channel: 'Telegram', severity: 'high', score: 86, confidence: 'High', status: 'Review', created: '5 hrs ago', entities: 3 },
-]
-export const riskTrend = [{ day: 'Mon', critical: 1, high: 4, safe: 18 }, { day: 'Tue', critical: 2, high: 5, safe: 21 }, { day: 'Wed', critical: 1, high: 3, safe: 17 }, { day: 'Thu', critical: 3, high: 6, safe: 24 }, { day: 'Fri', critical: 2, high: 5, safe: 22 }, { day: 'Sat', critical: 2, high: 4, safe: 19 }, { day: 'Sun', critical: 3, high: 7, safe: 26 }]
-export const threatTypes = [{ name: 'Credential Phishing', value: 22 }, { name: 'Malicious Link', value: 16 }, { name: 'Identity / KYC Scam', value: 10 }, { name: 'Payment Scam', value: 8 }, { name: 'Social Engineering', value: 6 }, { name: 'Malware', value: 5 }]
-export const severityLabel = (s: Severity) => ({ critical: 'Critical', high: 'High', suspicious: 'Suspicious', safe: 'Safe' }[s])
-export const severityClass = (s: Severity) => ({ critical: 'severity-critical', high: 'severity-high', suspicious: 'severity-suspicious', safe: 'severity-safe' }[s])
-export const api = { scan: async (_input: { text?: string; image?: File }) => null as unknown as Promise<Scan> }
-export const scanApi = { scan: async (input: string) => { const response = await fetch('/api/scan', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ input, platform: 'telegram' }) }); if (!response.ok) throw new Error('Scan analysis could not be completed.'); return response.json() as Promise<ScanAnalysisResponse> } }
-export const imageScanApi = { scan: async (image: File) => { const formData = new FormData(); formData.append('file', image); const response = await fetch('/api/scan/image', { method: 'POST', body: formData }); const body = await response.json() as ScanAnalysisResponse & { error?: string }; if (!response.ok || body.error) throw new Error(body.error || 'Image scan could not be completed.'); return body } }
-export type PageKey = 'Overview' | 'Scan Analyzer' | 'Incident Center' | 'Scan History' | 'Settings'
-export const navItems: { label: PageKey; icon: string }[] = [{ label: 'Overview', icon: 'grid' }, { label: 'Scan Analyzer', icon: 'scan' }, { label: 'Incident Center', icon: 'alert' }, { label: 'Scan History', icon: 'history' }, { label: 'Settings', icon: 'settings' }]
-export const analysis = { risk: 100, confidence: 'High', verdict: 'Confirmed scam', category: 'Credential Phishing', summary: 'This Telegram message uses artificial urgency, account suspension threats, a lookalike domain, and an OTP request to pressure the recipient into surrendering credentials.', ai: { scam_intent: true, social_engineering: true, impersonation: true, financial_manipulation: false, urgency: 'high' }, evidence: ['URL detected', 'OTP request', 'Artificial urgency', 'Credential request', 'Brand impersonation'], entities: [{ label: 'URL', value: 'secure-telegram-auth.com', risk: 'critical' }, { label: 'Brand', value: 'Telegram', risk: 'high' }, { label: 'Action', value: 'Account verification', risk: 'suspicious' }] }
-export const legitimateAnalysis = { verdict: 'No strong threat detected', category: 'No Strong Threat Detected', risk: 20, confidence: 'High', ai: { scam_intent: false, threat_type: 'benign' } }
+
+// Official reproducible 120-sample benchmark evaluation
+export const BENCHMARK_EVALUATION = {
+  title: '120-Sample Text Benchmark Evaluation',
+  provenance: 'Evaluated against benchmark/text_benchmark.csv using the production FastAPI /api/scan detection pipeline (threshold = 25).',
+  sampleCount: 120,
+  overall: {
+    accuracy: 95.0,
+    precision: 100.0,
+    recall: 90.0,
+    f1Score: 94.74,
+    tp: 54,
+    tn: 60,
+    fp: 0,
+    fn: 6,
+    totalScam: 60,
+    totalBenign: 60,
+  },
+  byLanguage: {
+    english: { samples: 40, accuracy: 100.0, precision: 100.0, recall: 100.0, f1Score: 100.0, tp: 20, tn: 20, fp: 0, fn: 0 },
+    hindi: { samples: 40, accuracy: 87.5, precision: 100.0, recall: 75.0, f1Score: 85.71, tp: 15, tn: 20, fp: 0, fn: 5 },
+    hinglish: { samples: 40, accuracy: 97.5, precision: 100.0, recall: 95.0, f1Score: 97.44, tp: 19, tn: 20, fp: 0, fn: 1 },
+  },
+  limitations: [
+    { id: 'HI-S-002', lang: 'Hindi', expected: 'SCAM', predicted: 'SAFE', score: 15, text: 'प्रिय ग्राहक, आपका बिजली कनेक्शन आज रात 9:30 बजे काट दिया जाएगा...' },
+    { id: 'HI-S-004', lang: 'Hindi', expected: 'SCAM', predicted: 'SAFE', score: 15, text: 'आपका SBI खाता ब्लॉक हो गया है। तुरंत KYC अपडेट करें...' },
+    { id: 'HI-S-009', lang: 'Hindi', expected: 'SCAM', predicted: 'SAFE', score: 20, text: 'बिजली बिल बकाया है। तुरंत भुगतान करें अन्यथा आपूर्ति बंद...' },
+    { id: 'HI-S-015', lang: 'Hindi', expected: 'SCAM', predicted: 'SAFE', score: 15, text: 'आपके फोन में वायरस है। सुरक्षा के लिए यह सपोर्ट ऐप इंस्टॉल करें...' },
+    { id: 'HI-S-018', lang: 'Hindi', expected: 'SCAM', predicted: 'SAFE', score: 20, text: 'सरकारी योजना के तहत ₹50000 की सहायता राशि प्राप्त करने के लिए...' },
+    { id: 'HING-S-015', lang: 'Hinglish', expected: 'SCAM', predicted: 'SAFE', score: 15, text: 'Aapke device me security alert hai. Remote support tool download karein...' },
+  ]
+}
+

@@ -1,0 +1,1234 @@
+{
+  "metadata": {
+    "timestamp": "2026-09-01T17:55:27.518167+00:00",
+    "evaluation_pipeline": "Production TruthLensAI Engine (Exact POST /api/scan logic)",
+    "datasets": {
+      "development_benchmark": {
+        "path": "/Users/sarthak/TruthLensAI/benchmark/text_benchmark.csv",
+        "total_samples": 120,
+        "scam": 60,
+        "benign": 60
+      },
+      "heldout_validation": {
+        "path": "/Users/sarthak/TruthLensAI/benchmark/text_heldout.csv",
+        "total_samples": 50,
+        "scam": 26,
+        "benign": 24
+      }
+    },
+    "candidate_thresholds": [
+      15,
+      18,
+      20,
+      22,
+      25
+    ],
+    "current_production_threshold": 25,
+    "recommendation": "KEEP threshold at 25"
+  },
+  "development_benchmark_results": {
+    "15": {
+      "threshold": 15,
+      "overall": {
+        "tp": 60,
+        "tn": 44,
+        "fp": 16,
+        "fn": 0,
+        "total": 120,
+        "accuracy": 86.67,
+        "precision": 78.95,
+        "recall": 100.0,
+        "f1": 88.24
+      },
+      "by_language": {
+        "english": {
+          "tp": 20,
+          "tn": 13,
+          "fp": 7,
+          "fn": 0,
+          "total": 40,
+          "accuracy": 82.5,
+          "precision": 74.07,
+          "recall": 100.0,
+          "f1": 85.11
+        },
+        "hindi": {
+          "tp": 20,
+          "tn": 18,
+          "fp": 2,
+          "fn": 0,
+          "total": 40,
+          "accuracy": 95.0,
+          "precision": 90.91,
+          "recall": 100.0,
+          "f1": 95.24
+        },
+        "hinglish": {
+          "tp": 20,
+          "tn": 13,
+          "fp": 7,
+          "fn": 0,
+          "total": 40,
+          "accuracy": 82.5,
+          "precision": 74.07,
+          "recall": 100.0,
+          "f1": 85.11
+        }
+      },
+      "false_positives": [
+        {
+          "id": "EN-B-004",
+          "language": "english",
+          "score": 20,
+          "text": "Your monthly electricity bill is due on the 28th. You can pay it through the official website."
+        },
+        {
+          "id": "HING-B-004",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Monthly electricity bill 28th ko due hai, official app se pay kar dena."
+        },
+        {
+          "id": "EN-B-008",
+          "language": "english",
+          "score": 20,
+          "text": "Please pay the college semester fee through the official university payment portal."
+        },
+        {
+          "id": "EN-B-009",
+          "language": "english",
+          "score": 20,
+          "text": "Your electricity bill is due tomorrow. You can pay it through the official electricity provider website."
+        },
+        {
+          "id": "EN-B-014",
+          "language": "english",
+          "score": 20,
+          "text": "Please transfer the agreed amount for the shared dinner after everyone confirms the total."
+        },
+        {
+          "id": "EN-B-017",
+          "language": "english",
+          "score": 20,
+          "text": "Please send me the payment receipt after you complete the registration fee."
+        },
+        {
+          "id": "EN-B-019",
+          "language": "english",
+          "score": 15,
+          "text": "My internet provider has scheduled routine maintenance for tonight."
+        },
+        {
+          "id": "EN-B-020",
+          "language": "english",
+          "score": 20,
+          "text": "I will call customer support tomorrow to check the status of my refund."
+        },
+        {
+          "id": "HI-B-017",
+          "language": "hindi",
+          "score": 20,
+          "text": "पंजीकरण शुल्क जमा करने के बाद कृपया भुगतान की रसीद भेज दें।"
+        },
+        {
+          "id": "HI-B-019",
+          "language": "hindi",
+          "score": 15,
+          "text": "मेरे इंटरनेट प्रदाता ने आज रात सामान्य रखरखाव की सूचना दी है।"
+        },
+        {
+          "id": "HING-B-008",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Semester fee official university payment portal se pay kar dena."
+        },
+        {
+          "id": "HING-B-009",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Electricity bill kal due hai, official website se payment kar dena."
+        },
+        {
+          "id": "HING-B-014",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Dinner ka total confirm hone ke baad sab apna share transfer kar dena."
+        },
+        {
+          "id": "HING-B-017",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Registration fee pay karne ke baad payment receipt mujhe send kar dena."
+        },
+        {
+          "id": "HING-B-019",
+          "language": "hinglish",
+          "score": 15,
+          "text": "Internet provider ne aaj raat routine maintenance schedule kiya hai."
+        },
+        {
+          "id": "HING-B-020",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Main kal customer support ko call karke refund ka status check karunga."
+        }
+      ],
+      "false_negatives": []
+    },
+    "18": {
+      "threshold": 18,
+      "overall": {
+        "tp": 56,
+        "tn": 47,
+        "fp": 13,
+        "fn": 4,
+        "total": 120,
+        "accuracy": 85.83,
+        "precision": 81.16,
+        "recall": 93.33,
+        "f1": 86.82
+      },
+      "by_language": {
+        "english": {
+          "tp": 20,
+          "tn": 14,
+          "fp": 6,
+          "fn": 0,
+          "total": 40,
+          "accuracy": 85.0,
+          "precision": 76.92,
+          "recall": 100.0,
+          "f1": 86.96
+        },
+        "hindi": {
+          "tp": 17,
+          "tn": 19,
+          "fp": 1,
+          "fn": 3,
+          "total": 40,
+          "accuracy": 90.0,
+          "precision": 94.44,
+          "recall": 85.0,
+          "f1": 89.47
+        },
+        "hinglish": {
+          "tp": 19,
+          "tn": 14,
+          "fp": 6,
+          "fn": 1,
+          "total": 40,
+          "accuracy": 82.5,
+          "precision": 76.0,
+          "recall": 95.0,
+          "f1": 84.44
+        }
+      },
+      "false_positives": [
+        {
+          "id": "EN-B-004",
+          "language": "english",
+          "score": 20,
+          "text": "Your monthly electricity bill is due on the 28th. You can pay it through the official website."
+        },
+        {
+          "id": "HING-B-004",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Monthly electricity bill 28th ko due hai, official app se pay kar dena."
+        },
+        {
+          "id": "EN-B-008",
+          "language": "english",
+          "score": 20,
+          "text": "Please pay the college semester fee through the official university payment portal."
+        },
+        {
+          "id": "EN-B-009",
+          "language": "english",
+          "score": 20,
+          "text": "Your electricity bill is due tomorrow. You can pay it through the official electricity provider website."
+        },
+        {
+          "id": "EN-B-014",
+          "language": "english",
+          "score": 20,
+          "text": "Please transfer the agreed amount for the shared dinner after everyone confirms the total."
+        },
+        {
+          "id": "EN-B-017",
+          "language": "english",
+          "score": 20,
+          "text": "Please send me the payment receipt after you complete the registration fee."
+        },
+        {
+          "id": "EN-B-020",
+          "language": "english",
+          "score": 20,
+          "text": "I will call customer support tomorrow to check the status of my refund."
+        },
+        {
+          "id": "HI-B-017",
+          "language": "hindi",
+          "score": 20,
+          "text": "पंजीकरण शुल्क जमा करने के बाद कृपया भुगतान की रसीद भेज दें।"
+        },
+        {
+          "id": "HING-B-008",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Semester fee official university payment portal se pay kar dena."
+        },
+        {
+          "id": "HING-B-009",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Electricity bill kal due hai, official website se payment kar dena."
+        },
+        {
+          "id": "HING-B-014",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Dinner ka total confirm hone ke baad sab apna share transfer kar dena."
+        },
+        {
+          "id": "HING-B-017",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Registration fee pay karne ke baad payment receipt mujhe send kar dena."
+        },
+        {
+          "id": "HING-B-020",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Main kal customer support ko call karke refund ka status check karunga."
+        }
+      ],
+      "false_negatives": [
+        {
+          "id": "HI-S-002",
+          "language": "hindi",
+          "score": 15,
+          "text": "आपका KYC समाप्त हो गया है। तुरंत इस लिंक पर क्लिक करके अपना बैंक विवरण अपडेट करें।"
+        },
+        {
+          "id": "HI-S-004",
+          "language": "hindi",
+          "score": 15,
+          "text": "आपका बिजली कनेक्शन आज काट दिया जाएगा। तुरंत भुगतान करने के लिए इस लिंक का उपयोग करें।"
+        },
+        {
+          "id": "HI-S-015",
+          "language": "hindi",
+          "score": 15,
+          "text": "तकनीकी सहायता से बोल रहा हूँ। आपके कंप्यूटर में वायरस है, यह ऐप तुरंत इंस्टॉल करें।"
+        },
+        {
+          "id": "HING-S-015",
+          "language": "hinglish",
+          "score": 15,
+          "text": "Main technical support se bol raha hoon. Computer mein virus hai, remote access app install karo."
+        }
+      ]
+    },
+    "20": {
+      "threshold": 20,
+      "overall": {
+        "tp": 56,
+        "tn": 47,
+        "fp": 13,
+        "fn": 4,
+        "total": 120,
+        "accuracy": 85.83,
+        "precision": 81.16,
+        "recall": 93.33,
+        "f1": 86.82
+      },
+      "by_language": {
+        "english": {
+          "tp": 20,
+          "tn": 14,
+          "fp": 6,
+          "fn": 0,
+          "total": 40,
+          "accuracy": 85.0,
+          "precision": 76.92,
+          "recall": 100.0,
+          "f1": 86.96
+        },
+        "hindi": {
+          "tp": 17,
+          "tn": 19,
+          "fp": 1,
+          "fn": 3,
+          "total": 40,
+          "accuracy": 90.0,
+          "precision": 94.44,
+          "recall": 85.0,
+          "f1": 89.47
+        },
+        "hinglish": {
+          "tp": 19,
+          "tn": 14,
+          "fp": 6,
+          "fn": 1,
+          "total": 40,
+          "accuracy": 82.5,
+          "precision": 76.0,
+          "recall": 95.0,
+          "f1": 84.44
+        }
+      },
+      "false_positives": [
+        {
+          "id": "EN-B-004",
+          "language": "english",
+          "score": 20,
+          "text": "Your monthly electricity bill is due on the 28th. You can pay it through the official website."
+        },
+        {
+          "id": "HING-B-004",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Monthly electricity bill 28th ko due hai, official app se pay kar dena."
+        },
+        {
+          "id": "EN-B-008",
+          "language": "english",
+          "score": 20,
+          "text": "Please pay the college semester fee through the official university payment portal."
+        },
+        {
+          "id": "EN-B-009",
+          "language": "english",
+          "score": 20,
+          "text": "Your electricity bill is due tomorrow. You can pay it through the official electricity provider website."
+        },
+        {
+          "id": "EN-B-014",
+          "language": "english",
+          "score": 20,
+          "text": "Please transfer the agreed amount for the shared dinner after everyone confirms the total."
+        },
+        {
+          "id": "EN-B-017",
+          "language": "english",
+          "score": 20,
+          "text": "Please send me the payment receipt after you complete the registration fee."
+        },
+        {
+          "id": "EN-B-020",
+          "language": "english",
+          "score": 20,
+          "text": "I will call customer support tomorrow to check the status of my refund."
+        },
+        {
+          "id": "HI-B-017",
+          "language": "hindi",
+          "score": 20,
+          "text": "पंजीकरण शुल्क जमा करने के बाद कृपया भुगतान की रसीद भेज दें।"
+        },
+        {
+          "id": "HING-B-008",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Semester fee official university payment portal se pay kar dena."
+        },
+        {
+          "id": "HING-B-009",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Electricity bill kal due hai, official website se payment kar dena."
+        },
+        {
+          "id": "HING-B-014",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Dinner ka total confirm hone ke baad sab apna share transfer kar dena."
+        },
+        {
+          "id": "HING-B-017",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Registration fee pay karne ke baad payment receipt mujhe send kar dena."
+        },
+        {
+          "id": "HING-B-020",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Main kal customer support ko call karke refund ka status check karunga."
+        }
+      ],
+      "false_negatives": [
+        {
+          "id": "HI-S-002",
+          "language": "hindi",
+          "score": 15,
+          "text": "आपका KYC समाप्त हो गया है। तुरंत इस लिंक पर क्लिक करके अपना बैंक विवरण अपडेट करें।"
+        },
+        {
+          "id": "HI-S-004",
+          "language": "hindi",
+          "score": 15,
+          "text": "आपका बिजली कनेक्शन आज काट दिया जाएगा। तुरंत भुगतान करने के लिए इस लिंक का उपयोग करें।"
+        },
+        {
+          "id": "HI-S-015",
+          "language": "hindi",
+          "score": 15,
+          "text": "तकनीकी सहायता से बोल रहा हूँ। आपके कंप्यूटर में वायरस है, यह ऐप तुरंत इंस्टॉल करें।"
+        },
+        {
+          "id": "HING-S-015",
+          "language": "hinglish",
+          "score": 15,
+          "text": "Main technical support se bol raha hoon. Computer mein virus hai, remote access app install karo."
+        }
+      ]
+    },
+    "22": {
+      "threshold": 22,
+      "overall": {
+        "tp": 54,
+        "tn": 60,
+        "fp": 0,
+        "fn": 6,
+        "total": 120,
+        "accuracy": 95.0,
+        "precision": 100.0,
+        "recall": 90.0,
+        "f1": 94.74
+      },
+      "by_language": {
+        "english": {
+          "tp": 20,
+          "tn": 20,
+          "fp": 0,
+          "fn": 0,
+          "total": 40,
+          "accuracy": 100.0,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "hindi": {
+          "tp": 15,
+          "tn": 20,
+          "fp": 0,
+          "fn": 5,
+          "total": 40,
+          "accuracy": 87.5,
+          "precision": 100.0,
+          "recall": 75.0,
+          "f1": 85.71
+        },
+        "hinglish": {
+          "tp": 19,
+          "tn": 20,
+          "fp": 0,
+          "fn": 1,
+          "total": 40,
+          "accuracy": 97.5,
+          "precision": 100.0,
+          "recall": 95.0,
+          "f1": 97.44
+        }
+      },
+      "false_positives": [],
+      "false_negatives": [
+        {
+          "id": "HI-S-002",
+          "language": "hindi",
+          "score": 15,
+          "text": "आपका KYC समाप्त हो गया है। तुरंत इस लिंक पर क्लिक करके अपना बैंक विवरण अपडेट करें।"
+        },
+        {
+          "id": "HI-S-004",
+          "language": "hindi",
+          "score": 15,
+          "text": "आपका बिजली कनेक्शन आज काट दिया जाएगा। तुरंत भुगतान करने के लिए इस लिंक का उपयोग करें।"
+        },
+        {
+          "id": "HI-S-009",
+          "language": "hindi",
+          "score": 20,
+          "text": "आपका बिजली कनेक्शन आज काट दिया जाएगा। तुरंत बकाया भुगतान करें।"
+        },
+        {
+          "id": "HI-S-015",
+          "language": "hindi",
+          "score": 15,
+          "text": "तकनीकी सहायता से बोल रहा हूँ। आपके कंप्यूटर में वायरस है, यह ऐप तुरंत इंस्टॉल करें।"
+        },
+        {
+          "id": "HI-S-018",
+          "language": "hindi",
+          "score": 20,
+          "text": "आपको सरकारी लाभ मिला है। इसे प्राप्त करने के लिए पंजीकरण शुल्क जमा करें।"
+        },
+        {
+          "id": "HING-S-015",
+          "language": "hinglish",
+          "score": 15,
+          "text": "Main technical support se bol raha hoon. Computer mein virus hai, remote access app install karo."
+        }
+      ]
+    },
+    "25": {
+      "threshold": 25,
+      "overall": {
+        "tp": 54,
+        "tn": 60,
+        "fp": 0,
+        "fn": 6,
+        "total": 120,
+        "accuracy": 95.0,
+        "precision": 100.0,
+        "recall": 90.0,
+        "f1": 94.74
+      },
+      "by_language": {
+        "english": {
+          "tp": 20,
+          "tn": 20,
+          "fp": 0,
+          "fn": 0,
+          "total": 40,
+          "accuracy": 100.0,
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "hindi": {
+          "tp": 15,
+          "tn": 20,
+          "fp": 0,
+          "fn": 5,
+          "total": 40,
+          "accuracy": 87.5,
+          "precision": 100.0,
+          "recall": 75.0,
+          "f1": 85.71
+        },
+        "hinglish": {
+          "tp": 19,
+          "tn": 20,
+          "fp": 0,
+          "fn": 1,
+          "total": 40,
+          "accuracy": 97.5,
+          "precision": 100.0,
+          "recall": 95.0,
+          "f1": 97.44
+        }
+      },
+      "false_positives": [],
+      "false_negatives": [
+        {
+          "id": "HI-S-002",
+          "language": "hindi",
+          "score": 15,
+          "text": "आपका KYC समाप्त हो गया है। तुरंत इस लिंक पर क्लिक करके अपना बैंक विवरण अपडेट करें।"
+        },
+        {
+          "id": "HI-S-004",
+          "language": "hindi",
+          "score": 15,
+          "text": "आपका बिजली कनेक्शन आज काट दिया जाएगा। तुरंत भुगतान करने के लिए इस लिंक का उपयोग करें।"
+        },
+        {
+          "id": "HI-S-009",
+          "language": "hindi",
+          "score": 20,
+          "text": "आपका बिजली कनेक्शन आज काट दिया जाएगा। तुरंत बकाया भुगतान करें।"
+        },
+        {
+          "id": "HI-S-015",
+          "language": "hindi",
+          "score": 15,
+          "text": "तकनीकी सहायता से बोल रहा हूँ। आपके कंप्यूटर में वायरस है, यह ऐप तुरंत इंस्टॉल करें।"
+        },
+        {
+          "id": "HI-S-018",
+          "language": "hindi",
+          "score": 20,
+          "text": "आपको सरकारी लाभ मिला है। इसे प्राप्त करने के लिए पंजीकरण शुल्क जमा करें।"
+        },
+        {
+          "id": "HING-S-015",
+          "language": "hinglish",
+          "score": 15,
+          "text": "Main technical support se bol raha hoon. Computer mein virus hai, remote access app install karo."
+        }
+      ]
+    }
+  },
+  "heldout_validation_results": {
+    "15": {
+      "threshold": 15,
+      "overall": {
+        "tp": 21,
+        "tn": 22,
+        "fp": 2,
+        "fn": 5,
+        "total": 50,
+        "accuracy": 86.0,
+        "precision": 91.3,
+        "recall": 80.77,
+        "f1": 85.71
+      },
+      "by_language": {
+        "english": {
+          "tp": 8,
+          "tn": 7,
+          "fp": 1,
+          "fn": 1,
+          "total": 17,
+          "accuracy": 88.24,
+          "precision": 88.89,
+          "recall": 88.89,
+          "f1": 88.89
+        },
+        "hindi": {
+          "tp": 5,
+          "tn": 8,
+          "fp": 0,
+          "fn": 4,
+          "total": 17,
+          "accuracy": 76.47,
+          "precision": 100.0,
+          "recall": 55.56,
+          "f1": 71.43
+        },
+        "hinglish": {
+          "tp": 8,
+          "tn": 7,
+          "fp": 1,
+          "fn": 0,
+          "total": 16,
+          "accuracy": 93.75,
+          "precision": 88.89,
+          "recall": 100.0,
+          "f1": 94.12
+        }
+      },
+      "false_positives": [
+        {
+          "id": "EN-H-012",
+          "language": "english",
+          "score": 25,
+          "text": "The courier attempted delivery today and will try again tomorrow between 10 AM and 2 PM."
+        },
+        {
+          "id": "HG-H-011",
+          "language": "hinglish",
+          "score": 25,
+          "text": "Courier delivery kal dobara try karega, isliye ghar par available rehna zaroori nahi hai."
+        }
+      ],
+      "false_negatives": [
+        {
+          "id": "EN-H-001",
+          "language": "english",
+          "score": 10,
+          "text": "Your account has been flagged. Verify your identity at https://secure-account-check.example before midnight."
+        },
+        {
+          "id": "HI-H-001",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपके बैंक खाते पर संदिग्ध गतिविधि मिली है। खाता बंद होने से पहले तुरंत इस लिंक पर जानकारी भरें।"
+        },
+        {
+          "id": "HI-H-005",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपके नाम से कानूनी शिकायत दर्ज हुई है। मामला बंद करने के लिए तुरंत इस खाते में पैसे भेजें।"
+        },
+        {
+          "id": "HI-H-008",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपको सरकारी योजना का नकद लाभ मिला है। राशि जारी करने के लिए पहले छोटी सी फीस भरें।"
+        },
+        {
+          "id": "HI-H-009",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपका मोबाइल नंबर बैंक रिकॉर्ड से हट जाएगा। तुरंत सत्यापन करें और अपनी लॉगिन जानकारी साझा करें।"
+        }
+      ]
+    },
+    "18": {
+      "threshold": 18,
+      "overall": {
+        "tp": 20,
+        "tn": 22,
+        "fp": 2,
+        "fn": 6,
+        "total": 50,
+        "accuracy": 84.0,
+        "precision": 90.91,
+        "recall": 76.92,
+        "f1": 83.33
+      },
+      "by_language": {
+        "english": {
+          "tp": 8,
+          "tn": 7,
+          "fp": 1,
+          "fn": 1,
+          "total": 17,
+          "accuracy": 88.24,
+          "precision": 88.89,
+          "recall": 88.89,
+          "f1": 88.89
+        },
+        "hindi": {
+          "tp": 4,
+          "tn": 8,
+          "fp": 0,
+          "fn": 5,
+          "total": 17,
+          "accuracy": 70.59,
+          "precision": 100.0,
+          "recall": 44.44,
+          "f1": 61.54
+        },
+        "hinglish": {
+          "tp": 8,
+          "tn": 7,
+          "fp": 1,
+          "fn": 0,
+          "total": 16,
+          "accuracy": 93.75,
+          "precision": 88.89,
+          "recall": 100.0,
+          "f1": 94.12
+        }
+      },
+      "false_positives": [
+        {
+          "id": "EN-H-012",
+          "language": "english",
+          "score": 25,
+          "text": "The courier attempted delivery today and will try again tomorrow between 10 AM and 2 PM."
+        },
+        {
+          "id": "HG-H-011",
+          "language": "hinglish",
+          "score": 25,
+          "text": "Courier delivery kal dobara try karega, isliye ghar par available rehna zaroori nahi hai."
+        }
+      ],
+      "false_negatives": [
+        {
+          "id": "EN-H-001",
+          "language": "english",
+          "score": 10,
+          "text": "Your account has been flagged. Verify your identity at https://secure-account-check.example before midnight."
+        },
+        {
+          "id": "HI-H-001",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपके बैंक खाते पर संदिग्ध गतिविधि मिली है। खाता बंद होने से पहले तुरंत इस लिंक पर जानकारी भरें।"
+        },
+        {
+          "id": "HI-H-004",
+          "language": "hindi",
+          "score": 15,
+          "text": "आपका बिजली कनेक्शन आज रात काट दिया जाएगा। बिल भुगतान के लिए दिए गए लिंक पर अभी क्लिक करें।"
+        },
+        {
+          "id": "HI-H-005",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपके नाम से कानूनी शिकायत दर्ज हुई है। मामला बंद करने के लिए तुरंत इस खाते में पैसे भेजें।"
+        },
+        {
+          "id": "HI-H-008",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपको सरकारी योजना का नकद लाभ मिला है। राशि जारी करने के लिए पहले छोटी सी फीस भरें।"
+        },
+        {
+          "id": "HI-H-009",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपका मोबाइल नंबर बैंक रिकॉर्ड से हट जाएगा। तुरंत सत्यापन करें और अपनी लॉगिन जानकारी साझा करें।"
+        }
+      ]
+    },
+    "20": {
+      "threshold": 20,
+      "overall": {
+        "tp": 20,
+        "tn": 22,
+        "fp": 2,
+        "fn": 6,
+        "total": 50,
+        "accuracy": 84.0,
+        "precision": 90.91,
+        "recall": 76.92,
+        "f1": 83.33
+      },
+      "by_language": {
+        "english": {
+          "tp": 8,
+          "tn": 7,
+          "fp": 1,
+          "fn": 1,
+          "total": 17,
+          "accuracy": 88.24,
+          "precision": 88.89,
+          "recall": 88.89,
+          "f1": 88.89
+        },
+        "hindi": {
+          "tp": 4,
+          "tn": 8,
+          "fp": 0,
+          "fn": 5,
+          "total": 17,
+          "accuracy": 70.59,
+          "precision": 100.0,
+          "recall": 44.44,
+          "f1": 61.54
+        },
+        "hinglish": {
+          "tp": 8,
+          "tn": 7,
+          "fp": 1,
+          "fn": 0,
+          "total": 16,
+          "accuracy": 93.75,
+          "precision": 88.89,
+          "recall": 100.0,
+          "f1": 94.12
+        }
+      },
+      "false_positives": [
+        {
+          "id": "EN-H-012",
+          "language": "english",
+          "score": 25,
+          "text": "The courier attempted delivery today and will try again tomorrow between 10 AM and 2 PM."
+        },
+        {
+          "id": "HG-H-011",
+          "language": "hinglish",
+          "score": 25,
+          "text": "Courier delivery kal dobara try karega, isliye ghar par available rehna zaroori nahi hai."
+        }
+      ],
+      "false_negatives": [
+        {
+          "id": "EN-H-001",
+          "language": "english",
+          "score": 10,
+          "text": "Your account has been flagged. Verify your identity at https://secure-account-check.example before midnight."
+        },
+        {
+          "id": "HI-H-001",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपके बैंक खाते पर संदिग्ध गतिविधि मिली है। खाता बंद होने से पहले तुरंत इस लिंक पर जानकारी भरें।"
+        },
+        {
+          "id": "HI-H-004",
+          "language": "hindi",
+          "score": 15,
+          "text": "आपका बिजली कनेक्शन आज रात काट दिया जाएगा। बिल भुगतान के लिए दिए गए लिंक पर अभी क्लिक करें।"
+        },
+        {
+          "id": "HI-H-005",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपके नाम से कानूनी शिकायत दर्ज हुई है। मामला बंद करने के लिए तुरंत इस खाते में पैसे भेजें।"
+        },
+        {
+          "id": "HI-H-008",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपको सरकारी योजना का नकद लाभ मिला है। राशि जारी करने के लिए पहले छोटी सी फीस भरें।"
+        },
+        {
+          "id": "HI-H-009",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपका मोबाइल नंबर बैंक रिकॉर्ड से हट जाएगा। तुरंत सत्यापन करें और अपनी लॉगिन जानकारी साझा करें।"
+        }
+      ]
+    },
+    "22": {
+      "threshold": 22,
+      "overall": {
+        "tp": 15,
+        "tn": 22,
+        "fp": 2,
+        "fn": 11,
+        "total": 50,
+        "accuracy": 74.0,
+        "precision": 88.24,
+        "recall": 57.69,
+        "f1": 69.77
+      },
+      "by_language": {
+        "english": {
+          "tp": 6,
+          "tn": 7,
+          "fp": 1,
+          "fn": 3,
+          "total": 17,
+          "accuracy": 76.47,
+          "precision": 85.71,
+          "recall": 66.67,
+          "f1": 75.0
+        },
+        "hindi": {
+          "tp": 3,
+          "tn": 8,
+          "fp": 0,
+          "fn": 6,
+          "total": 17,
+          "accuracy": 64.71,
+          "precision": 100.0,
+          "recall": 33.33,
+          "f1": 50.0
+        },
+        "hinglish": {
+          "tp": 6,
+          "tn": 7,
+          "fp": 1,
+          "fn": 2,
+          "total": 16,
+          "accuracy": 81.25,
+          "precision": 85.71,
+          "recall": 75.0,
+          "f1": 80.0
+        }
+      },
+      "false_positives": [
+        {
+          "id": "EN-H-012",
+          "language": "english",
+          "score": 25,
+          "text": "The courier attempted delivery today and will try again tomorrow between 10 AM and 2 PM."
+        },
+        {
+          "id": "HG-H-011",
+          "language": "hinglish",
+          "score": 25,
+          "text": "Courier delivery kal dobara try karega, isliye ghar par available rehna zaroori nahi hai."
+        }
+      ],
+      "false_negatives": [
+        {
+          "id": "EN-H-001",
+          "language": "english",
+          "score": 10,
+          "text": "Your account has been flagged. Verify your identity at https://secure-account-check.example before midnight."
+        },
+        {
+          "id": "EN-H-006",
+          "language": "english",
+          "score": 20,
+          "text": "You have won a cash bonus. Transfer the refundable verification amount to receive your winnings."
+        },
+        {
+          "id": "EN-H-008",
+          "language": "english",
+          "score": 20,
+          "text": "A legal case has been opened against your account. Pay the settlement now through this private payment link."
+        },
+        {
+          "id": "HI-H-001",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपके बैंक खाते पर संदिग्ध गतिविधि मिली है। खाता बंद होने से पहले तुरंत इस लिंक पर जानकारी भरें।"
+        },
+        {
+          "id": "HI-H-004",
+          "language": "hindi",
+          "score": 15,
+          "text": "आपका बिजली कनेक्शन आज रात काट दिया जाएगा। बिल भुगतान के लिए दिए गए लिंक पर अभी क्लिक करें।"
+        },
+        {
+          "id": "HI-H-005",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपके नाम से कानूनी शिकायत दर्ज हुई है। मामला बंद करने के लिए तुरंत इस खाते में पैसे भेजें।"
+        },
+        {
+          "id": "HI-H-006",
+          "language": "hindi",
+          "score": 20,
+          "text": "कूरियर रोक दिया गया है। डिलीवरी जारी रखने के लिए अभी कस्टम शुल्क जमा करें।"
+        },
+        {
+          "id": "HI-H-008",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपको सरकारी योजना का नकद लाभ मिला है। राशि जारी करने के लिए पहले छोटी सी फीस भरें।"
+        },
+        {
+          "id": "HI-H-009",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपका मोबाइल नंबर बैंक रिकॉर्ड से हट जाएगा। तुरंत सत्यापन करें और अपनी लॉगिन जानकारी साझा करें।"
+        },
+        {
+          "id": "HG-H-006",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Aaj last day hai. Electricity connection disconnect hone se pehle payment link par click karo."
+        },
+        {
+          "id": "HG-H-008",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Aapke naam se complaint register hui hai. Case close karne ke liye private account me payment karo."
+        }
+      ]
+    },
+    "25": {
+      "threshold": 25,
+      "overall": {
+        "tp": 15,
+        "tn": 22,
+        "fp": 2,
+        "fn": 11,
+        "total": 50,
+        "accuracy": 74.0,
+        "precision": 88.24,
+        "recall": 57.69,
+        "f1": 69.77
+      },
+      "by_language": {
+        "english": {
+          "tp": 6,
+          "tn": 7,
+          "fp": 1,
+          "fn": 3,
+          "total": 17,
+          "accuracy": 76.47,
+          "precision": 85.71,
+          "recall": 66.67,
+          "f1": 75.0
+        },
+        "hindi": {
+          "tp": 3,
+          "tn": 8,
+          "fp": 0,
+          "fn": 6,
+          "total": 17,
+          "accuracy": 64.71,
+          "precision": 100.0,
+          "recall": 33.33,
+          "f1": 50.0
+        },
+        "hinglish": {
+          "tp": 6,
+          "tn": 7,
+          "fp": 1,
+          "fn": 2,
+          "total": 16,
+          "accuracy": 81.25,
+          "precision": 85.71,
+          "recall": 75.0,
+          "f1": 80.0
+        }
+      },
+      "false_positives": [
+        {
+          "id": "EN-H-012",
+          "language": "english",
+          "score": 25,
+          "text": "The courier attempted delivery today and will try again tomorrow between 10 AM and 2 PM."
+        },
+        {
+          "id": "HG-H-011",
+          "language": "hinglish",
+          "score": 25,
+          "text": "Courier delivery kal dobara try karega, isliye ghar par available rehna zaroori nahi hai."
+        }
+      ],
+      "false_negatives": [
+        {
+          "id": "EN-H-001",
+          "language": "english",
+          "score": 10,
+          "text": "Your account has been flagged. Verify your identity at https://secure-account-check.example before midnight."
+        },
+        {
+          "id": "EN-H-006",
+          "language": "english",
+          "score": 20,
+          "text": "You have won a cash bonus. Transfer the refundable verification amount to receive your winnings."
+        },
+        {
+          "id": "EN-H-008",
+          "language": "english",
+          "score": 20,
+          "text": "A legal case has been opened against your account. Pay the settlement now through this private payment link."
+        },
+        {
+          "id": "HI-H-001",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपके बैंक खाते पर संदिग्ध गतिविधि मिली है। खाता बंद होने से पहले तुरंत इस लिंक पर जानकारी भरें।"
+        },
+        {
+          "id": "HI-H-004",
+          "language": "hindi",
+          "score": 15,
+          "text": "आपका बिजली कनेक्शन आज रात काट दिया जाएगा। बिल भुगतान के लिए दिए गए लिंक पर अभी क्लिक करें।"
+        },
+        {
+          "id": "HI-H-005",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपके नाम से कानूनी शिकायत दर्ज हुई है। मामला बंद करने के लिए तुरंत इस खाते में पैसे भेजें।"
+        },
+        {
+          "id": "HI-H-006",
+          "language": "hindi",
+          "score": 20,
+          "text": "कूरियर रोक दिया गया है। डिलीवरी जारी रखने के लिए अभी कस्टम शुल्क जमा करें।"
+        },
+        {
+          "id": "HI-H-008",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपको सरकारी योजना का नकद लाभ मिला है। राशि जारी करने के लिए पहले छोटी सी फीस भरें।"
+        },
+        {
+          "id": "HI-H-009",
+          "language": "hindi",
+          "score": 0,
+          "text": "आपका मोबाइल नंबर बैंक रिकॉर्ड से हट जाएगा। तुरंत सत्यापन करें और अपनी लॉगिन जानकारी साझा करें।"
+        },
+        {
+          "id": "HG-H-006",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Aaj last day hai. Electricity connection disconnect hone se pehle payment link par click karo."
+        },
+        {
+          "id": "HG-H-008",
+          "language": "hinglish",
+          "score": 20,
+          "text": "Aapke naam se complaint register hui hai. Case close karne ke liye private account me payment karo."
+        }
+      ]
+    }
+  },
+  "key_findings": {
+    "best_dev_threshold": 25,
+    "best_heldout_threshold_tradeoff": 25,
+    "false_positive_risk_at_threshold_20": "Introduces 13 False Positives on development set, reducing precision to 81.16%",
+    "false_positive_risk_at_threshold_15": "Introduces 16 False Positives on development set, reducing precision to 78.95%",
+    "root_cause_of_false_negatives": "Multilingual regex gaps in Hindi/Hinglish combined with AI fallback unavailable state (contributing 0 points).",
+    "action_item": "Keep threshold at 25. Improve Hindi/Hinglish regex and AI reliability in future detection engine updates."
+  }
+}

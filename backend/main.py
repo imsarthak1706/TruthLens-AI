@@ -335,6 +335,16 @@ class ScanRequest(BaseModel):
     platform: str = "web"
 
 
+class IncidentCreateRequest(BaseModel):
+    scan_id: str
+    platform: str = "Web"
+    evidence_json: dict | str | None = None
+
+
+class IncidentStatusUpdateRequest(BaseModel):
+    status: str
+
+
 MAX_VIDEO_BYTES = 50 * 1024 * 1024
 MAX_VIDEO_DURATION_SECONDS = 120
 MAX_VIDEO_WIDTH = 1920
@@ -608,6 +618,171 @@ async def get_incidents(limit: int = 10, offset: int = 0):
     except Exception as e:
         print(f"[Telemetry] get_incidents failed: {e}")
         return {"items": [], "total": 0, "limit": limit, "offset": offset}
+
+
+@app.post("/api/incidents")
+async def create_incident(req: IncidentCreateRequest):
+    scan_id = req.scan_id.strip() if req.scan_id else ""
+    if not scan_id:
+        raise HTTPException(status_code=400, detail="scan_id is required")
+
+    evidence_dict: dict = {}
+    if isinstance(req.evidence_json, dict):
+        evidence_dict = dict(req.evidence_json)
+    elif isinstance(req.evidence_json, str):
+        try:
+            parsed = json.loads(req.evidence_json)
+            if isinstance(parsed, dict):
+                evidence_dict = parsed
+            else:
+                evidence_dict = {"original_text": req.evidence_json}
+        except json.JSONDecodeError:
+            evidence_dict = {"original_text": req.evidence_json}
+
+    # If evidence is minimal, attempt to enrich from cache or scans table
+    if not evidence_dict.get("risk_score") and not evidence_dict.get("threat_type"):
+        cached = _get_scan_result(scan_id)
+        if not cached:
+            cached = await _get_scan_from_supabase(scan_id)
+        if cached and isinstance(cached, dict):
+            for k, v in cached.items():
+                if k not in evidence_dict or not evidence_dict[k]:
+                    evidence_dict[k] = v
+
+    # Platform & status defaults
+    evidence_dict["platform"] = req.platform or evidence_dict.get("platform") or "Web"
+    evidence_dict["status"] = str(evidence_dict.get("status") or "investigating").lower()
+
+    # Derive severity if missing or validate existing
+    existing_sev = evidence_dict.get("severity")
+    if existing_sev and str(existing_sev).lower() in ("critical", "high", "suspicious", "safe"):
+        severity = str(existing_sev).lower()
+    else:
+        risk_score = evidence_dict.get("risk_score")
+        verdict = evidence_dict.get("verdict")
+        severity = _derive_severity(risk_score, verdict)
+    evidence_dict["severity"] = severity.upper()
+    evidence_dict["scan_id"] = scan_id
+
+    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
+        raise HTTPException(status_code=503, detail="Supabase database not configured")
+
+    url = f"{SUPABASE_URL}/rest/v1/incident_reports"
+    headers = {
+        **_get_supabase_headers(),
+        "Content-Type": "application/json",
+        "Prefer": "return=representation",
+    }
+    payload = {
+        "scan_id": scan_id,
+        "chat_id": None,
+        "evidence_json": json.dumps(evidence_dict),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=8.0) as client:
+            resp = await client.post(url, json=payload, headers=headers)
+            if resp.status_code not in (200, 201):
+                print(f"[Supabase] Warning: Failed to create incident: {resp.status_code} {resp.text}")
+                raise HTTPException(status_code=502, detail="Failed to persist incident to database")
+
+            created_rows = resp.json()
+            if not created_rows or not isinstance(created_rows, list):
+                raise HTTPException(status_code=502, detail="Database did not return created incident")
+
+            created_row = created_rows[0]
+            return _parse_incident_row(created_row)
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[Supabase] Error creating incident: {e}")
+        raise HTTPException(status_code=502, detail="Database connection error")
+
+
+ALLOWED_INCIDENT_STATUSES = {"investigating", "open", "resolved"}
+
+
+@app.patch("/api/incidents/{incident_id}")
+async def update_incident_status(incident_id: str, req: IncidentStatusUpdateRequest):
+    incident_id = incident_id.strip()
+    if not incident_id:
+        raise HTTPException(status_code=400, detail="incident_id is required")
+
+    new_status = req.status.strip().lower()
+    if new_status not in ALLOWED_INCIDENT_STATUSES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid status '{req.status}'. Allowed statuses: {', '.join(sorted(ALLOWED_INCIDENT_STATUSES))}"
+        )
+
+    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
+        raise HTTPException(status_code=503, detail="Supabase database not configured")
+
+    numeric_id = None
+    if incident_id.upper().startswith("INC-") and incident_id[4:].isdigit():
+        numeric_id = int(incident_id[4:])
+    elif incident_id.isdigit():
+        numeric_id = int(incident_id)
+
+    headers = _get_supabase_headers()
+
+    if numeric_id is not None:
+        fetch_url = f"{SUPABASE_URL}/rest/v1/incident_reports?id=eq.{numeric_id}&select=id,scan_id,evidence_json,created_at"
+    else:
+        fetch_url = f"{SUPABASE_URL}/rest/v1/incident_reports?scan_id=eq.{incident_id}&select=id,scan_id,evidence_json,created_at&limit=1"
+
+    try:
+        async with httpx.AsyncClient(timeout=8.0) as client:
+            fetch_resp = await client.get(fetch_url, headers=headers)
+            if fetch_resp.status_code != 200:
+                raise HTTPException(status_code=502, detail="Failed to fetch incident from database")
+
+            rows = fetch_resp.json()
+            if not rows or not isinstance(rows, list):
+                raise HTTPException(status_code=404, detail=f"Incident '{incident_id}' not found")
+
+            target_row = rows[0]
+            raw_evidence = target_row.get("evidence_json") or {}
+            if isinstance(raw_evidence, str):
+                try:
+                    evidence_dict = json.loads(raw_evidence)
+                except json.JSONDecodeError:
+                    evidence_dict = {"original_text": raw_evidence}
+            elif isinstance(raw_evidence, dict):
+                evidence_dict = dict(raw_evidence)
+            else:
+                evidence_dict = {}
+
+            # Preserve all existing forensic evidence; only update/add status
+            evidence_dict["status"] = new_status
+
+            patch_url = f"{SUPABASE_URL}/rest/v1/incident_reports?id=eq.{target_row['id']}"
+            patch_headers = {
+                **headers,
+                "Content-Type": "application/json",
+                "Prefer": "return=representation",
+            }
+            patch_payload = {
+                "evidence_json": json.dumps(evidence_dict)
+            }
+
+            patch_resp = await client.patch(patch_url, json=patch_payload, headers=patch_headers)
+            if patch_resp.status_code not in (200, 204):
+                print(f"[Supabase] Warning: Failed to update incident status: {patch_resp.status_code} {patch_resp.text}")
+                raise HTTPException(status_code=502, detail="Failed to persist incident status in database")
+
+            updated_rows = patch_resp.json() if patch_resp.status_code == 200 else []
+            if updated_rows and isinstance(updated_rows, list):
+                return _parse_incident_row(updated_rows[0])
+
+            target_row["evidence_json"] = json.dumps(evidence_dict)
+            return _parse_incident_row(target_row)
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[Supabase] Error updating incident status: {e}")
+        raise HTTPException(status_code=502, detail="Database connection error")
 
 
 @app.get("/api/community/feed")

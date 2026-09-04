@@ -1,0 +1,51 @@
+id,language,label,text
+EN-H-001,english,scam,Your account has been flagged. Verify your identity at https://secure-account-check.example before midnight.
+EN-H-002,english,scam,"Congratulations, you were selected for a reward. Pay a small processing fee today to release your prize."
+EN-H-003,english,scam,Your parcel is waiting at the depot. Pay the customs charge using the payment link below to avoid return.
+EN-H-004,english,scam,We detected unusual activity on your card. Send your OTP to the support agent to secure the account.
+EN-H-005,english,scam,Final warning: your KYC will be suspended today unless you confirm your banking details immediately.
+EN-H-006,english,scam,You have won a cash bonus. Transfer the refundable verification amount to receive your winnings.
+EN-H-007,english,scam,Your salary account needs urgent verification. Reply with your password and OTP to prevent access restrictions.
+EN-H-008,english,scam,A legal case has been opened against your account. Pay the settlement now through this private payment link.
+EN-H-009,english,scam,Your electricity service will be disconnected tonight. Complete the payment immediately using the attached link.
+EN-H-010,english,benign,The bank branch will be closed on Saturday for maintenance. Normal services resume Monday morning.
+EN-H-011,english,benign,Your monthly account statement is now available in the mobile banking app.
+EN-H-012,english,benign,The courier attempted delivery today and will try again tomorrow between 10 AM and 2 PM.
+EN-H-013,english,benign,Our team meeting has been moved to 3 PM. Please use the usual calendar invitation.
+EN-H-014,english,benign,The university has published the timetable for the next semester on the student portal.
+EN-H-015,english,benign,Please remember to bring your original ID card to tomorrow's appointment.
+EN-H-016,english,benign,The electricity bill for August is available in your customer portal.
+EN-H-017,english,benign,Your package has been delivered to the reception desk. Please collect it when convenient.
+HI-H-001,hindi,scam,आपके बैंक खाते पर संदिग्ध गतिविधि मिली है। खाता बंद होने से पहले तुरंत इस लिंक पर जानकारी भरें।
+HI-H-002,hindi,scam,आपने इनाम जीता है। पुरस्कार पाने के लिए आज ही प्रोसेसिंग फीस जमा करें।
+HI-H-003,hindi,scam,"आपकी KYC आज समाप्त हो रही है। तुरंत अपना पैन, पासवर्ड और OTP भेजकर सत्यापन पूरा करें।"
+HI-H-004,hindi,scam,आपका बिजली कनेक्शन आज रात काट दिया जाएगा। बिल भुगतान के लिए दिए गए लिंक पर अभी क्लिक करें।
+HI-H-005,hindi,scam,आपके नाम से कानूनी शिकायत दर्ज हुई है। मामला बंद करने के लिए तुरंत इस खाते में पैसे भेजें।
+HI-H-006,hindi,scam,कूरियर रोक दिया गया है। डिलीवरी जारी रखने के लिए अभी कस्टम शुल्क जमा करें।
+HI-H-007,hindi,scam,बैंक अधिकारी से बात करने के लिए अपना OTP बताएं ताकि आपका कार्ड तुरंत सुरक्षित किया जा सके।
+HI-H-008,hindi,scam,आपको सरकारी योजना का नकद लाभ मिला है। राशि जारी करने के लिए पहले छोटी सी फीस भरें।
+HI-H-009,hindi,scam,आपका मोबाइल नंबर बैंक रिकॉर्ड से हट जाएगा। तुरंत सत्यापन करें और अपनी लॉगिन जानकारी साझा करें।
+HI-H-010,hindi,benign,बैंक की शाखा रविवार को बंद रहेगी और सोमवार को सामान्य समय पर खुलेगी।
+HI-H-011,hindi,benign,आपका मासिक बैंक स्टेटमेंट मोबाइल ऐप में उपलब्ध है।
+HI-H-012,hindi,benign,आपका पार्सल आज डिलीवर नहीं हो सका। डिलीवरी टीम कल फिर प्रयास करेगी।
+HI-H-013,hindi,benign,कल की कक्षा सुबह दस बजे से शुरू होगी। कृपया समय पर कॉलेज पहुंचें।
+HI-H-014,hindi,benign,अगले सप्ताह की परीक्षा का टाइमटेबल कॉलेज पोर्टल पर अपलोड कर दिया गया है।
+HI-H-015,hindi,benign,बिजली का अगस्त महीने का बिल ग्राहक पोर्टल पर उपलब्ध है।
+HI-H-016,hindi,benign,कृपया मीटिंग में अपना पहचान पत्र साथ लेकर आएं।
+HI-H-017,hindi,benign,आपका आवेदन सफलतापूर्वक जमा हो गया है। आगे की जानकारी ईमेल से भेजी जाएगी।
+HG-H-001,hinglish,scam,"URGENT! Aapka bank account block hone wala hai, verify karne ke liye abhi link open karo."
+HG-H-002,hinglish,scam,"Congrats! Aapne cash prize jeeta hai, release karne ke liye processing fee pay karo."
+HG-H-003,hinglish,scam,Aapki KYC expire ho gayi hai. Account active rakhne ke liye OTP aur banking details bhejo.
+HG-H-004,hinglish,scam,"Courier hold par hai, delivery continue karne ke liye customs charge abhi pay karo."
+HG-H-005,hinglish,scam,Aapke card me suspicious transaction mila hai. Security ke liye support agent ko OTP batao.
+HG-H-006,hinglish,scam,Aaj last day hai. Electricity connection disconnect hone se pehle payment link par click karo.
+HG-H-007,hinglish,scam,"Government benefit approve ho gaya hai, amount receive karne ke liye verification fee transfer karo."
+HG-H-008,hinglish,scam,Aapke naam se complaint register hui hai. Case close karne ke liye private account me payment karo.
+HG-H-009,hinglish,benign,"Bank branch Sunday ko closed rahegi, Monday se normal working hours rahenge."
+HG-H-010,hinglish,benign,"Aapka monthly statement app me available hai, jab convenient ho tab check kar lena."
+HG-H-011,hinglish,benign,"Courier delivery kal dobara try karega, isliye ghar par available rehna zaroori nahi hai."
+HG-H-012,hinglish,benign,"Team meeting ko 3 PM shift kar diya gaya hai, calendar invite same rahega."
+HG-H-013,hinglish,benign,College portal par next semester ka timetable upload ho gaya hai.
+HG-H-014,hinglish,benign,August electricity bill customer portal par generate ho gaya hai.
+HG-H-015,hinglish,benign,Kal appointment ke liye original ID card saath le aana.
+HG-H-016,hinglish,benign,"Aapka application successfully submit ho gaya hai, next update email par milega."

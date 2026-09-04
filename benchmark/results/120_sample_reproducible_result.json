@@ -1,0 +1,1332 @@
+{
+  "metadata": {
+    "timestamp": "2026-09-02T18:55:58.877766+00:00",
+    "dataset": "/Users/sarthak/TruthLensAI/benchmark/text_benchmark.csv",
+    "total_samples": 120,
+    "method": "Direct In-Process (main.process_text)",
+    "duration_seconds": 136.64
+  },
+  "overall": {
+    "total_samples": 120,
+    "total_scam": 60,
+    "total_benign": 60,
+    "prediction_distribution": {
+      "scam": 54,
+      "benign": 66
+    },
+    "tp": 54,
+    "tn": 60,
+    "fp": 0,
+    "fn": 6,
+    "total": 120,
+    "accuracy": 95.0,
+    "precision": 100.0,
+    "recall": 90.0,
+    "f1": 94.74
+  },
+  "by_language": {
+    "english": {
+      "tp": 20,
+      "tn": 20,
+      "fp": 0,
+      "fn": 0,
+      "total": 40,
+      "accuracy": 100.0,
+      "precision": 100.0,
+      "recall": 100.0,
+      "f1": 100.0
+    },
+    "hindi": {
+      "tp": 15,
+      "tn": 20,
+      "fp": 0,
+      "fn": 5,
+      "total": 40,
+      "accuracy": 87.5,
+      "precision": 100.0,
+      "recall": 75.0,
+      "f1": 85.71
+    },
+    "hinglish": {
+      "tp": 19,
+      "tn": 20,
+      "fp": 0,
+      "fn": 1,
+      "total": 40,
+      "accuracy": 97.5,
+      "precision": 100.0,
+      "recall": 95.0,
+      "f1": 97.44
+    }
+  },
+  "misclassifications": [
+    {
+      "id": "HI-S-002",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "benign",
+      "risk_score": 15,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": false,
+      "text": "आपका KYC समाप्त हो गया है। तुरंत इस लिंक पर क्लिक करके अपना बैंक विवरण अपडेट करें।"
+    },
+    {
+      "id": "HI-S-004",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "benign",
+      "risk_score": 15,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": false,
+      "text": "आपका बिजली कनेक्शन आज काट दिया जाएगा। तुरंत भुगतान करने के लिए इस लिंक का उपयोग करें।"
+    },
+    {
+      "id": "HI-S-009",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "benign",
+      "risk_score": 20,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": false,
+      "text": "आपका बिजली कनेक्शन आज काट दिया जाएगा। तुरंत बकाया भुगतान करें।"
+    },
+    {
+      "id": "HI-S-015",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "benign",
+      "risk_score": 15,
+      "severity": "SAFE",
+      "threat_type": "Tech Support Scam",
+      "is_correct": false,
+      "text": "तकनीकी सहायता से बोल रहा हूँ। आपके कंप्यूटर में वायरस है, यह ऐप तुरंत इंस्टॉल करें।"
+    },
+    {
+      "id": "HI-S-018",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "benign",
+      "risk_score": 20,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": false,
+      "text": "आपको सरकारी लाभ मिला है। इसे प्राप्त करने के लिए पंजीकरण शुल्क जमा करें।"
+    },
+    {
+      "id": "HING-S-015",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "benign",
+      "risk_score": 15,
+      "severity": "SAFE",
+      "threat_type": "Tech Support Scam",
+      "is_correct": false,
+      "text": "Main technical support se bol raha hoon. Computer mein virus hai, remote access app install karo."
+    }
+  ],
+  "samples": [
+    {
+      "id": "EN-S-001",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 100,
+      "severity": "CRITICAL",
+      "threat_type": "Possible Impersonation Scam",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-002",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 100,
+      "severity": "CRITICAL",
+      "threat_type": "Credential Phishing",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-003",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 75,
+      "severity": "HIGH RISK",
+      "threat_type": "Payment Scam",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-004",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 50,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Payment Scam",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-005",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 55,
+      "severity": "HIGH RISK",
+      "threat_type": "Possible Impersonation Scam",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-001",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-002",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-003",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-004",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-005",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-001",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 65,
+      "severity": "HIGH RISK",
+      "threat_type": "Social Engineering",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-002",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "benign",
+      "risk_score": 15,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": false
+    },
+    {
+      "id": "HI-S-003",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 35,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Prize / Reward Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-004",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "benign",
+      "risk_score": 15,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": false
+    },
+    {
+      "id": "HI-S-005",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 25,
+      "severity": "SUSPICIOUS",
+      "threat_type": "OTP / Verification Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-001",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-002",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-003",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-004",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-005",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-001",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 70,
+      "severity": "HIGH RISK",
+      "threat_type": "Bank / Account Impersonation",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-002",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 70,
+      "severity": "HIGH RISK",
+      "threat_type": "Bank / Account Impersonation",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-003",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 35,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Prize / Reward Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-004",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 55,
+      "severity": "HIGH RISK",
+      "threat_type": "Financial Social Engineering",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-005",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 35,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Bank / Account Impersonation",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-001",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-002",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-003",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-004",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-005",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-006",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 55,
+      "severity": "HIGH RISK",
+      "threat_type": "Bank / Account Impersonation",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-007",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 40,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Threat / Account Scam",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-008",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 45,
+      "severity": "SUSPICIOUS",
+      "threat_type": "KYC / Account Scam",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-009",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 65,
+      "severity": "HIGH RISK",
+      "threat_type": "Credential Phishing",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-010",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 30,
+      "severity": "SUSPICIOUS",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-011",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 45,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Financial Social Engineering",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-012",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 35,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Prize / Reward Scam",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-013",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 35,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Financial Social Engineering",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-014",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 50,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Financial Social Engineering",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-015",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 45,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Threat / Account Scam",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-016",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 30,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Tech Support Scam",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-017",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 45,
+      "severity": "SUSPICIOUS",
+      "threat_type": "KYC / Account Scam",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-018",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 80,
+      "severity": "CRITICAL",
+      "threat_type": "Financial Social Engineering",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-019",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 55,
+      "severity": "HIGH RISK",
+      "threat_type": "Financial Social Engineering",
+      "is_correct": true
+    },
+    {
+      "id": "EN-S-020",
+      "language": "english",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 25,
+      "severity": "SUSPICIOUS",
+      "threat_type": "OTP / Verification Scam",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-006",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-007",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 10,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-008",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 20,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-009",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-010",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 10,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-011",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-012",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-013",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 10,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-014",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 20,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-015",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-016",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-017",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 20,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-018",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-019",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 15,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "EN-B-020",
+      "language": "english",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 20,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-006",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 25,
+      "severity": "SUSPICIOUS",
+      "threat_type": "OTP / Verification Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-007",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 30,
+      "severity": "SUSPICIOUS",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-008",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 35,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Prize / Reward Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-009",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "benign",
+      "risk_score": 20,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": false
+    },
+    {
+      "id": "HI-S-010",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 35,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Financial Social Engineering",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-011",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 35,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Prize / Reward Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-012",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 40,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Threat / Account Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-013",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 35,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Investment Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-014",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 25,
+      "severity": "SUSPICIOUS",
+      "threat_type": "OTP / Verification Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-015",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "benign",
+      "risk_score": 15,
+      "severity": "SAFE",
+      "threat_type": "Tech Support Scam",
+      "is_correct": false
+    },
+    {
+      "id": "HI-S-016",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 35,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Threat / Account Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-017",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 25,
+      "severity": "SUSPICIOUS",
+      "threat_type": "OTP / Verification Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-018",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "benign",
+      "risk_score": 20,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": false
+    },
+    {
+      "id": "HI-S-019",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 40,
+      "severity": "SUSPICIOUS",
+      "threat_type": "OTP / Verification Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HI-S-020",
+      "language": "hindi",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 60,
+      "severity": "HIGH RISK",
+      "threat_type": "Prize / Reward Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-006",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-007",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-008",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-009",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-010",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-011",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-012",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-013",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-014",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-015",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-016",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-017",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 20,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-018",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-019",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 15,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HI-B-020",
+      "language": "hindi",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-006",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 55,
+      "severity": "HIGH RISK",
+      "threat_type": "Bank / Account Impersonation",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-007",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 50,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Identity / KYC Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-008",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 35,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Prize / Reward Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-009",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 35,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Financial Social Engineering",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-010",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 45,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Financial Social Engineering",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-011",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 35,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Prize / Reward Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-012",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 50,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Threat / Account Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-013",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 50,
+      "severity": "SUSPICIOUS",
+      "threat_type": "Financial Social Engineering",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-014",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 45,
+      "severity": "SUSPICIOUS",
+      "threat_type": "OTP / Verification Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-015",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "benign",
+      "risk_score": 15,
+      "severity": "SAFE",
+      "threat_type": "Tech Support Scam",
+      "is_correct": false
+    },
+    {
+      "id": "HING-S-016",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 45,
+      "severity": "SUSPICIOUS",
+      "threat_type": "KYC / Account Scam",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-017",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 55,
+      "severity": "HIGH RISK",
+      "threat_type": "Bank / Account Impersonation",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-018",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 30,
+      "severity": "SUSPICIOUS",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-019",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 70,
+      "severity": "HIGH RISK",
+      "threat_type": "Bank / Account Impersonation",
+      "is_correct": true
+    },
+    {
+      "id": "HING-S-020",
+      "language": "hinglish",
+      "expected_label": "scam",
+      "predicted_label": "scam",
+      "risk_score": 80,
+      "severity": "CRITICAL",
+      "threat_type": "Financial Social Engineering",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-006",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-007",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 10,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-008",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 20,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-009",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 20,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-010",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 10,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-011",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-012",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-013",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 10,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-014",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 20,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-015",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-016",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-017",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 20,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-018",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 0,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-019",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 15,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    },
+    {
+      "id": "HING-B-020",
+      "language": "hinglish",
+      "expected_label": "benign",
+      "predicted_label": "benign",
+      "risk_score": 20,
+      "severity": "SAFE",
+      "threat_type": "No Strong Threat Detected",
+      "is_correct": true
+    }
+  ]
+}

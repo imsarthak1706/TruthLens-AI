@@ -1,0 +1,67 @@
+================================================================================
+TruthLensAI 120-Sample Text Benchmark Evaluation Report
+================================================================================
+Evaluation Timestamp: 2026-09-02T18:55:58.877175+00:00
+Method Used:          Direct In-Process (main.process_text)
+Dataset:              /Users/sarthak/TruthLensAI/benchmark/text_benchmark.csv
+Evaluation Duration:  136.64s
+
+OVERALL
+Samples:                 120
+Ground Truth:            60 Scam, 60 Benign
+Prediction Distribution: 54 Scam, 66 Benign
+TP:                      54
+TN:                      60
+FP:                      0
+FN:                      6
+Accuracy:                95.00%
+Precision:               100.00%
+Recall:                  90.00%
+F1:                      94.74%
+
+ENGLISH
+Samples:    40 (20 Scam, 20 Benign)
+TP:         20
+TN:         20
+FP:         0
+FN:         0
+Accuracy:   100.00%
+Precision:  100.00%
+Recall:     100.00%
+F1:         100.00%
+
+HINDI
+Samples:    40 (20 Scam, 20 Benign)
+TP:         15
+TN:         20
+FP:         0
+FN:         5
+Accuracy:   87.50%
+Precision:  100.00%
+Recall:     75.00%
+F1:         85.71%
+
+HINGLISH
+Samples:    40 (20 Scam, 20 Benign)
+TP:         19
+TN:         20
+FP:         0
+FN:         1
+Accuracy:   97.50%
+Precision:  100.00%
+Recall:     95.00%
+F1:         97.44%
+
+MISCLASSIFICATIONS (6 total)
+- [HI-S-002] (hindi): expected SCAM but predicted BENIGN (risk_score: 15, severity: SAFE, threat_type: No Strong Threat Detected)
+  Text: "आपका KYC समाप्त हो गया है। तुरंत इस लिंक पर क्लिक करके अपना बैंक विवरण अपडेट करें।"
+- [HI-S-004] (hindi): expected SCAM but predicted BENIGN (risk_score: 15, severity: SAFE, threat_type: No Strong Threat Detected)
+  Text: "आपका बिजली कनेक्शन आज काट दिया जाएगा। तुरंत भुगतान करने के लिए इस लिंक का उपयोग करें।"
+- [HI-S-009] (hindi): expected SCAM but predicted BENIGN (risk_score: 20, severity: SAFE, threat_type: No Strong Threat Detected)
+  Text: "आपका बिजली कनेक्शन आज काट दिया जाएगा। तुरंत बकाया भुगतान करें।"
+- [HI-S-015] (hindi): expected SCAM but predicted BENIGN (risk_score: 15, severity: SAFE, threat_type: Tech Support Scam)
+  Text: "तकनीकी सहायता से बोल रहा हूँ। आपके कंप्यूटर में वायरस है, यह ऐप तुरंत इंस्टॉल करें।"
+- [HI-S-018] (hindi): expected SCAM but predicted BENIGN (risk_score: 20, severity: SAFE, threat_type: No Strong Threat Detected)
+  Text: "आपको सरकारी लाभ मिला है। इसे प्राप्त करने के लिए पंजीकरण शुल्क जमा करें।"
+- [HING-S-015] (hinglish): expected SCAM but predicted BENIGN (risk_score: 15, severity: SAFE, threat_type: Tech Support Scam)
+  Text: "Main technical support se bol raha hoon. Computer mein virus hai, remote access app install karo."

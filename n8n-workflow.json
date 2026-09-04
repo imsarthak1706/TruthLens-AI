@@ -339,13 +339,13 @@
                   {
                     "text": "🔍 Why is this suspicious?",
                     "additionalFields": {
-                      "callback_data": "why_suspicious"
+                      "callback_data": "={{ 'why_suspicious:' + ($json.scan_id || '') }}"
                     }
                   },
                   {
                     "text": "🛡️ What should I do?",
                     "additionalFields": {
-                      "callback_data": "what_to_do"
+                      "callback_data": "={{ 'what_to_do:' + ($json.scan_id || '') }}"
                     }
                   }
                 ]
@@ -357,13 +357,13 @@
                   {
                     "text": "✅ This is safe",
                     "additionalFields": {
-                      "callback_data": "mark_safe"
+                      "callback_data": "={{ 'mark_safe:' + ($json.scan_id || '') }}"
                     }
                   },
                   {
                     "text": "🚨 This is a scam",
                     "additionalFields": {
-                      "callback_data": "report_scam"
+                      "callback_data": "={{ 'report_scam:' + ($json.scan_id || '') }}"
                     }
                   }
                 ]
@@ -625,7 +625,7 @@
                     "rightValue": "cancel_incident",
                     "operator": {
                       "type": "string",
-                      "operation": "equals"
+                      "operation": "startsWith"
                     }
                   }
                 ],
@@ -633,6 +633,98 @@
               },
               "renameOutput": true,
               "outputKey": "cancel_incident"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "mark_safe",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "mark_safe"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "report_scam",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "report_scam"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "why_suspicious",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "why_suspicious"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "what_to_do",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "what_to_do"
             }
           ]
         },
@@ -939,13 +1031,13 @@
                   {
                     "text": "🔍 Why is this suspicious?",
                     "additionalFields": {
-                      "callback_data": "why_suspicious"
+                      "callback_data": "={{ 'why_suspicious:' + ($json.scan_id || '') }}"
                     }
                   },
                   {
                     "text": "🛡️ What should I do?",
                     "additionalFields": {
-                      "callback_data": "what_to_do"
+                      "callback_data": "={{ 'what_to_do:' + ($json.scan_id || '') }}"
                     }
                   }
                 ]
@@ -957,13 +1049,13 @@
                   {
                     "text": "✅ This is safe",
                     "additionalFields": {
-                      "callback_data": "mark_safe"
+                      "callback_data": "={{ 'mark_safe:' + ($json.scan_id || '') }}"
                     }
                   },
                   {
                     "text": "🚨 This is a scam",
                     "additionalFields": {
-                      "callback_data": "report_scam"
+                      "callback_data": "={{ 'report_scam:' + ($json.scan_id || '') }}"
                     }
                   }
                 ]
@@ -1220,6 +1312,42 @@
                   }
                 ]
               }
+            },
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "🔍 Why is this suspicious?",
+                    "additionalFields": {
+                      "callback_data": "={{ 'why_suspicious:' + ($json.scan_id || '') }}"
+                    }
+                  },
+                  {
+                    "text": "🛡️ What should I do?",
+                    "additionalFields": {
+                      "callback_data": "={{ 'what_to_do:' + ($json.scan_id || '') }}"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "✅ This is safe",
+                    "additionalFields": {
+                      "callback_data": "={{ 'mark_safe:' + ($json.scan_id || '') }}"
+                    }
+                  },
+                  {
+                    "text": "🚨 This is a scam",
+                    "additionalFields": {
+                      "callback_data": "={{ 'report_scam:' + ($json.scan_id || '') }}"
+                    }
+                  }
+                ]
+              }
             }
           ]
         },
@@ -1428,6 +1556,42 @@
                   }
                 ]
               }
+            },
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "🔍 Why is this suspicious?",
+                    "additionalFields": {
+                      "callback_data": "={{ 'why_suspicious:' + ($json.scan_id || '') }}"
+                    }
+                  },
+                  {
+                    "text": "🛡️ What should I do?",
+                    "additionalFields": {
+                      "callback_data": "={{ 'what_to_do:' + ($json.scan_id || '') }}"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "✅ This is safe",
+                    "additionalFields": {
+                      "callback_data": "={{ 'mark_safe:' + ($json.scan_id || '') }}"
+                    }
+                  },
+                  {
+                    "text": "🚨 This is a scam",
+                    "additionalFields": {
+                      "callback_data": "={{ 'report_scam:' + ($json.scan_id || '') }}"
+                    }
+                  }
+                ]
+              }
             }
           ]
         },
@@ -1444,6 +1608,242 @@
       ],
       "webhookId": "1c973e55-0139-46e4-80ac-dff6ba3a8566",
       "id": "c5a3bca2-b655-4eb4-9199-793fa1bd1bf3",
+      "credentials": {
+        "telegramApi": {
+          "id": "fE4fEfsTySkWHA78",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "queryId": "={{ $('Telegram Trigger').item.json.callback_query.id }}",
+        "additionalFields": {}
+      },
+      "name": "Acknowledge Mark Safe Callback",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        720
+      ],
+      "id": "0ada7e40-7c66-408b-b990-0f08ecdd4723",
+      "credentials": {
+        "telegramApi": {
+          "id": "fE4fEfsTySkWHA78",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.callback_query.message.chat.id }}",
+        "text": "✅ Thanks. Your feedback has been recorded.",
+        "additionalFields": {}
+      },
+      "name": "Send Mark Safe Message",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        368,
+        720
+      ],
+      "id": "cd5e387b-8979-4333-af0c-3e44191b0a74",
+      "credentials": {
+        "telegramApi": {
+          "id": "fE4fEfsTySkWHA78",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "queryId": "={{ $('Telegram Trigger').item.json.callback_query.id }}",
+        "additionalFields": {}
+      },
+      "name": "Acknowledge Report Scam Callback",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        880
+      ],
+      "id": "addbf0cb-f723-41c3-801e-a8c450653588",
+      "credentials": {
+        "telegramApi": {
+          "id": "fE4fEfsTySkWHA78",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.callback_query.message.chat.id }}",
+        "text": "🚨 Thanks. Your feedback has been recorded.",
+        "additionalFields": {}
+      },
+      "name": "Send Report Scam Message",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        368,
+        880
+      ],
+      "id": "d316e6c3-9969-4287-bac7-ee437c80404a",
+      "credentials": {
+        "telegramApi": {
+          "id": "fE4fEfsTySkWHA78",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "queryId": "={{ $('Telegram Trigger').item.json.callback_query.id }}",
+        "additionalFields": {}
+      },
+      "name": "Acknowledge Why Suspicious Callback",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        1040
+      ],
+      "id": "37ea4e67-0139-4430-b560-692ec953d9be",
+      "credentials": {
+        "telegramApi": {
+          "id": "fE4fEfsTySkWHA78",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'https://truthlens-ai-1-7unv.onrender.com/api/scan/' + ($('Telegram Trigger').item.json.callback_query.data.split(':')[1] || 'none') }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "name": "Fetch Scan Why Suspicious",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        368,
+        1040
+      ],
+      "id": "c616f9bb-f77b-446e-8d3e-7d01e8d436b7"
+    },
+    {
+      "parameters": {
+        "jsCode": "const cb = $('Telegram Trigger').first().json.callback_query;\nconst scanId = (cb.data || \"\").split(\":\")[1];\nconst item = $input.first()?.json || {};\n\nlet msg = \"\";\nif (item && item.scan_id && (item.evidence || item.threat_type)) {\n  const threatType = item.threat_type || \"Potential Threat\";\n  const score = item.risk_score != null ? item.risk_score : \"N/A\";\n  const severity = item.severity || \"UNKNOWN\";\n  const confidence = item.confidence || \"Medium\";\n\n  let evidenceList = \"• No specific threat signals detected.\";\n  if (Array.isArray(item.evidence) && item.evidence.length > 0) {\n    evidenceList = item.evidence\n      .map(e => (typeof e === \"string\" ? \"• \" + e : (e && e.signal ? \"• \" + e.signal : \"\")))\n      .filter(Boolean)\n      .join(\"\\n\");\n  }\n\n  msg = `🔍 WHY THIS WAS FLAGGED\\n\\n🛡️ Threat: ${threatType}\\n⚠️ Risk Score: ${score}/100\\n🚨 Severity: ${severity}\\n🎯 Confidence: ${confidence}\\n\\n━━━━━━━━━━━━━━━━━━\\n🔎 DETECTED SIGNALS\\n━━━━━━━━━━━━━━━━━━\\n\\n${evidenceList}`;\n} else {\n  msg = `🔍 SCAN EVIDENCE\\n\\nDetailed signal telemetry for scan (${scanId || \"unspecified\"}) is no longer cached. Please refer to your initial scan report or view the full forensic report on the dashboard.`;\n}\n\nreturn [{\n  json: {\n    chatId: cb.message.chat.id,\n    text: msg\n  }\n}];"
+      },
+      "name": "Format Why Suspicious Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        592,
+        1040
+      ],
+      "id": "ecc66098-77b4-4ef4-b3c7-e9f16af7883b"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {}
+      },
+      "name": "Send Why Suspicious Message",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        816,
+        1040
+      ],
+      "id": "7bd587b1-7938-49f6-9685-a7bbbf6e0baa",
+      "credentials": {
+        "telegramApi": {
+          "id": "fE4fEfsTySkWHA78",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "queryId": "={{ $('Telegram Trigger').item.json.callback_query.id }}",
+        "additionalFields": {}
+      },
+      "name": "Acknowledge What To Do Callback",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        1200
+      ],
+      "id": "d971bf7a-be9c-423a-ad19-9c9ad9db06f2",
+      "credentials": {
+        "telegramApi": {
+          "id": "fE4fEfsTySkWHA78",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'https://truthlens-ai-1-7unv.onrender.com/api/scan/' + ($('Telegram Trigger').item.json.callback_query.data.split(':')[1] || 'none') }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "name": "Fetch Scan What To Do",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        368,
+        1200
+      ],
+      "id": "0842424c-0762-4bec-81fe-52c656b336d9"
+    },
+    {
+      "parameters": {
+        "jsCode": "const cb = $('Telegram Trigger').first().json.callback_query;\nconst scanId = (cb.data || \"\").split(\":\")[1];\nconst item = $input.first()?.json || {};\n\nlet msg = \"\";\nif (item && item.scan_id && item.recommendation) {\n  const threatType = item.threat_type || \"Suspicious Content\";\n  msg = `🛡️ RECOMMENDED ACTION\\n\\nTarget: ${threatType}\\n\\n━━━━━━━━━━━━━━━━━━\\n💡 SAFETY GUIDELINES\\n━━━━━━━━━━━━━━━━━━\\n\\n${item.recommendation}`;\n} else {\n  msg = `🛡️ RECOMMENDED ACTION\\n\\nDo not click links, share OTPs, credentials, or make payments for unexpected requests. Verify the sender through official independent channels.`;\n}\n\nreturn [{\n  json: {\n    chatId: cb.message.chat.id,\n    text: msg\n  }\n}];"
+      },
+      "name": "Format What To Do Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        592,
+        1200
+      ],
+      "id": "ab32de49-6b25-48f5-b48f-d2a20f223fe0"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {}
+      },
+      "name": "Send What To Do Message",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        816,
+        1200
+      ],
+      "id": "e6886b0f-b8db-4f21-984d-cb10b1a8dc34",
       "credentials": {
         "telegramApi": {
           "id": "fE4fEfsTySkWHA78",
@@ -1589,13 +1989,7 @@
     },
     "response builder": {
       "main": [
-        [
-          {
-            "node": "Send a text message",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Wait": {
@@ -1683,6 +2077,34 @@
         [
           {
             "node": "Acknowledge Cancel Callback",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Acknowledge Mark Safe Callback",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Acknowledge Report Scam Callback",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Acknowledge Why Suspicious Callback",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Acknowledge What To Do Callback",
             "type": "main",
             "index": 0
           }
@@ -1945,6 +2367,94 @@
           },
           {
             "node": "Incident Eligibility",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Acknowledge Mark Safe Callback": {
+      "main": [
+        [
+          {
+            "node": "Send Mark Safe Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Acknowledge Report Scam Callback": {
+      "main": [
+        [
+          {
+            "node": "Send Report Scam Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Acknowledge Why Suspicious Callback": {
+      "main": [
+        [
+          {
+            "node": "Fetch Scan Why Suspicious",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Scan Why Suspicious": {
+      "main": [
+        [
+          {
+            "node": "Format Why Suspicious Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Why Suspicious Message": {
+      "main": [
+        [
+          {
+            "node": "Send Why Suspicious Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Acknowledge What To Do Callback": {
+      "main": [
+        [
+          {
+            "node": "Fetch Scan What To Do",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Scan What To Do": {
+      "main": [
+        [
+          {
+            "node": "Format What To Do Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format What To Do Message": {
+      "main": [
+        [
+          {
+            "node": "Send What To Do Message",
             "type": "main",
             "index": 0
           }

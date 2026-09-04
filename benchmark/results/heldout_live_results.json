@@ -1,0 +1,902 @@
+[
+  {
+    "id": "EN-H-001",
+    "language": "english",
+    "expected_label": "scam",
+    "risk_score": 10,
+    "severity": "SAFE",
+    "threat_type": "Suspicious Link",
+    "text": "Your account has been flagged. Verify your identity at https://secure-account-check.example before midnight.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-002",
+    "language": "english",
+    "expected_label": "scam",
+    "risk_score": 50,
+    "severity": "SUSPICIOUS",
+    "threat_type": "Financial Social Engineering",
+    "text": "Congratulations, you were selected for a reward. Pay a small processing fee today to release your prize.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-003",
+    "language": "english",
+    "expected_label": "scam",
+    "risk_score": 30,
+    "severity": "SUSPICIOUS",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Your parcel is waiting at the depot. Pay the customs charge using the payment link below to avoid return.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-004",
+    "language": "english",
+    "expected_label": "scam",
+    "risk_score": 45,
+    "severity": "SUSPICIOUS",
+    "threat_type": "OTP / Verification Scam",
+    "text": "We detected unusual activity on your card. Send your OTP to the support agent to secure the account.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-005",
+    "language": "english",
+    "expected_label": "scam",
+    "risk_score": 25,
+    "severity": "SUSPICIOUS",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Final warning: your KYC will be suspended today unless you confirm your banking details immediately.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-006",
+    "language": "english",
+    "expected_label": "scam",
+    "risk_score": 20,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "You have won a cash bonus. Transfer the refundable verification amount to receive your winnings.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-007",
+    "language": "english",
+    "expected_label": "scam",
+    "risk_score": 60,
+    "severity": "HIGH RISK",
+    "threat_type": "OTP / Verification Scam",
+    "text": "Your salary account needs urgent verification. Reply with your password and OTP to prevent access restrictions.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-008",
+    "language": "english",
+    "expected_label": "scam",
+    "risk_score": 20,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "A legal case has been opened against your account. Pay the settlement now through this private payment link.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-009",
+    "language": "english",
+    "expected_label": "scam",
+    "risk_score": 55,
+    "severity": "HIGH RISK",
+    "threat_type": "Financial Social Engineering",
+    "text": "Your electricity service will be disconnected tonight. Complete the payment immediately using the attached link.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-010",
+    "language": "english",
+    "expected_label": "benign",
+    "risk_score": 10,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "The bank branch will be closed on Saturday for maintenance. Normal services resume Monday morning.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-011",
+    "language": "english",
+    "expected_label": "benign",
+    "risk_score": 10,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Your monthly account statement is now available in the mobile banking app.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-012",
+    "language": "english",
+    "expected_label": "benign",
+    "risk_score": 25,
+    "severity": "SUSPICIOUS",
+    "threat_type": "No Strong Threat Detected",
+    "text": "The courier attempted delivery today and will try again tomorrow between 10 AM and 2 PM.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-013",
+    "language": "english",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Our team meeting has been moved to 3 PM. Please use the usual calendar invitation.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-014",
+    "language": "english",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "The university has published the timetable for the next semester on the student portal.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-015",
+    "language": "english",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Please remember to bring your original ID card to tomorrow's appointment.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-016",
+    "language": "english",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "The electricity bill for August is available in your customer portal.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "EN-H-017",
+    "language": "english",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Your package has been delivered to the reception desk. Please collect it when convenient.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-001",
+    "language": "hindi",
+    "expected_label": "scam",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "आपके बैंक खाते पर संदिग्ध गतिविधि मिली है। खाता बंद होने से पहले तुरंत इस लिंक पर जानकारी भरें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-002",
+    "language": "hindi",
+    "expected_label": "scam",
+    "risk_score": 50,
+    "severity": "SUSPICIOUS",
+    "threat_type": "Financial Social Engineering",
+    "text": "आपने इनाम जीता है। पुरस्कार पाने के लिए आज ही प्रोसेसिंग फीस जमा करें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-003",
+    "language": "hindi",
+    "expected_label": "scam",
+    "risk_score": 60,
+    "severity": "HIGH RISK",
+    "threat_type": "OTP / Verification Scam",
+    "text": "आपकी KYC आज समाप्त हो रही है। तुरंत अपना पैन, पासवर्ड और OTP भेजकर सत्यापन पूरा करें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-004",
+    "language": "hindi",
+    "expected_label": "scam",
+    "risk_score": 15,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "आपका बिजली कनेक्शन आज रात काट दिया जाएगा। बिल भुगतान के लिए दिए गए लिंक पर अभी क्लिक करें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-005",
+    "language": "hindi",
+    "expected_label": "scam",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "आपके नाम से कानूनी शिकायत दर्ज हुई है। मामला बंद करने के लिए तुरंत इस खाते में पैसे भेजें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-006",
+    "language": "hindi",
+    "expected_label": "scam",
+    "risk_score": 20,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "कूरियर रोक दिया गया है। डिलीवरी जारी रखने के लिए अभी कस्टम शुल्क जमा करें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-007",
+    "language": "hindi",
+    "expected_label": "scam",
+    "risk_score": 25,
+    "severity": "SUSPICIOUS",
+    "threat_type": "OTP / Verification Scam",
+    "text": "बैंक अधिकारी से बात करने के लिए अपना OTP बताएं ताकि आपका कार्ड तुरंत सुरक्षित किया जा सके।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-008",
+    "language": "hindi",
+    "expected_label": "scam",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "आपको सरकारी योजना का नकद लाभ मिला है। राशि जारी करने के लिए पहले छोटी सी फीस भरें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-009",
+    "language": "hindi",
+    "expected_label": "scam",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "आपका मोबाइल नंबर बैंक रिकॉर्ड से हट जाएगा। तुरंत सत्यापन करें और अपनी लॉगिन जानकारी साझा करें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-010",
+    "language": "hindi",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "बैंक की शाखा रविवार को बंद रहेगी और सोमवार को सामान्य समय पर खुलेगी।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-011",
+    "language": "hindi",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "आपका मासिक बैंक स्टेटमेंट मोबाइल ऐप में उपलब्ध है।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-012",
+    "language": "hindi",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "आपका पार्सल आज डिलीवर नहीं हो सका। डिलीवरी टीम कल फिर प्रयास करेगी।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-013",
+    "language": "hindi",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "कल की कक्षा सुबह दस बजे से शुरू होगी। कृपया समय पर कॉलेज पहुंचें।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-014",
+    "language": "hindi",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "अगले सप्ताह की परीक्षा का टाइमटेबल कॉलेज पोर्टल पर अपलोड कर दिया गया है।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-015",
+    "language": "hindi",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "बिजली का अगस्त महीने का बिल ग्राहक पोर्टल पर उपलब्ध है।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-016",
+    "language": "hindi",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "कृपया मीटिंग में अपना पहचान पत्र साथ लेकर आएं।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HI-H-017",
+    "language": "hindi",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "आपका आवेदन सफलतापूर्वक जमा हो गया है। आगे की जानकारी ईमेल से भेजी जाएगी।",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-001",
+    "language": "hinglish",
+    "expected_label": "scam",
+    "risk_score": 45,
+    "severity": "SUSPICIOUS",
+    "threat_type": "Financial Social Engineering",
+    "text": "URGENT! Aapka bank account block hone wala hai, verify karne ke liye abhi link open karo.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-002",
+    "language": "hinglish",
+    "expected_label": "scam",
+    "risk_score": 35,
+    "severity": "SUSPICIOUS",
+    "threat_type": "Prize / Reward Scam",
+    "text": "Congrats! Aapne cash prize jeeta hai, release karne ke liye processing fee pay karo.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-003",
+    "language": "hinglish",
+    "expected_label": "scam",
+    "risk_score": 50,
+    "severity": "SUSPICIOUS",
+    "threat_type": "Bank / Account Impersonation",
+    "text": "Aapki KYC expire ho gayi hai. Account active rakhne ke liye OTP aur banking details bhejo.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-004",
+    "language": "hinglish",
+    "expected_label": "scam",
+    "risk_score": 30,
+    "severity": "SUSPICIOUS",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Courier hold par hai, delivery continue karne ke liye customs charge abhi pay karo.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-005",
+    "language": "hinglish",
+    "expected_label": "scam",
+    "risk_score": 45,
+    "severity": "SUSPICIOUS",
+    "threat_type": "OTP / Verification Scam",
+    "text": "Aapke card me suspicious transaction mila hai. Security ke liye support agent ko OTP batao.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-006",
+    "language": "hinglish",
+    "expected_label": "scam",
+    "risk_score": 20,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Aaj last day hai. Electricity connection disconnect hone se pehle payment link par click karo.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-007",
+    "language": "hinglish",
+    "expected_label": "scam",
+    "risk_score": 30,
+    "severity": "SUSPICIOUS",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Government benefit approve ho gaya hai, amount receive karne ke liye verification fee transfer karo.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-008",
+    "language": "hinglish",
+    "expected_label": "scam",
+    "risk_score": 20,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Aapke naam se complaint register hui hai. Case close karne ke liye private account me payment karo.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-009",
+    "language": "hinglish",
+    "expected_label": "benign",
+    "risk_score": 10,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Bank branch Sunday ko closed rahegi, Monday se normal working hours rahenge.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-010",
+    "language": "hinglish",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Aapka monthly statement app me available hai, jab convenient ho tab check kar lena.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-011",
+    "language": "hinglish",
+    "expected_label": "benign",
+    "risk_score": 25,
+    "severity": "SUSPICIOUS",
+    "threat_type": "Identity / KYC Scam",
+    "text": "Courier delivery kal dobara try karega, isliye ghar par available rehna zaroori nahi hai.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-012",
+    "language": "hinglish",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Team meeting ko 3 PM shift kar diya gaya hai, calendar invite same rahega.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-013",
+    "language": "hinglish",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "College portal par next semester ka timetable upload ho gaya hai.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-014",
+    "language": "hinglish",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "August electricity bill customer portal par generate ho gaya hai.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-015",
+    "language": "hinglish",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Kal appointment ke liye original ID card saath le aana.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  },
+  {
+    "id": "HG-H-016",
+    "language": "hinglish",
+    "expected_label": "benign",
+    "risk_score": 0,
+    "severity": "SAFE",
+    "threat_type": "No Strong Threat Detected",
+    "text": "Aapka application successfully submit ho gaya hai, next update email par milega.",
+    "ai_analysis": {
+      "scam_intent": false,
+      "social_engineering": false,
+      "impersonation": false,
+      "financial_manipulation": false,
+      "urgency": "low",
+      "confidence": "low",
+      "explanation": "AI analysis unavailable."
+    }
+  }
+]
