@@ -1231,6 +1231,19 @@ async def scan_audio(
             }
         }
 
+    suffix = Path(file.filename).suffix.lower()
+    if not suffix:
+        if "ogg" in content_type:
+            suffix = ".ogg"
+        elif "mpeg" in content_type or "mp3" in content_type:
+            suffix = ".mp3"
+        elif "wav" in content_type:
+            suffix = ".wav"
+        elif "webm" in content_type:
+            suffix = ".webm"
+        else:
+            suffix = ".wav"
+
     res = await asyncio.to_thread(_sync_scan_audio, contents, file.filename, suffix, platform)
     if isinstance(res, dict) and "error" not in res and res.get("scan_id"):
         asyncio.create_task(_persist_scan_to_supabase(res, platform=platform, has_image=0))
