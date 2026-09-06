@@ -294,10 +294,6 @@ Risk Engine
 
 TruthLensAI connects user intake, event-driven orchestration, modality-specific analysis, hybrid AI and deterministic detection, threat intelligence, forensic reporting, and incident response into one integrated workflow.
 
-### Architecture
-
-<img src="https://raw.githubusercontent.com/imsarthak1706/TruthLens-AI/main/docs/architecture.png" alt="TruthLensAI System Architecture" width="100%">
-
 ### Core Architecture Flow
 
 ```text
@@ -680,7 +676,6 @@ TruthLensAI/
 ├── benchmark/
 │
 ├── docs/
-│   ├── architecture.png
 │   ├── dashboard.png
 │   ├── telegram.png
 │   ├── forensic-report.png
