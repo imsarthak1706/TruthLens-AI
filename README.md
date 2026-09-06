@@ -85,7 +85,7 @@ The AI model is combined with deterministic security signals instead of being tr
 
 ## 🎬 Video Multimodal Fusion
 
-Video analysis combines multiple sources of evidence:
+Video analysis combines multiple sources of evidence.
 
 ```text
 Visual Frame Analysis
@@ -296,7 +296,7 @@ TruthLensAI connects user intake, event-driven orchestration, modality-specific 
 
 ### Architecture
 
-![TruthLensAI System Architecture](docs/architecture.png)
+<img src="https://raw.githubusercontent.com/imsarthak1706/TruthLens-AI/main/docs/architecture.png" alt="TruthLensAI System Architecture" width="100%">
 
 ### Core Architecture Flow
 
@@ -597,27 +597,27 @@ The report is delivered through the configured incident email workflow.
 # 🔄 End-to-End Workflow
 
 ```text
-1. User submits content
+User submits content
         ↓
-2. Telegram receives the input
+Telegram receives the input
         ↓
-3. n8n identifies the modality
+n8n identifies the modality
         ↓
-4. Modality-specific processing
+Modality-specific processing
         ↓
-5. Hybrid threat analysis
+Hybrid threat analysis
         ↓
-6. Risk assessment
+Risk assessment
         ↓
-7. Threat intelligence enrichment
+Threat intelligence enrichment
         ↓
-8. Explainable result
+Explainable result
         ↓
-9. Forensic evidence
+Forensic evidence
         ↓
-10. Incident response
+Incident response
         ↓
-11. IOC blocking / STIX export
+IOC blocking / STIX export
 ```
 
 ### Modality Processing
@@ -633,25 +633,28 @@ The report is delivered through the configured incident email workflow.
 
 # 🧪 Evaluation
 
-The project includes benchmark and calibration workflows used to evaluate detection behavior.
+TruthLensAI includes benchmark and detection-calibration workflows to evaluate the behavior of the hybrid detection pipeline.
 
-### Benchmark Results
+The benchmark was run against a curated set of **benign and threat-related samples** covering scenarios such as:
 
-| Metric | Result |
-|---|---:|
-| Accuracy | **95%** |
-| Precision | **100%** |
-| Recall | **90%** |
-| F1 Score | **94.74%** |
+- Phishing and credential theft
+- Malicious URLs
+- Payment and financial scams
+- Social engineering
+- Urgency-based attacks
+- Benign everyday messages
+- Scam scenarios without direct URLs
 
-The detection calibration tests cover:
+The evaluation was used to identify false positives and false negatives and to calibrate the interaction between deterministic security signals and AI-based analysis.
+
+Dedicated regression tests cover:
 
 - Benign payment requests
-- Scam scenarios without URLs
+- URL-less scam attempts
 - Genuine malicious URLs
 - Strong phishing and payment scams
 
-These tests were used to evaluate and calibrate the behavior of the hybrid detection pipeline.
+The benchmark and calibration workflows are included in the repository for reproducibility.
 
 ---
 
